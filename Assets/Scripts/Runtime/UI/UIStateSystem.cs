@@ -70,15 +70,9 @@ namespace JZK.UI
 		public enum EUIState
 		{
 			None,
-			PressStart,
 			MainMenu,
-			LevelSelect,
-			Level,
-			LevelComplete,
-			LevelFailure,
-			LevelPause,
-			Bestiary,
-			TestLevelSelect,
+			Gameplay,
+			ControlSettings,
 
 			Max
 		}
@@ -113,24 +107,8 @@ namespace JZK.UI
 		{
 			switch(state)
 			{
-				/*case EUIState.LevelSelect:
-					return LevelSelectUISystem.Instance;
-				case EUIState.PressStart:
-					return PressStartUISystem.Instance;
 				case EUIState.MainMenu:
 					return MainMenuUISystem.Instance;
-				case EUIState.Level:
-					return LevelUISystem.Instance;
-				case EUIState.LevelComplete:
-					return LevelCompleteUISystem.Instance;
-				case EUIState.LevelFailure:
-					return LevelFailureUISystem.Instance;
-				case EUIState.LevelPause:
-					return LevelPauseUISystem.Instance;
-				case EUIState.Bestiary:
-					return BestiaryUISystem.Instance;
-				case EUIState.TestLevelSelect:
-					return TestLevelSelectUISystem.Instance;*/
 				default:
 					Debug.LogWarning("[UI] No UI System found for UI State " + state.ToString());
 					return null;
@@ -196,7 +174,7 @@ namespace JZK.UI
 
 		private EUIState _pauseLastState;
 
-		public void Pause()
+		/*public void Pause()
 		{
 			if(_currentState == EUIState.LevelPause)
 			{
@@ -211,7 +189,7 @@ namespace JZK.UI
 		{
 			EnterScreen(_pauseLastState);
 			_pauseLastState = EUIState.None;
-		}
+		}*/
 
 		#region Callbacks
 
@@ -227,7 +205,7 @@ namespace JZK.UI
 				return;
 			}
 
-			EnterScreen(EUIState.PressStart);
+			EnterScreen(EUIState.MainMenu);
 		}
 
 		#endregion //Callbacks

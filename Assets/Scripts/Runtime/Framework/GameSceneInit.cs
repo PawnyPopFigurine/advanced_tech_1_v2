@@ -17,7 +17,7 @@ namespace JZK.Framework
 			new SystemReference<Input.SpeechRecognitionSystem>(),
 
             new SystemReference<UI.UIStateSystem>(),
-
+			new SystemReference<UI.MainMenuUISystem>(),
 			
 
 		};
