@@ -36,52 +36,14 @@ namespace JZK.Input
 		public delegate void InputEvent();
 		public event ControllerChangeEvent OnControllerTypeChanged;
 		public event InputEvent OnControllerPlatformTypeChanged;
-
-		[System.Serializable]
-		public class ControlState
-		{
-			[SerializeField]
-			bool _currentState;
-			bool _previousState;
-
-			public void SetState(bool state)
-			{
-				_previousState = _currentState;
-				_currentState = state;
-			}
-
-			public void Clear()
-			{
-				_previousState = false;
-				_currentState = false;
-			}
-
-			public bool IsDown
-			{
-				get => _currentState;
-			}
-
-			public bool Pressed
-			{
-				get => !_previousState && _currentState;
-			}
-
-			public bool Released
-			{
-				get => _previousState && !_currentState;
-			}
-		}
-
-		protected InputSystem() { }
-
-		public bool FaceButtonDown { get; private set; }
-		public bool FaceButtonDownPressed { get; private set; }
-		public bool FaceButtonUp { get; private set; }
-		public bool FaceButtonUpPressed { get; private set;}
-		public bool FaceButtonLeft { get; private set; }
-		public bool FaceButtonLeftPressed { get; private set; }
-		public bool FaceButtonRight { get; private set; }
-		public bool FaceButtonRightPressed { get; set; }
+		public bool FaceButtonSouth { get; private set; }
+		public bool FaceButtonSouthPressed { get; private set; }
+		public bool FaceButtonNorth { get; private set; }
+		public bool FaceButtonNorthPressed { get; private set;}
+		public bool FaceButtonWest { get; private set; }
+		public bool FaceButtonWestPressed { get; private set; }
+		public bool FaceButtonEast { get; private set; }
+		public bool FaceButtonEastPressed { get; set; }
 
 
 		EControllerType _lastControllerType;
@@ -158,14 +120,14 @@ namespace JZK.Input
 				return;
 			}
 
-			FaceButtonDown = false;
-			FaceButtonDownPressed = false;
-			FaceButtonLeft = false;
-			FaceButtonLeftPressed = false;
-			FaceButtonRight = false;
-			FaceButtonRightPressed = false;
-			FaceButtonUp = false;
-			FaceButtonUpPressed = false;
+			FaceButtonSouth = false;
+			FaceButtonSouthPressed = false;
+			FaceButtonWest = false;
+			FaceButtonWestPressed = false;
+			FaceButtonEast = false;
+			FaceButtonEastPressed = false;
+			FaceButtonNorth = false;
+			FaceButtonNorthPressed = false;
 
 			EControllerPlatformType platformType = LastControllerPlatformType;
 			LastControllerType = GetCurrentController(out platformType, out LastInputDevice);
@@ -178,36 +140,32 @@ namespace JZK.Input
 			//MousePosition = Mouse.current.position.ReadValue();
 #endif
 
-			bool lastFaceButtonUp = FaceButtonUp;
-			FaceButtonUp = inputAction_FaceButtonUp.triggered;
-			if(FaceButtonUp && !lastFaceButtonUp)
+			bool lastFaceButtonUp = FaceButtonNorth;
+			FaceButtonNorth = inputAction_FaceButtonUp.triggered;
+			if(FaceButtonNorth && !lastFaceButtonUp)
 			{
-				print("[HELLO] pressed Up");
-				FaceButtonUpPressed = true;
+				FaceButtonNorthPressed = true;
 			}
 
-			bool lastFaceButtonDown = FaceButtonDown;
-			FaceButtonDown = inputAction_FaceButtonDown.triggered;
-			if(FaceButtonDown && !lastFaceButtonDown)
+			bool lastFaceButtonDown = FaceButtonSouth;
+			FaceButtonSouth = inputAction_FaceButtonDown.triggered;
+			if(FaceButtonSouth && !lastFaceButtonDown)
 			{
-                print("[HELLO] pressed Down");
-                FaceButtonDownPressed = true;
+                FaceButtonSouthPressed = true;
 			}
 
-			bool lastFaceButtonLeft = FaceButtonLeft;
-			FaceButtonLeft = inputAction_FaceButtonLeft.triggered;
-			if (FaceButtonLeft && !lastFaceButtonLeft)
+			bool lastFaceButtonLeft = FaceButtonWest;
+			FaceButtonWest = inputAction_FaceButtonLeft.triggered;
+			if (FaceButtonWest && !lastFaceButtonLeft)
 			{
-                print("[HELLO] pressed Left");
-                FaceButtonLeftPressed = true;
+                FaceButtonWestPressed = true;
 			}
 
-			bool lastFaceButtonRight = FaceButtonRight;
-			FaceButtonRight = inputAction_FaceButtonRight.triggered;
-			if(FaceButtonRight && !lastFaceButtonRight)
+			bool lastFaceButtonRight = FaceButtonEast;
+			FaceButtonEast = inputAction_FaceButtonRight.triggered;
+			if(FaceButtonEast && !lastFaceButtonRight)
 			{
-                print("[HELLO] pressed Right");
-                FaceButtonRightPressed = true;
+                FaceButtonEastPressed = true;
 			}
 		}
 		#endregion // PersistentSystem
@@ -273,15 +231,15 @@ namespace JZK.Input
 
 		public void Clear()
 		{
-			FaceButtonLeft = false;
-			FaceButtonRight = false;
-			FaceButtonUp = false;
-			FaceButtonDown = false;
+			FaceButtonWest = false;
+			FaceButtonEast = false;
+			FaceButtonNorth = false;
+			FaceButtonSouth = false;
 
-			FaceButtonLeftPressed = false;
-			FaceButtonRightPressed = false;
-			FaceButtonUpPressed = false;
-			FaceButtonDownPressed = false;
+			FaceButtonWestPressed = false;
+			FaceButtonEastPressed = false;
+			FaceButtonNorthPressed = false;
+			FaceButtonSouthPressed = false;
 		}
 
 		EControllerType GetCurrentController(out EControllerPlatformType lastPlatformType, out InputDevice lastDevice)

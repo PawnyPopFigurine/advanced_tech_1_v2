@@ -50,24 +50,18 @@ public class ContinuousSpeechTest : MonoBehaviour
             await recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
             Task.WaitAny(new[] { _stopRecognition.Task });
 
+            await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+
             //_recognizer = recognizer;
         }
     }
-
-    /*async void StopContinuousRecognition()
-    {
-        var 
-        await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
-        Debug.Log("[HELLO] STOPPED RECOGNITION");
-    }*/
-
     
 
     void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
     {
         Debug.Log("[HELLO] recognized speech: " + e.Result.Text);
         _outputText.text = e.Result.Text;
-        Canvas.ForceUpdateCanvases();
+        //Canvas.ForceUpdateCanvases();
     }
 
     void OnSpeechRecognizing(object sender, SpeechRecognitionEventArgs e)
@@ -89,25 +83,5 @@ public class ContinuousSpeechTest : MonoBehaviour
     private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
     {
         Debug.Log("[HELLO] speech end detected: ");
-    }
-
-    private void Update()
-    {
-        /*if(_isRecording)
-        {
-            if (!Application.isPlaying)
-            {
-                StopContinuousRecognition();
-            }
-        }*/
-        
-    }
-
-    private void OnApplicationQuit()
-    {
-        /*if(_isRecording)
-        {
-            StopContinuousRecognition();
-        }*/
     }
 }
