@@ -75,6 +75,19 @@ namespace JZK.Input
         {
             base.UpdateSystem();
             ClearSpeechInput();
+
+            if(SpeechRecognitionSystem.Instance.RecordedThisFrame)
+            {
+                OnSpeechRecognized(SpeechRecognitionSystem.Instance.LatestRecordedSpeech);
+            }
+        }
+
+        public override void SetCallbacks()
+        {
+            base.SetCallbacks();
+
+            SpeechRecognitionSystem.Instance.OnSpeechRecognised -= OnSpeechRecognized;
+            SpeechRecognitionSystem.Instance.OnSpeechRecognised += OnSpeechRecognized;
         }
 
         ESpeechInputType GetInputForRecognisedSpeech(string speech)
@@ -92,12 +105,13 @@ namespace JZK.Input
 
         public void OnSpeechRecognized(string speechTerm)
         {
-            //Debug.Log("[HELLO] recognized speech " + speechTerm);
+            //Debug.Log(this.name + " - [HELLO] recognized speech " + speechTerm);
             
-            string processedTerm = speechTerm.ToLower();
+            string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
+            /*string processedTerm = speechTerm.ToLower();
 
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            processedTerm = rgx.Replace(processedTerm, "");
+            processedTerm = rgx.Replace(processedTerm, "");*/
 
             ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
 

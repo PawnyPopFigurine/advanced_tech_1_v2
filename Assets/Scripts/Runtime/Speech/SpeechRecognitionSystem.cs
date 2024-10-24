@@ -4,6 +4,7 @@ using UnityEngine;
 using JZK.Framework;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
+using JZK.UI;
 
 namespace JZK.Input
 {
@@ -12,6 +13,14 @@ namespace JZK.Input
         TaskCompletionSource<int> _stopRecognition;
         bool _isRecording;
 
+        public bool IsSettingTerm;
+
+        public bool RecordedThisFrame { get; private set; }
+        public string LatestRecordedSpeech { get; private set; }
+
+        public delegate void SpeechEvent(string speech);
+        public event SpeechEvent OnSpeechRecognised;
+
         public SystemLoadData _loadData = new SystemLoadData()
         {
             LoadStates = SystemLoadState.NoLoadingNeeded,
@@ -19,6 +28,14 @@ namespace JZK.Input
         };
 
         public override SystemLoadData LoadData => _loadData;
+
+        public override void UpdateSystem()
+        {
+            base.UpdateSystem();
+
+            RecordedThisFrame = false;
+            LatestRecordedSpeech = string.Empty;
+        }
 
         public async void StartContinuousRecognition()
         {
@@ -55,8 +72,13 @@ namespace JZK.Input
 
         void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
         {
-            SpeechInputSystem.Instance.OnSpeechRecognized(e.Result.Text);
-            //Debug.Log("[HELLO] recognized speech: " + e.Result.Text);
+            if(e.Result.Text == string.Empty)
+            {
+                return;
+            }
+
+            RecordedThisFrame = true;
+            LatestRecordedSpeech = e.Result.Text;
         }
 
         void OnSpeechRecognizing(object sender, SpeechRecognitionEventArgs e)

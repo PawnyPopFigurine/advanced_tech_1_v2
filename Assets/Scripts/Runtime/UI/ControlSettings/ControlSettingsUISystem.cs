@@ -5,6 +5,7 @@ using JZK.Framework;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using JetBrains.Annotations;
+using JZK.Input;
 
 namespace JZK.UI
 {
@@ -55,7 +56,18 @@ namespace JZK.UI
             if (_active)
             {
                 _controller.UpdateController();
+
+                if(SpeechRecognitionSystem.Instance.RecordedThisFrame)
+                {
+                    _controller.OnSpeechRecognised(SpeechRecognitionSystem.Instance.LatestRecordedSpeech);
+                }
             }
+        }
+
+        public override void SetCallbacks()
+        {
+            SpeechRecognitionSystem.Instance.OnSpeechRecognised -= OnSpeechRecognised;
+            SpeechRecognitionSystem.Instance.OnSpeechRecognised += OnSpeechRecognised;
         }
 
         #endregion //PersistentSystem
@@ -100,6 +112,16 @@ namespace JZK.UI
         public void Input_BackButtonPressed()
         {
             UIStateSystem.Instance.EnterPreviousScreen();
+        }
+
+        public void Input_RecordButtonPressed(ESpeechInputType type)
+        {
+            _controller.Input_RecordButtonPressed(type);
+        }
+
+        public void OnSpeechRecognised(string speech)
+        {
+            _controller.OnSpeechRecognised(speech);
         }
     }
 }
