@@ -61,12 +61,12 @@ namespace JZK.Input
 
         void OnSpeechRecognizing(object sender, SpeechRecognitionEventArgs e)
         {
-            Debug.Log("[HELLO] recognizing speech: " + e.Result.Text);
+            //Debug.Log("[HELLO] recognizing speech: " + e.Result.Text);
         }
 
         void OnSpeechSessionStopped(object sender, SessionEventArgs e)
         {
-            Debug.Log("[HELLO] session stopped");
+           // Debug.Log("[HELLO] session stopped");
             _stopRecognition.TrySetResult(0);
         }
 
@@ -77,7 +77,7 @@ namespace JZK.Input
 
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
         {
-            Debug.Log("[HELLO] speech end detected: ");
+            //Debug.Log("[HELLO] speech end detected: ");
         }
     }
 }

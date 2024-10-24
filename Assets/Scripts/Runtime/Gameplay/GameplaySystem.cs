@@ -45,6 +45,26 @@ namespace JZK.Gameplay
             {
                 Debug.Log("[HELLO] pressed Circle!");
             }
+
+            if(InputSystem.Instance.DPadUpPressed || SpeechInputSystem.Instance.DPadUpPressed)
+            {
+                Debug.Log("[HELLO] pressed Up!");
+            }
+
+            if(InputSystem.Instance.DPadDownPressed || SpeechInputSystem.Instance.DPadDownPressed)
+            {
+                Debug.Log("[HELLO] pressed Down!");
+            }
+
+            if(InputSystem.Instance.DPadLeftPressed || SpeechInputSystem.Instance.DPadLeftPressed)
+            {
+                Debug.Log("[HELLO] pressed Left!");
+            }
+
+            if(InputSystem.Instance.DPadRightPressed || SpeechInputSystem.Instance.DPadRightPressed)
+            {
+                Debug.Log("[HELLO] pressed Right!");
+            }
         }
     }
 }

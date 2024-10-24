@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace JZK.UI
 {
-    public class MainMenuUISystem : PersistentSystem<MainMenuUISystem>, IUISystem
+    public class ControlSettingsUISystem : PersistentSystem<ControlSettingsUISystem>, IUISystem
     {
         #region IUISystem
 
@@ -16,7 +16,7 @@ namespace JZK.UI
 
         public void SetActive(bool active)
         {
-            if(!_hasLoaded)
+            if (!_hasLoaded)
             {
                 return;
             }
@@ -27,7 +27,7 @@ namespace JZK.UI
 
         #endregion //IUISystem
 
-        private MainMenuUIController _controller;
+        private ControlSettingsUIController _controller;
         bool _active = false;
         public bool Active => _active;
 
@@ -52,7 +52,7 @@ namespace JZK.UI
         public override void UpdateSystem()
         {
             base.UpdateSystem();
-            if(_active)
+            if (_active)
             {
                 _controller.UpdateController();
             }
@@ -64,7 +64,7 @@ namespace JZK.UI
 
         void LoadUIPrefab()
         {
-            Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/UI/MainMenu/MainMenuUI.prefab").Completed += LoadCompleted;
+            Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/UI/ControlSettings/ControlSettingsUI.prefab").Completed += LoadCompleted;
         }
 
         void LoadCompleted(AsyncOperationHandle<GameObject> op)
@@ -83,7 +83,7 @@ namespace JZK.UI
             uiRoot.transform.position = Vector3.zero;
             uiRoot.transform.rotation = Quaternion.identity;
             uiRoot.transform.localScale = Vector3.one;
-            _controller = uiRoot.GetComponent<MainMenuUIController>();
+            _controller = uiRoot.GetComponent<ControlSettingsUIController>();
             _controller.Initialise();
             _controller.SetActive(false);
 
@@ -97,9 +97,9 @@ namespace JZK.UI
 
         #endregion //Load
 
-        public void Input_ControlSettingsButton()
+        public void Input_BackButtonPressed()
         {
-            UIStateSystem.Instance.EnterScreen(UIStateSystem.EUIState.ControlSettings);
+            UIStateSystem.Instance.EnterPreviousScreen();
         }
     }
 }

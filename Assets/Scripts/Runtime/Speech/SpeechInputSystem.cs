@@ -50,16 +50,25 @@ namespace JZK.Input
 
         Dictionary<string, ESpeechInputType> _speechTermInput_LUT = new()
         {
-            {"north", ESpeechInputType.Game_FaceNorth },
-            {"south", ESpeechInputType.Game_FaceSouth },
-            {"east", ESpeechInputType.Game_FaceEast },
-            {"west", ESpeechInputType.Game_FaceWest },
+            {"green", ESpeechInputType.Game_FaceNorth },
+            {"blue", ESpeechInputType.Game_FaceSouth },
+            {"red", ESpeechInputType.Game_FaceEast },
+            {"pink", ESpeechInputType.Game_FaceWest },
+
+            {"up", ESpeechInputType.Game_DPadUp },
+            {"down", ESpeechInputType.Game_DPadDown },
+            {"left", ESpeechInputType.Game_DPadLeft },
+            {"right", ESpeechInputType.Game_DPadRight },
         };
 
         public bool NorthFacePressed { get; private set; }
         public bool SouthFacePressed { get; private set; }
         public bool EastFacePressed { get; private set; }
         public bool WestFacePressed { get; private set; }
+        public bool DPadUpPressed { get; private set; }
+        public bool DPadDownPressed { get; private set; }
+        public bool DPadLeftPressed { get; private set; }
+        public bool DPadRightPressed { get; private set; }
 
 
         public override void UpdateSystem()
@@ -83,7 +92,7 @@ namespace JZK.Input
 
         public void OnSpeechRecognized(string speechTerm)
         {
-            Debug.Log("[HELLO] recognized speech " + speechTerm);
+            //Debug.Log("[HELLO] recognized speech " + speechTerm);
             
             string processedTerm = speechTerm.ToLower();
 
@@ -106,6 +115,18 @@ namespace JZK.Input
                 case ESpeechInputType.Game_FaceEast:
                     EastFacePressed = true;
                     break;
+                case ESpeechInputType.Game_DPadUp:
+                    DPadUpPressed = true;
+                    break;
+                case ESpeechInputType.Game_DPadDown:
+                    DPadDownPressed = true;
+                    break;
+                case ESpeechInputType.Game_DPadLeft:
+                    DPadLeftPressed = true;
+                    break;
+                case ESpeechInputType.Game_DPadRight:
+                    DPadRightPressed = true;
+                    break;
                 default:
                     Debug.Log(this.name + " - no recognised input type for speech " + processedTerm);
                     break;
@@ -118,6 +139,11 @@ namespace JZK.Input
             SouthFacePressed = false;
             EastFacePressed = false;
             WestFacePressed = false;
+
+            DPadUpPressed = false;
+            DPadDownPressed = false;
+            DPadLeftPressed = false;
+            DPadRightPressed = false;
         }
     }
 }

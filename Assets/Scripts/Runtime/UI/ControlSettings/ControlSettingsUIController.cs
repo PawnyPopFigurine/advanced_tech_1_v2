@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace JZK.UI
 {
-    public class MainMenuUIController : UIController
+    public class ControlSettingsUIController : UIController
     {
         public override void UpdateController()
         {
@@ -17,9 +17,9 @@ namespace JZK.UI
 
         }
 
-        public void Input_ControlSettingsButton()
+        public void Input_BackButtonPressed()
         {
-            MainMenuUISystem.Instance.Input_ControlSettingsButton();
+            ControlSettingsUISystem.Instance.Input_BackButtonPressed();
         }
     }
 }

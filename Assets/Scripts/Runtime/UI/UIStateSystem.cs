@@ -109,6 +109,8 @@ namespace JZK.UI
 			{
 				case EUIState.MainMenu:
 					return MainMenuUISystem.Instance;
+				case EUIState.ControlSettings:
+					return ControlSettingsUISystem.Instance;
 				default:
 					Debug.LogWarning("[UI] No UI System found for UI State " + state.ToString());
 					return null;

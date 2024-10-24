@@ -16,11 +16,13 @@ namespace JZK.Framework
 			new SystemReference<Input.SpeechInputSystem>(),
 			new SystemReference<Input.SpeechRecognitionSystem>(),
 
-            new SystemReference<UI.UIStateSystem>(),
+			new SystemReference<UI.ControlSettingsUISystem>(),
 			new SystemReference<UI.MainMenuUISystem>(),
-			
+            new SystemReference<UI.UIStateSystem>(),
 
-		};
+
+
+        };
 
 		public void Start()
 		{

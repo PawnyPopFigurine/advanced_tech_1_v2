@@ -30,6 +30,7 @@ namespace JZK.Input
 		private static readonly string[] INPUT_ACTION_MAP_IDS =
 		{
 			"Gameplay",
+			"UI",
 		};
 
 		public delegate void ControllerChangeEvent(EControllerType previous, EControllerType current);
@@ -44,6 +45,14 @@ namespace JZK.Input
 		public bool FaceButtonWestPressed { get; private set; }
 		public bool FaceButtonEast { get; private set; }
 		public bool FaceButtonEastPressed { get; set; }
+		public bool DPadUp { get; private set; }
+		public bool DPadUpPressed { get; private set; }
+		public bool DPadDown { get; private set; }
+		public bool DPadDownPressed { get;private set; }
+		public bool DPadLeft { get; private set; }
+		public bool DPadLeftPressed { get; private set; }
+		public bool DPadRight { get; private set; }
+		public bool DPadRightPressed { get; private set; }
 
 
 		EControllerType _lastControllerType;
@@ -120,14 +129,16 @@ namespace JZK.Input
 				return;
 			}
 
-			FaceButtonSouth = false;
+			Clear();
+
+			/*FaceButtonSouth = false;
 			FaceButtonSouthPressed = false;
 			FaceButtonWest = false;
 			FaceButtonWestPressed = false;
 			FaceButtonEast = false;
 			FaceButtonEastPressed = false;
 			FaceButtonNorth = false;
-			FaceButtonNorthPressed = false;
+			FaceButtonNorthPressed = false;*/
 
 			EControllerPlatformType platformType = LastControllerPlatformType;
 			LastControllerType = GetCurrentController(out platformType, out LastInputDevice);
@@ -166,6 +177,34 @@ namespace JZK.Input
 			if(FaceButtonEast && !lastFaceButtonRight)
 			{
                 FaceButtonEastPressed = true;
+			}
+
+			bool lastDPadUp = DPadUp;
+			DPadUp = inputAction_DPadUp.triggered;
+			if(DPadUp && !lastDPadUp)
+			{
+				DPadUpPressed = true;
+			}
+
+			bool lastDPadDown = DPadDown;
+			DPadDown = inputAction_DPadDown.triggered;
+			if(DPadDown && !lastDPadDown)
+			{
+				DPadDownPressed = true;
+			}
+
+			bool lastDPadLeft = DPadLeft;
+			DPadLeft = inputAction_DPadLeft.triggered;
+			if(DPadLeft && !lastDPadLeft)
+			{
+				DPadLeftPressed = true;
+			}
+
+			bool lastDPadRight = DPadRight;
+			DPadRight = inputAction_DPadRight.triggered;
+			if(DPadRight && !lastDPadRight)
+			{
+				DPadRightPressed = true;
 			}
 		}
 		#endregion // PersistentSystem
@@ -221,12 +260,22 @@ namespace JZK.Input
 		private InputAction inputAction_FaceButtonLeft;
 		private InputAction inputAction_FaceButtonRight;
 
+		private InputAction inputAction_DPadUp;
+		private InputAction inputAction_DPadDown;
+		private InputAction inputAction_DPadLeft;
+		private InputAction inputAction_DPadRight;
+
 		private void SetUpActions()
 		{
 			inputAction_FaceButtonDown = _playerInput.actions["Gameplay/FaceButtonDown"];
             inputAction_FaceButtonUp = _playerInput.actions["Gameplay/FaceButtonUp"];
             inputAction_FaceButtonLeft = _playerInput.actions["Gameplay/FaceButtonLeft"];
             inputAction_FaceButtonRight = _playerInput.actions["Gameplay/FaceButtonRight"];
+
+			inputAction_DPadUp = _playerInput.actions["Gameplay/DPadUp"];
+			inputAction_DPadDown = _playerInput.actions["Gameplay/DPadDown"];
+			inputAction_DPadLeft = _playerInput.actions["Gameplay/DPadLeft"];
+			inputAction_DPadRight = _playerInput.actions["Gameplay/DPadRight"];
         }
 
 		public void Clear()
@@ -240,6 +289,15 @@ namespace JZK.Input
 			FaceButtonEastPressed = false;
 			FaceButtonNorthPressed = false;
 			FaceButtonSouthPressed = false;
+
+			DPadDown = false;
+			DPadLeft = false;
+			DPadRight = false;
+			DPadUp = false;
+			DPadDownPressed = false;
+			DPadLeftPressed = false;
+			DPadRightPressed = false;
+			DPadUpPressed = false;
 		}
 
 		EControllerType GetCurrentController(out EControllerPlatformType lastPlatformType, out InputDevice lastDevice)
