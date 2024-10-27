@@ -93,6 +93,8 @@ namespace JZK.UI
 			{
 				_activeUISystem.UpdateSystem();
 			}
+
+			DebugOverlayUISystem.Instance.UpdateSystem();
 		}
 
 		private void LateUpdateState()
@@ -101,7 +103,9 @@ namespace JZK.UI
 			{
 				_activeUISystem.LateUpdateSystem();
 			}
-		}
+
+            DebugOverlayUISystem.Instance.LateUpdateSystem();
+        }
 
 		IUISystem GetSystemForUIState(EUIState state)
 		{
@@ -145,6 +149,7 @@ namespace JZK.UI
 				_activeUISystem.SetActive(true);
 			}
 
+			DebugOverlayUISystem.Instance.SetActive(true);
 		}
 
 		public void HideAllUI()

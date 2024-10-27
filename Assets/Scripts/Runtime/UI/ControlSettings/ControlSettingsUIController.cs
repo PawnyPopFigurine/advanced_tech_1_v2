@@ -19,6 +19,7 @@ namespace JZK.UI
         [SerializeField] GameObject _popupHeader;
         [SerializeField] GameObject _recordedTerm;
         [SerializeField] TMP_Text _recordedTermText;
+        [SerializeField] TMP_Text _settingInputText;
 
         [SerializeField] List<ScrollItemTermText> _scrollItemTermTexts;
 
@@ -54,12 +55,16 @@ namespace JZK.UI
         {
             base.UpdateController();
 
-
+            UpdateInput();
         }
 
         public void UpdateInput()
         {
-
+            if(SpeechInputSystem.Instance.UIBackPressed)
+            {
+                Input_BackButtonPressed();
+                return;
+            }
         }
 
         void TogglePopup(bool active)
@@ -70,6 +75,8 @@ namespace JZK.UI
             if(active)
             {
                 RefreshPopupOnOpen();
+                string inputName = SpeechHelper.INPUT_NAMES[_recordForType];
+                _settingInputText.text = inputName;
                 SpeechRecognitionSystem.Instance.IsSettingTerm = true;
             }
             else

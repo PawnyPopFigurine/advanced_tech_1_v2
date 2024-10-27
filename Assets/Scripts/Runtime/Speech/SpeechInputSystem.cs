@@ -4,6 +4,8 @@ using UnityEngine;
 using JZK.Framework;
 using System.Text.RegularExpressions;
 using JZK.Save;
+using System;
+using UnityEngine.UIElements;
 
 namespace JZK.Input
 {
@@ -32,7 +34,7 @@ namespace JZK.Input
         UI_Right,
 
         UI_Confirm,
-        UI_Cancel,
+        UI_Back,
 
         Max,
         Invalid
@@ -59,6 +61,11 @@ namespace JZK.Input
         public bool DPadDownPressed { get; private set; }
         public bool DPadLeftPressed { get; private set; }
         public bool DPadRightPressed { get; private set; }
+
+        public bool UIConfirmPressed { get; private set; }
+        public bool UIBackPressed { get; private set; }
+
+        public ESpeechInputType DebugLatestInput { get; private set; }
 
         public override void UpdateSystem()
         {
@@ -135,12 +142,17 @@ namespace JZK.Input
 
         public void ResetTermsToDefault()
         {
-            Dictionary<string, ESpeechInputType> _speechTermInput_LUT_Cache = new(_speechTermInput_LUT);
+            _speechTermInput_LUT.Clear();
 
-            foreach (ESpeechInputType typeValue in _speechTermInput_LUT_Cache.Values)
+            foreach (ESpeechInputType type in Enum.GetValues(typeof(ESpeechInputType)))
             {
-                string defaultTerm = SpeechHelper.DEFAULT_TERMS[typeValue];
-                SetTermForType(typeValue, defaultTerm);
+                if(!SpeechHelper.DEFAULT_TERMS.ContainsKey(type))
+                {
+                    continue;
+                }
+
+                string defaultTerm = SpeechHelper.DEFAULT_TERMS[type];
+                _speechTermInput_LUT.Add(defaultTerm, type);
             }
         }
 
@@ -176,10 +188,18 @@ namespace JZK.Input
                 case ESpeechInputType.Game_DPadRight:
                     DPadRightPressed = true;
                     break;
+                case ESpeechInputType.UI_Confirm:
+                    UIConfirmPressed = true;
+                    break;
+                case ESpeechInputType.UI_Back:
+                    UIBackPressed = true;
+                    break;
                 default:
                     Debug.Log(this.name + " - no recognised input type for speech " + processedTerm);
                     break;
             }
+
+            DebugLatestInput = inputType;
         }
 
         void ClearSpeechInput()
@@ -193,6 +213,9 @@ namespace JZK.Input
             DPadDownPressed = false;
             DPadLeftPressed = false;
             DPadRightPressed = false;
+
+            UIConfirmPressed = false;
+            UIBackPressed = false;
         }
 
         public void OnSystemDataLoaded(object loadedData)

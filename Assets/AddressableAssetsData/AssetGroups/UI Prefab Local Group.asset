@@ -29,6 +29,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - ui
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7761a9a346bd59543b5b6c396cd01782
+    m_Address: Assets/Prefabs/UI/DebugOverlay/DebugOverlayUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ui
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d46275014cbfb8f469cd69782521e9d9, type: 2}
   m_SchemaSet:

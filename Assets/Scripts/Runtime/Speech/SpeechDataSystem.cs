@@ -144,6 +144,9 @@ namespace JZK.Input
                     new(){Type = ESpeechInputType.Game_FaceWest, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceWest]},
                     new(){Type = ESpeechInputType.Game_FaceNorth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceNorth]},
                     new(){Type = ESpeechInputType.Game_FaceSouth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceSouth]},
+
+                    new(){Type = ESpeechInputType.UI_Confirm, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Confirm]},
+                    new(){Type = ESpeechInputType.UI_Back, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Back]},
                 }
             };
         }
@@ -180,7 +183,7 @@ namespace JZK.Input
 
             await Serialization.SerializationManager.ProcessWriteAsync(data, filePath);
 
-            Debug.Log("Game save file written to " + filePath);
+            Debug.Log(this.name + " - Game save file written to " + filePath);
 
             _currentState = EIOState.Idle;
 

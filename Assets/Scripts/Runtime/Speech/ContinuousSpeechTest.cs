@@ -50,7 +50,7 @@ public class ContinuousSpeechTest : MonoBehaviour
             await recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
             Task.WaitAny(new[] { _stopRecognition.Task });
 
-            await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+            //await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
 
             //_recognizer = recognizer;
         }

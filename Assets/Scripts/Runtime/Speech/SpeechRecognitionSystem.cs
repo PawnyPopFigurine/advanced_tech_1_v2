@@ -67,7 +67,7 @@ namespace JZK.Input
                 await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
 
                 _isRecording = true;
-                Debug.Log(this.name + " - starting continuous recognition");
+                //Debug.Log("SpeechRecognitionSystem: Starting continuous recognition");
 
                 //_recognizer = recognizer;
             }

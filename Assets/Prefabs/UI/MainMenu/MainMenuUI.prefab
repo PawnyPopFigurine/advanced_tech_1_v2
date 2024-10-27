@@ -440,6 +440,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rootCanvas: {fileID: 1713982698499928113}
   _rootCanvasGroup: {fileID: 9196678152971687745}
+  _defaultSelected: {fileID: 5388179494785741489}
+  _controlSettingsButton: {fileID: 5388179494785741489}
 --- !u!1001 &605933410562546509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -448,25 +450,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2927811133531193963}
     m_Modifications:
-    - target: {fileID: 1767480732411368878, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_Navigation.m_Mode
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.b
-      value: 0.990566
-      objectReference: {fileID: 0}
-    - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.g
-      value: 0.4336062
-      objectReference: {fileID: 0}
-    - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.r
-      value: 0.9092898
       objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -578,7 +564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4804810331440310780, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_Name
-      value: UIButton
+      value: ControlSettingsButton
       objectReference: {fileID: 0}
     - target: {fileID: 9168195087065642167, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_text
@@ -600,5 +586,10 @@ PrefabInstance:
 --- !u!224 &3203809930430313206 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2602672742062221755, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
+  m_PrefabInstance: {fileID: 605933410562546509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5388179494785741489 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4804810331440310780, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
   m_PrefabInstance: {fileID: 605933410562546509}
   m_PrefabAsset: {fileID: 0}

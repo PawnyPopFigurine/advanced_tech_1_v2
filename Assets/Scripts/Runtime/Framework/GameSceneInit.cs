@@ -18,6 +18,7 @@ namespace JZK.Framework
 			new SystemReference<Input.SpeechRecognitionSystem>(),
 
 			new SystemReference<UI.ControlSettingsUISystem>(),
+			new SystemReference<UI.DebugOverlayUISystem>(),
 			new SystemReference<UI.MainMenuUISystem>(),
             new SystemReference<UI.UIStateSystem>(),
 
