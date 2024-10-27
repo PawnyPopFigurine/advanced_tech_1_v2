@@ -11,6 +11,7 @@ namespace JZK.UI
         [SerializeField] GameObject _defaultSelected;
 
         [SerializeField] GameObject _controlSettingsButton;
+        [SerializeField] GameObject _quitButton;
 
         public override void SetActive(bool active)
         {
@@ -41,6 +42,13 @@ namespace JZK.UI
                 if(EventSystem.current.currentSelectedGameObject == _controlSettingsButton)
                 {
                     Input_ControlSettingsButton();
+                    return;
+                }
+
+                if(EventSystem.current.currentSelectedGameObject == _quitButton)
+                {
+                    Input_QuitButton();
+                    return;
                 }
             }
         }
@@ -48,6 +56,11 @@ namespace JZK.UI
         public void Input_ControlSettingsButton()
         {
             MainMenuUISystem.Instance.Input_ControlSettingsButton();
+        }
+
+        public void Input_QuitButton()
+        {
+            UIStateSystem.Instance.QuitToDesktop();
         }
     }
 }
