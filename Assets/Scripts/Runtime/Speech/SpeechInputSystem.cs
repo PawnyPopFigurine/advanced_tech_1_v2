@@ -133,6 +133,17 @@ namespace JZK.Input
             Debug.LogWarning(this.name + " - failed to set new term - " + newTerm + " - for type " + type.ToString());
         }
 
+        public void ResetTermsToDefault()
+        {
+            Dictionary<string, ESpeechInputType> _speechTermInput_LUT_Cache = new(_speechTermInput_LUT);
+
+            foreach (ESpeechInputType typeValue in _speechTermInput_LUT_Cache.Values)
+            {
+                string defaultTerm = SpeechHelper.DEFAULT_TERMS[typeValue];
+                SetTermForType(typeValue, defaultTerm);
+            }
+        }
+
         public void OnSpeechRecognized(string speechTerm)
         {            
             string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);

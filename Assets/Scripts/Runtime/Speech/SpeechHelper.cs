@@ -14,5 +14,19 @@ namespace JZK.Input
             processedSpeech = rgx.Replace(processedSpeech, "");
             return processedSpeech;
         }
+
+        public static Dictionary<ESpeechInputType, string> DEFAULT_TERMS = new()
+        {
+            { ESpeechInputType.Game_DPadDown, "down"},
+            { ESpeechInputType.Game_DPadUp, "up" },
+            { ESpeechInputType.Game_DPadLeft, "left" },
+            { ESpeechInputType.Game_DPadRight, "right" },
+
+            { ESpeechInputType.Game_FaceEast, "east" },
+            { ESpeechInputType.Game_FaceNorth, "north" },
+            { ESpeechInputType.Game_FaceSouth, "south" },
+            { ESpeechInputType.Game_FaceWest, "west" },
+
+        };
     }
 }

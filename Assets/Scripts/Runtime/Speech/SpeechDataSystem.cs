@@ -135,15 +135,15 @@ namespace JZK.Input
             {
                 Terms = new()
                 {
-                    new(){Type = ESpeechInputType.Game_DPadUp, Term = "up"},
-                    new(){Type = ESpeechInputType.Game_DPadDown, Term = "down"},
-                    new(){Type = ESpeechInputType.Game_DPadLeft, Term = "left"},
-                    new(){Type = ESpeechInputType.Game_DPadRight, Term = "right"},
+                    new(){Type = ESpeechInputType.Game_DPadUp, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_DPadUp]},
+                    new(){Type = ESpeechInputType.Game_DPadDown, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_DPadDown]},
+                    new(){Type = ESpeechInputType.Game_DPadLeft, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_DPadLeft]},
+                    new(){Type = ESpeechInputType.Game_DPadRight, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_DPadRight]},
 
-                    new(){Type = ESpeechInputType.Game_FaceEast, Term = "east"},
-                    new(){Type = ESpeechInputType.Game_FaceWest, Term = "west"},
-                    new(){Type = ESpeechInputType.Game_FaceNorth, Term = "north"},
-                    new(){Type = ESpeechInputType.Game_FaceSouth, Term = "south"},
+                    new(){Type = ESpeechInputType.Game_FaceEast, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceEast]},
+                    new(){Type = ESpeechInputType.Game_FaceWest, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceWest]},
+                    new(){Type = ESpeechInputType.Game_FaceNorth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceNorth]},
+                    new(){Type = ESpeechInputType.Game_FaceSouth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceSouth]},
                 }
             };
         }

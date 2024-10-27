@@ -115,6 +115,14 @@ namespace JZK.UI
             TogglePopup(false);
         }
 
+        public void Input_ResetButtonPressed()
+        {
+            SpeechInputSystem.Instance.ResetTermsToDefault();
+            SpeechInputSystem.Instance.SaveCurrentTerms();
+            RefreshDisplayedTerms();
+        }
+
+
         public void OnSpeechRecognised(string speech)
         {
             if(!_isActive)
