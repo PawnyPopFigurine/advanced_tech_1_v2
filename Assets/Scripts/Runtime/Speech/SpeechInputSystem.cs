@@ -52,6 +52,7 @@ namespace JZK.Input
         public override SystemLoadData LoadData => _loadData;
 
         Dictionary<string, ESpeechInputType> _speechTermInput_LUT = new();
+        public Dictionary<string, ESpeechInputType> SpeechTermInput_LUT => _speechTermInput_LUT;
 
         public bool NorthFacePressed { get; private set; }
         public bool SouthFacePressed { get; private set; }
