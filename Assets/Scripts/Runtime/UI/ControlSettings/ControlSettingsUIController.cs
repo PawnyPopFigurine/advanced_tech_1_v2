@@ -9,13 +9,19 @@ namespace JZK.UI
     public class ControlSettingsUIController : UIController
     {
         ESpeechInputType _recordForType;
+        public ESpeechInputType RecordForType => _recordForType;
 
         bool _popupOpen;
+        string _latestRecordedTerm;
+        public string LatestRecordedTerm => _latestRecordedTerm;
 
         [SerializeField] GameObject _recordingPopup;
         [SerializeField] GameObject _popupHeader;
         [SerializeField] GameObject _recordedTerm;
         [SerializeField] TMP_Text _recordedTermText;
+
+        [SerializeField] List<ScrollItemTermText> _scrollItemTermTexts;
+
 
         public override void SetActive(bool active)
         {
@@ -29,12 +35,26 @@ namespace JZK.UI
         void RefreshOnActive()
         {
             _recordForType = ESpeechInputType.None;
+
             TogglePopup(false);
+            RefreshDisplayedTerms();
+        }
+
+        void RefreshDisplayedTerms()
+        {
+            foreach(ScrollItemTermText item in _scrollItemTermTexts)
+            {
+                string currentTermForType = SpeechInputSystem.Instance.GetTermForType(item.InputType);
+                TMP_Text itemText = item.gameObject.GetComponent<TMP_Text>();
+                itemText.text = currentTermForType;
+            }
         }
 
         public override void UpdateController()
         {
             base.UpdateController();
+
+
         }
 
         public void UpdateInput()
@@ -62,6 +82,7 @@ namespace JZK.UI
         {
             _popupHeader.SetActive(true);
             _recordedTerm.SetActive(false);
+            _latestRecordedTerm = string.Empty;
             _recordedTermText.text = string.Empty;
         }
 
@@ -74,6 +95,24 @@ namespace JZK.UI
         {
             _recordForType = type;
             TogglePopup(true);
+        }
+
+        public void Input_ConfirmButtonPressed()
+        {
+            if(_latestRecordedTerm == string.Empty)
+            {
+                Debug.Log(this.name + " - tried to confirm an empty recording. aborting action");
+                return;
+            }
+            SpeechInputSystem.Instance.SetTermForType(_recordForType, _latestRecordedTerm);
+            SpeechInputSystem.Instance.SaveCurrentTerms();
+            RefreshDisplayedTerms();
+            TogglePopup(false);
+        }
+
+        public void Input_CancelButtonPressed()
+        {
+            TogglePopup(false);
         }
 
         public void OnSpeechRecognised(string speech)
@@ -93,6 +132,7 @@ namespace JZK.UI
             _popupHeader.SetActive(false);
             _recordedTerm.SetActive(true);
             _recordedTermText.text = processedSpeech;
+            _latestRecordedTerm = processedSpeech;
         }
     }
 }

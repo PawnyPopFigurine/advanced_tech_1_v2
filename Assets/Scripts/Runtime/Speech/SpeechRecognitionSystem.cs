@@ -8,7 +8,7 @@ using JZK.UI;
 
 namespace JZK.Input
 {
-    public class SpeechRecognitionSystem : PersistentSystem<SpeechRecognitionSystem>
+    public class SpeechRecognitionSystem : GameSystem<SpeechRecognitionSystem>
     {
         TaskCompletionSource<int> _stopRecognition;
         bool _isRecording;
@@ -65,6 +65,9 @@ namespace JZK.Input
                 Task.WaitAny(new[] { _stopRecognition.Task });
 
                 await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+
+                _isRecording = true;
+                Debug.Log(this.name + " - starting continuous recognition");
 
                 //_recognizer = recognizer;
             }

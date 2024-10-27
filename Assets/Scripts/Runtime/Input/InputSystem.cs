@@ -25,7 +25,7 @@ namespace JZK.Input
 
 	}
 
-	public class InputSystem : PersistentSystem<InputSystem>
+	public class InputSystem : GameSystem<InputSystem>
 	{
 		private static readonly string[] INPUT_ACTION_MAP_IDS =
 		{
@@ -130,15 +130,6 @@ namespace JZK.Input
 			}
 
 			Clear();
-
-			/*FaceButtonSouth = false;
-			FaceButtonSouthPressed = false;
-			FaceButtonWest = false;
-			FaceButtonWestPressed = false;
-			FaceButtonEast = false;
-			FaceButtonEastPressed = false;
-			FaceButtonNorth = false;
-			FaceButtonNorthPressed = false;*/
 
 			EControllerPlatformType platformType = LastControllerPlatformType;
 			LastControllerType = GetCurrentController(out platformType, out LastInputDevice);

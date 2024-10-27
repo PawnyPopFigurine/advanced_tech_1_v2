@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace JZK.Gameplay
 {
-    public class GameplaySystem : PersistentSystem<GameplaySystem>
+    public class GameplaySystem : GameSystem<GameplaySystem>
     {
         #region PersistentSystem
         public SystemLoadData _loadData = new SystemLoadData()

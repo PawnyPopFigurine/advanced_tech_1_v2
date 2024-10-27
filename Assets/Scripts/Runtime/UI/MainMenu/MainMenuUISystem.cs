@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace JZK.UI
 {
-    public class MainMenuUISystem : PersistentSystem<MainMenuUISystem>, IUISystem
+    public class MainMenuUISystem : GameSystem<MainMenuUISystem>, IUISystem
     {
         #region IUISystem
 

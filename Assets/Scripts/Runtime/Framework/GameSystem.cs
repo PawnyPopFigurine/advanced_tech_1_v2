@@ -6,7 +6,7 @@ using Unity.Profiling;
 namespace JZK.Framework
 {
 
-	public abstract class PersistentSystem<T> : MonoBehaviour where T : MonoBehaviour
+	public abstract class GameSystem<T> : MonoBehaviour where T : MonoBehaviour
 	{
 
 		protected ProfilerMarker _loadPerfMarker;

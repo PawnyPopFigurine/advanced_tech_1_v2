@@ -45,7 +45,7 @@ namespace JZK.Framework
 			set { _loadData = value; }
 		}
 
-		PersistentSystem<T> _persistentSystem;
+		GameSystem<T> _persistentSystem;
 
 		public SystemReference()
 		{
@@ -64,7 +64,7 @@ namespace JZK.Framework
 				return;
 			}
 
-			if(systemObject is PersistentSystem<T> ps)
+			if(systemObject is GameSystem<T> ps)
 			{
 				_persistentSystem = ps;
 			}

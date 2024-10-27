@@ -9,7 +9,7 @@ using JZK.Input;
 
 namespace JZK.UI
 {
-    public class ControlSettingsUISystem : PersistentSystem<ControlSettingsUISystem>, IUISystem
+    public class ControlSettingsUISystem : GameSystem<ControlSettingsUISystem>, IUISystem
     {
         #region IUISystem
 
@@ -66,8 +66,8 @@ namespace JZK.UI
 
         public override void SetCallbacks()
         {
-            SpeechRecognitionSystem.Instance.OnSpeechRecognised -= OnSpeechRecognised;
-            SpeechRecognitionSystem.Instance.OnSpeechRecognised += OnSpeechRecognised;
+
+
         }
 
         #endregion //PersistentSystem
@@ -117,6 +117,16 @@ namespace JZK.UI
         public void Input_RecordButtonPressed(ESpeechInputType type)
         {
             _controller.Input_RecordButtonPressed(type);
+        }
+
+        public void Input_ConfirmButtonPressed()
+        {
+
+        }
+
+        public void Input_CancelButtonPressed()
+        {
+
         }
 
         public void OnSpeechRecognised(string speech)

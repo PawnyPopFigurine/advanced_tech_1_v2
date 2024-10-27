@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JZK.Framework;
 using System.Text.RegularExpressions;
+using JZK.Save;
 
 namespace JZK.Input
 {
@@ -38,7 +39,7 @@ namespace JZK.Input
     }
 
     //Takes in recognised speech and matches it to game input.
-    public class SpeechInputSystem : PersistentSystem<SpeechInputSystem>
+    public class SpeechInputSystem : GameSystem<SpeechInputSystem>
     {
         public SystemLoadData _loadData = new SystemLoadData()
         {
@@ -48,18 +49,7 @@ namespace JZK.Input
 
         public override SystemLoadData LoadData => _loadData;
 
-        Dictionary<string, ESpeechInputType> _speechTermInput_LUT = new()
-        {
-            {"green", ESpeechInputType.Game_FaceNorth },
-            {"blue", ESpeechInputType.Game_FaceSouth },
-            {"red", ESpeechInputType.Game_FaceEast },
-            {"pink", ESpeechInputType.Game_FaceWest },
-
-            {"up", ESpeechInputType.Game_DPadUp },
-            {"down", ESpeechInputType.Game_DPadDown },
-            {"left", ESpeechInputType.Game_DPadLeft },
-            {"right", ESpeechInputType.Game_DPadRight },
-        };
+        Dictionary<string, ESpeechInputType> _speechTermInput_LUT = new();
 
         public bool NorthFacePressed { get; private set; }
         public bool SouthFacePressed { get; private set; }
@@ -69,7 +59,6 @@ namespace JZK.Input
         public bool DPadDownPressed { get; private set; }
         public bool DPadLeftPressed { get; private set; }
         public bool DPadRightPressed { get; private set; }
-
 
         public override void UpdateSystem()
         {
@@ -86,8 +75,9 @@ namespace JZK.Input
         {
             base.SetCallbacks();
 
-            SpeechRecognitionSystem.Instance.OnSpeechRecognised -= OnSpeechRecognized;
-            SpeechRecognitionSystem.Instance.OnSpeechRecognised += OnSpeechRecognized;
+            SpeechDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
+            SpeechDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;
+
         }
 
         ESpeechInputType GetInputForRecognisedSpeech(string speech)
@@ -103,15 +93,49 @@ namespace JZK.Input
             return ESpeechInputType.None;
         }
 
-        public void OnSpeechRecognized(string speechTerm)
+        public string GetTermForType(ESpeechInputType type)
         {
-            //Debug.Log(this.name + " - [HELLO] recognized speech " + speechTerm);
-            
-            string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
-            /*string processedTerm = speechTerm.ToLower();
+            foreach(string keyString in _speechTermInput_LUT.Keys)
+            {
+                ESpeechInputType typeValue = _speechTermInput_LUT[keyString];
+                if(typeValue != type)
+                {
+                    continue;
+                }
 
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            processedTerm = rgx.Replace(processedTerm, "");*/
+                return keyString;
+            }
+
+            Debug.LogWarning(this.name + " - failed to find term for type " + type.ToString() + " - returning empty string");
+            return string.Empty;
+        }
+
+        public void SetTermForType(ESpeechInputType type, string newTerm)
+        {
+            Dictionary<string, ESpeechInputType> _speechTermInput_LUT_Cache = new(_speechTermInput_LUT);
+
+            foreach (string keyString in _speechTermInput_LUT_Cache.Keys)
+            {
+                ESpeechInputType typeValue = _speechTermInput_LUT_Cache[keyString];
+                if (typeValue != type)
+                {
+                    continue;
+                }
+
+                _speechTermInput_LUT.Remove(keyString);
+                _speechTermInput_LUT.Add(newTerm, type);
+
+                Debug.Log(this.name + " - set new term - " + newTerm + " - for input type - " + type.ToString());
+
+                return;
+            }
+
+            Debug.LogWarning(this.name + " - failed to set new term - " + newTerm + " - for type " + type.ToString());
+        }
+
+        public void OnSpeechRecognized(string speechTerm)
+        {            
+            string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
 
             ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
 
@@ -158,6 +182,51 @@ namespace JZK.Input
             DPadDownPressed = false;
             DPadLeftPressed = false;
             DPadRightPressed = false;
+        }
+
+        public void OnSystemDataLoaded(object loadedData)
+        {
+            SpeechSaveData saveData = (SpeechSaveData)loadedData;
+
+            if(saveData.Terms.Count == 0)
+            {
+                Debug.LogError(this.name + " - has recieved save data with 0 terms");
+                return;
+            }
+
+            _speechTermInput_LUT.Clear();
+
+            foreach(SpeechSaveData.SpeechSaveDataTerm term in saveData.Terms)
+            {
+                if(_speechTermInput_LUT.ContainsValue(term.Type))
+                {
+                    Debug.LogError(this.name + " - has recieved duplicate term for type " + term.Type.ToString() + " - skipping addition for Term" + term.Term);
+                    continue;
+                }
+
+                _speechTermInput_LUT.Add(term.Term, term.Type);
+                Debug.Log(this.name + " - adding term " + term.Term + " - for input type " + term.Type.ToString());
+            }
+        }
+
+        public void SaveCurrentTerms()
+        {
+            SpeechSaveData saveData = new();
+
+            saveData.Terms = new();
+
+            foreach(string termString in _speechTermInput_LUT.Keys)
+            {
+                SpeechSaveData.SpeechSaveDataTerm term = new()
+                {
+                    Term = termString,
+                    Type = _speechTermInput_LUT[termString]
+                };
+
+                saveData.Terms.Add(term);
+            }
+
+            SpeechDataSystem.Instance.SaveGameData(saveData);
         }
     }
 }

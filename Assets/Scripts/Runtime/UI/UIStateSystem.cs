@@ -5,7 +5,7 @@ using JZK.Framework;
 
 namespace JZK.UI
 {
-	public class UIStateSystem : PersistentSystem<UIStateSystem>
+	public class UIStateSystem : GameSystem<UIStateSystem>
 	{
 
 		#region PersistentSystem
