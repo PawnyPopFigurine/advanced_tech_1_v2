@@ -65,6 +65,18 @@ namespace JZK.UI
                 Input_BackButtonPressed();
                 return;
             }
+
+            if(_popupOpen)
+            {
+                if(SpeechInputSystem.Instance.UIConfirmPressed)
+                {
+                    Input_ConfirmButtonPressed();
+                }
+                if(SpeechInputSystem.Instance.UIBackPressed)
+                {
+                    Input_CancelButtonPressed();
+                }
+            }
         }
 
         void TogglePopup(bool active)

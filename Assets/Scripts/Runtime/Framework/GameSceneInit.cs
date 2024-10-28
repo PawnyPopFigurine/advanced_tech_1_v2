@@ -30,7 +30,7 @@ namespace JZK.Framework
 		{
 			Setup(_systems);
 
-			SpeechRecognitionSystem.Instance.StartContinuousRecognition();
+			//SpeechRecognitionSystem.Instance.StartContinuousRecognition();
 
 		}
 

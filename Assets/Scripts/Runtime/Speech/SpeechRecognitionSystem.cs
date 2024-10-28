@@ -5,6 +5,7 @@ using JZK.Framework;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
 using JZK.UI;
+using static JZK.UI.UIStateSystem;
 
 namespace JZK.Input
 {
@@ -24,7 +25,7 @@ namespace JZK.Input
         public SystemLoadData _loadData = new SystemLoadData()
         {
             LoadStates = SystemLoadState.NoLoadingNeeded,
-            UpdateAfterLoadingState = ELoadingState.Game,
+            UpdateAfterLoadingState = ELoadingState.FrontEnd,
         };
 
         public override SystemLoadData LoadData => _loadData;
@@ -33,8 +34,23 @@ namespace JZK.Input
         {
             base.UpdateSystem();
 
+            
+        }
+
+        public override void LateUpdateSystem()
+        {
+            base.LateUpdateSystem();
+
             RecordedThisFrame = false;
             LatestRecordedSpeech = string.Empty;
+        }
+
+        public override void SetCallbacks()
+        {
+            base.SetCallbacks();
+
+            SceneInit.CurrentSceneInit.OnLoadingStateComplete -= OnLoadingStateComplete;
+            SceneInit.CurrentSceneInit.OnLoadingStateComplete += OnLoadingStateComplete;
         }
 
         public async void StartContinuousRecognition()
@@ -64,7 +80,7 @@ namespace JZK.Input
                 await recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
                 Task.WaitAny(new[] { _stopRecognition.Task });
 
-                await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+                // await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
 
                 _isRecording = true;
                 //Debug.Log("SpeechRecognitionSystem: Starting continuous recognition");
@@ -103,6 +119,22 @@ namespace JZK.Input
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
         {
             //Debug.Log("[HELLO] speech end detected: ");
+        }
+
+
+        private void OnLoadingStateComplete(ELoadingState state)
+        {
+            if (state != ELoadingState.FrontEnd)
+            {
+                return;
+            }
+
+            if (SceneInit.IsTestScene)
+            {
+                return;
+            }
+
+            StartContinuousRecognition();
         }
     }
 }
