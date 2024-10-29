@@ -51,7 +51,11 @@ namespace JZK.UI
                 _latestSpeechText.text = SpeechRecognitionSystem.Instance.LatestRecordedSpeech;
             }
 
-            SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInput);
+            if(SpeechInputSystem.Instance.PressedThisFrame)
+            {
+                SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInput);
+            }
+            UpdateInputTextForGamepad();
         }
 
         public void RefreshTerms()
@@ -96,6 +100,18 @@ namespace JZK.UI
             }
 
             _latestInputText.text = inputName;
+        }
+
+        void UpdateInputTextForGamepad()
+        {
+            if(InputSystem.Instance.AnyButtonPressed)
+            {
+                ESpeechInputType inputSystemDebugType = InputSystem.Instance.DebugLatestInput;
+                if (inputSystemDebugType != ESpeechInputType.None)
+                {
+                    SetLatestInputText(inputSystemDebugType);
+                }
+            }
         }
     }
 }

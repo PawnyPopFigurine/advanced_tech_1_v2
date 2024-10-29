@@ -68,6 +68,23 @@ namespace JZK.Input
 
         public ESpeechInputType DebugLatestInput { get; private set; }
 
+        public bool PressedThisFrame
+        {
+            get
+            {
+                return (NorthFacePressed ||
+                    SouthFacePressed ||
+                    EastFacePressed ||
+                    WestFacePressed ||
+                    DPadUpPressed ||
+                    DPadDownPressed ||
+                    DPadLeftPressed ||
+                    DPadRightPressed ||
+                    UIConfirmPressed ||
+                    UIBackPressed);
+            }
+        }
+
         public override void UpdateSystem()
         {
             base.UpdateSystem();

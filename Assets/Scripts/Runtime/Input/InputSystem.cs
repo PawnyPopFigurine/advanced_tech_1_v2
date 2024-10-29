@@ -54,8 +54,26 @@ namespace JZK.Input
 		public bool DPadRight { get; private set; }
 		public bool DPadRightPressed { get; private set; }
 
+		public bool AnyButtonPressed
+		{
+			get
+			{
+				return (FaceButtonEastPressed ||
+					FaceButtonNorthPressed ||
+						FaceButtonSouthPressed ||
+						FaceButtonWestPressed ||
+						DPadDownPressed ||
+						DPadLeftPressed ||
+						DPadRightPressed ||
+						DPadUpPressed);
 
-		EControllerType _lastControllerType;
+			}
+		}
+
+        public ESpeechInputType DebugLatestInput { get; private set; }
+
+
+        EControllerType _lastControllerType;
 		public EControllerType LastControllerType
 		{
 			get { return _lastControllerType; }
@@ -197,7 +215,14 @@ namespace JZK.Input
 			{
 				DPadRightPressed = true;
 			}
-		}
+
+			ESpeechInputType type = GetDebugInputType();
+			if(type != ESpeechInputType.None)
+			{
+				DebugLatestInput = type;
+			}
+
+        }
 		#endregion // PersistentSystem
 
 		#region Load
@@ -405,6 +430,44 @@ namespace JZK.Input
 
 			UIConfirm = false;
 			UIConfirmPressed = false;*/
+		}
+
+		public ESpeechInputType GetDebugInputType()
+		{
+			if(FaceButtonEastPressed)
+			{
+				return ESpeechInputType.Game_FaceEast;
+			}
+			if(FaceButtonNorthPressed)
+			{
+				return ESpeechInputType.Game_FaceNorth;
+			}
+			if(FaceButtonSouthPressed)
+			{
+				return ESpeechInputType.Game_FaceSouth;
+			}
+			if(FaceButtonWestPressed)
+			{
+				return ESpeechInputType.Game_FaceWest;
+			}
+			if(DPadDownPressed)
+			{
+				return ESpeechInputType.Game_DPadDown;
+			}
+			if(DPadUpPressed)
+			{
+				return ESpeechInputType.Game_DPadUp;
+			}
+            if (DPadLeftPressed)
+			{
+				return ESpeechInputType.Game_DPadLeft;
+			}
+			if(DPadRightPressed)
+			{
+				return ESpeechInputType.Game_DPadRight;
+			}
+
+            return ESpeechInputType.None;
 		}
 
 
