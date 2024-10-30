@@ -40,10 +40,10 @@ namespace JZK.Input
             { ESpeechInputType.Game_DPadLeft, "D-Pad Left" },
             { ESpeechInputType.Game_DPadRight, "D-Pad Right" },
 
-            { ESpeechInputType.Game_FaceEast, "Gamepad East" },
-            { ESpeechInputType.Game_FaceNorth, "Gamepad North" },
-            { ESpeechInputType.Game_FaceSouth, "Gamepad South" },
-            { ESpeechInputType.Game_FaceWest, "Gamepad West" },
+            { ESpeechInputType.Game_FaceEast, "Face East" },
+            { ESpeechInputType.Game_FaceNorth, "Face North" },
+            { ESpeechInputType.Game_FaceSouth, "Face South" },
+            { ESpeechInputType.Game_FaceWest, "Face West" },
 
             { ESpeechInputType.UI_Confirm, "UI Confirm" },
             { ESpeechInputType.UI_Back, "UI Back" },

@@ -51,10 +51,7 @@ namespace JZK.UI
                 _latestSpeechText.text = SpeechRecognitionSystem.Instance.LatestRecordedSpeech;
             }
 
-            if(SpeechInputSystem.Instance.PressedThisFrame)
-            {
-                SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInput);
-            }
+            UpdateInputTextForSpeechInput();
             UpdateInputTextForGamepad();
         }
 
@@ -100,6 +97,14 @@ namespace JZK.UI
             }
 
             _latestInputText.text = inputName;
+        }
+
+        void UpdateInputTextForSpeechInput()
+        {
+            if (SpeechInputSystem.Instance.PressedThisFrame)
+            {
+                SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInput);
+            }
         }
 
         void UpdateInputTextForGamepad()
