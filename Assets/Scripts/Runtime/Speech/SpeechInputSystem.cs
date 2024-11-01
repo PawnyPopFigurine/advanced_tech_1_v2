@@ -68,6 +68,8 @@ namespace JZK.Input
 
         public ESpeechInputType DebugLatestInput { get; private set; }
 
+        public bool VoiceControlEnabled { get; private set; }
+
         public bool PressedThisFrame
         {
             get
@@ -83,6 +85,13 @@ namespace JZK.Input
                     UIConfirmPressed ||
                     UIBackPressed);
             }
+        }
+
+        public override void Initialise()
+        {
+            base.Initialise();
+
+            VoiceControlEnabled = true;
         }
 
         public override void UpdateSystem()
@@ -176,6 +185,12 @@ namespace JZK.Input
 
         public void OnSpeechRecognized(string speechTerm)
         {            
+            if(!VoiceControlEnabled)
+            {
+                Debug.Log(this.name + " - recognised term " + speechTerm + " , but voice control is disabled - aborting input");
+                return;
+            }
+
             string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
 
             ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
@@ -279,6 +294,11 @@ namespace JZK.Input
             }
 
             SpeechDataSystem.Instance.SaveGameData(saveData);
+        }
+
+        public void ToggleVoiceInputEnabled()
+        {
+            VoiceControlEnabled = !VoiceControlEnabled;
         }
     }
 }

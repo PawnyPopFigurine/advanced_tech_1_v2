@@ -60,7 +60,7 @@ namespace JZK.UI
 
         public void Input_QuitButton()
         {
-            UIStateSystem.Instance.QuitToDesktop();
+            UIStateSystem.Instance.TriggerQuit();
         }
     }
 }

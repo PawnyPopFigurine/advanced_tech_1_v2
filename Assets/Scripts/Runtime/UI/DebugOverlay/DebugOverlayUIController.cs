@@ -25,6 +25,8 @@ namespace JZK.UI
         [SerializeField] TMP_Text _confirm;
         [SerializeField] TMP_Text _back;
 
+        [SerializeField] TMP_Text _voiceControlEnabledText;
+
 
         public override void SetActive(bool active)
         {
@@ -45,14 +47,21 @@ namespace JZK.UI
             base.UpdateController();
 
             RefreshTerms();
-
-            if(SpeechRecognitionSystem.Instance.RecordedThisFrame)
+            if (SpeechInputSystem.Instance.VoiceControlEnabled)
             {
-                _latestSpeechText.text = SpeechRecognitionSystem.Instance.LatestRecordedSpeech;
+                if (SpeechRecognitionSystem.Instance.RecordedThisFrame)
+                {
+                    _latestSpeechText.text = SpeechRecognitionSystem.Instance.LatestRecordedSpeech;
+                }
+            
+                UpdateInputTextForSpeechInput();
             }
 
-            UpdateInputTextForSpeechInput();
             UpdateInputTextForGamepad();
+
+            string voiceEnabledText = SpeechInputSystem.Instance.VoiceControlEnabled ? "ON" : "OFF";
+
+            _voiceControlEnabledText.text = voiceEnabledText;
         }
 
         public void RefreshTerms()
@@ -117,6 +126,11 @@ namespace JZK.UI
                     SetLatestInputText(inputSystemDebugType);
                 }
             }
+        }
+
+        public void Input_ToggleVoiceControl()
+        {
+            SpeechInputSystem.Instance.ToggleVoiceInputEnabled();
         }
     }
 }

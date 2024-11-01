@@ -11,8 +11,11 @@ namespace JZK.Input
 {
     public class SpeechRecognitionSystem : GameSystem<SpeechRecognitionSystem>
     {
+        SpeechRecognizer _recognizer;
+
         TaskCompletionSource<int> _stopRecognition;
         bool _isRecording;
+        public bool IsRecording => _isRecording;
 
         public bool IsSettingTerm;
 
@@ -33,8 +36,6 @@ namespace JZK.Input
         public override void UpdateSystem()
         {
             base.UpdateSystem();
-
-            
         }
 
         public override void LateUpdateSystem()
@@ -58,35 +59,37 @@ namespace JZK.Input
             SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
 
-            using (var recognizer = new SpeechRecognizer(config))
-            {
-                _stopRecognition = new TaskCompletionSource<int>();
+            _isRecording = true;
 
-                recognizer.Recognized -= OnSpeechRecognized;
-                recognizer.Recognized += OnSpeechRecognized;
+            _recognizer = new SpeechRecognizer(config);
 
-                recognizer.Recognizing -= OnSpeechRecognizing;
-                recognizer.Recognizing += OnSpeechRecognizing;
+            _stopRecognition = new TaskCompletionSource<int>();
 
-                recognizer.Canceled -= OnSpeechSessionCancelled;
-                recognizer.Canceled += OnSpeechSessionCancelled;
+            _recognizer.Recognized -= OnSpeechRecognized;
+            _recognizer.Recognized += OnSpeechRecognized;
 
-                recognizer.SessionStopped -= OnSpeechSessionStopped;
-                recognizer.SessionStopped += OnSpeechSessionStopped;
+            _recognizer.Recognizing -= OnSpeechRecognizing;
+            _recognizer.Recognizing += OnSpeechRecognizing;
 
-                recognizer.SpeechEndDetected -= OnSpeechEndDetected;
-                recognizer.SpeechEndDetected += OnSpeechEndDetected;
+            _recognizer.Canceled -= OnSpeechSessionCancelled;
+            _recognizer.Canceled += OnSpeechSessionCancelled;
 
-                await recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
-                Task.WaitAny(new[] { _stopRecognition.Task });
+            _recognizer.SessionStopped -= OnSpeechSessionStopped;
+            _recognizer.SessionStopped += OnSpeechSessionStopped;
 
-                // await recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+            _recognizer.SpeechEndDetected -= OnSpeechEndDetected;
+            _recognizer.SpeechEndDetected += OnSpeechEndDetected;
 
-                _isRecording = true;
-                //Debug.Log("SpeechRecognitionSystem: Starting continuous recognition");
+            await _recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
+            Task.WaitAny(new[] { _stopRecognition.Task });
+        }
 
-                //_recognizer = recognizer;
-            }
+        public async void StopContinuousRecognition()
+        {
+            await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+            _recognizer.Dispose();
+
+            _isRecording = false;
         }
 
         void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
@@ -102,13 +105,12 @@ namespace JZK.Input
 
         void OnSpeechRecognizing(object sender, SpeechRecognitionEventArgs e)
         {
-            //Debug.Log("[HELLO] recognizing speech: " + e.Result.Text);
+
         }
 
         void OnSpeechSessionStopped(object sender, SessionEventArgs e)
         {
-           // Debug.Log("[HELLO] session stopped");
-            _stopRecognition.TrySetResult(0);
+            _isRecording = false;
         }
 
         void OnSpeechSessionCancelled(object sender, SpeechRecognitionEventArgs e)
@@ -118,7 +120,7 @@ namespace JZK.Input
 
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
         {
-            //Debug.Log("[HELLO] speech end detected: ");
+
         }
 
 
@@ -135,6 +137,11 @@ namespace JZK.Input
             }
 
             StartContinuousRecognition();
+        }
+
+        public void OnQuitTriggered()
+        {
+            StopContinuousRecognition();
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JZK.Framework;
+using JZK.Input;
 
 namespace JZK.UI
 {
@@ -47,6 +48,15 @@ namespace JZK.UI
 				return;
 			}
 
+			if(_quitTriggered)
+			{
+				if(!SpeechRecognitionSystem.Instance.IsRecording)
+				{
+					_canQuitSafely = true;
+					QuitToDesktop();
+				}
+			}
+
 			UpdateState();
 		}
 
@@ -86,6 +96,11 @@ namespace JZK.UI
 		[SerializeField] IUISystem _activeUISystem;
 
 		[SerializeField] bool _hasActiveUI;
+
+		bool _quitTriggered;
+		public bool QuitTriggered => _quitTriggered;
+
+		bool _canQuitSafely;
 
 		private void UpdateState()
 		{
@@ -169,17 +184,27 @@ namespace JZK.UI
 			EnterScreen(_previousState);
 		}
 
-		public void QuitToDesktop()
+		public void TriggerQuit()
 		{
+			_quitTriggered = true;
+			SpeechRecognitionSystem.Instance.OnQuitTriggered();
+		}
+
+		private void QuitToDesktop()
+		{
+			if(!_canQuitSafely)
+			{
+				Debug.Log(this.name + " - tried to trigger quit when not safe - aborting action");
+				return;
+			}
 #if UNITY_EDITOR
-			UnityEditor.EditorApplication.ExitPlaymode();
+            UnityEditor.EditorApplication.ExitPlaymode();
 #else
 			Application.Quit();
 #endif
+        }
 
-		}
-
-		private EUIState _pauseLastState;
+        private EUIState _pauseLastState;
 
 		/*public void Pause()
 		{

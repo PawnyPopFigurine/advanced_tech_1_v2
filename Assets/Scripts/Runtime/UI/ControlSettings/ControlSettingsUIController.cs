@@ -154,6 +154,11 @@ namespace JZK.UI
                 return;
             }
 
+            if(!SpeechInputSystem.Instance.VoiceControlEnabled)
+            {
+                return;
+            }
+
             string processedSpeech = SpeechHelper.ProcessSpeechTerm(speech);
 
             _popupHeader.SetActive(false);
