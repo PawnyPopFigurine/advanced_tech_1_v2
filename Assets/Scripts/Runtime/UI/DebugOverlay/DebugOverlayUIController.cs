@@ -108,11 +108,16 @@ namespace JZK.UI
             _latestInputText.text = inputName;
         }
 
+        public void SetLatestInputText(ESpeechInputType_Flag type)
+        {
+            _latestInputText.text = type.ToString();
+        }
+
         void UpdateInputTextForSpeechInput()
         {
             if (SpeechInputSystem.Instance.PressedThisFrame)
             {
-                SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInput);
+                SetLatestInputText(SpeechInputSystem.Instance.DebugLatestInputFlag);
             }
         }
 

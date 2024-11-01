@@ -2413,11 +2413,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2431781757394129944, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: _inputType
-      value: 18
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2689897988808892746, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: _type
-      value: 18
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2907151865823032254, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_Name
@@ -3924,11 +3924,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2431781757394129944, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: _inputType
-      value: 17
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2689897988808892746, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: _type
-      value: 17
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2907151865823032254, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_Name

@@ -28,16 +28,38 @@ namespace JZK.Input
         Game_RightShoulder,
         Game_RightTrigger,
 
-        UI_Up,
-        UI_Down,
-        UI_Left,
-        UI_Right,
-
         UI_Confirm,
         UI_Back,
 
         Max,
         Invalid
+    }
+
+    [Flags]
+    public enum ESpeechInputType_Flag
+    {
+        None = 0,
+
+        Game_DPadUp = 1,
+        Game_DPadDown = 2,
+        Game_DPadLeft = 4,
+        Game_DPadRight = 8,
+
+        Game_FaceNorth = 16,
+        Game_FaceSouth = 32,
+        Game_FaceWest = 64,
+        Game_FaceEast = 128,
+
+        Game_LeftShoulder = 256,
+        Game_LeftTrigger = 512,
+        Game_RightShoulder = 1024,
+        Game_RightTrigger = 2048,
+
+        UI_Confirm = 4096,
+        UI_Back = 8192,
+
+        Max = 16384,
+        Invalid = 32768,
     }
 
     //Takes in recognised speech and matches it to game input.
@@ -67,6 +89,7 @@ namespace JZK.Input
         public bool UIBackPressed { get; private set; }
 
         public ESpeechInputType DebugLatestInput { get; private set; }
+        public ESpeechInputType_Flag DebugLatestInputFlag { get; private set; }
 
         public bool VoiceControlEnabled { get; private set; }
 
@@ -114,17 +137,20 @@ namespace JZK.Input
 
         }
 
-        ESpeechInputType GetInputForRecognisedSpeech(string speech)
+        ESpeechInputType_Flag GetInputForRecognisedSpeech(string speech)
         {
+            ESpeechInputType_Flag typeFlag = ESpeechInputType_Flag.None;
+
             foreach(string keyString in _speechTermInput_LUT.Keys)
             {
-                if(keyString == speech)
+                if(speech.Contains(keyString))
                 {
-                    return _speechTermInput_LUT[keyString];
+                    ESpeechInputType_Flag enumFlag = SpeechHelper.FlagFromEnum(_speechTermInput_LUT[keyString]);
+                    typeFlag = typeFlag | enumFlag;
                 }
             }
 
-            return ESpeechInputType.None;
+            return typeFlag;
         }
 
         public string GetTermForType(ESpeechInputType type)
@@ -193,9 +219,62 @@ namespace JZK.Input
 
             string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
 
-            ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
+            ESpeechInputType_Flag inputType = GetInputForRecognisedSpeech(processedTerm);
 
-            switch(inputType)
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceNorth))
+            {
+                NorthFacePressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceSouth))
+            {
+                SouthFacePressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceWest))
+            {
+                WestFacePressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceEast))
+            {
+                EastFacePressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_DPadUp))
+            {
+                DPadUpPressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_DPadDown))
+            {
+                DPadDownPressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_DPadLeft))
+            {
+                DPadLeftPressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.Game_DPadRight))
+            {
+                DPadRightPressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.UI_Confirm))
+            {
+                UIConfirmPressed = true;
+            }
+
+            if(inputType.HasFlag(ESpeechInputType_Flag.UI_Back))
+            {
+                UIBackPressed = true;
+            }
+
+            DebugLatestInputFlag = inputType;
+            //ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
+
+            /*switch(inputType)
             {
                 case ESpeechInputType.Game_FaceNorth:
                     NorthFacePressed = true;
@@ -232,7 +311,7 @@ namespace JZK.Input
                     break;
             }
 
-            DebugLatestInput = inputType;
+            DebugLatestInput = inputType;*/
         }
 
         void ClearSpeechInput()
