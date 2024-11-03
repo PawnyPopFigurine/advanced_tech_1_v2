@@ -1791,6 +1791,8 @@ MonoBehaviour:
   _defaultSelected: {fileID: 5711145786939218426}
   _scrollRect: {fileID: 5248406087836021932}
   _contentPanel: {fileID: 8593071922918898036}
+  _resetButton: {fileID: 7058019853343381274}
+  _backButton: {fileID: 1505499500723804722}
 --- !u!1001 &89703161570739074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2153,6 +2155,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 3196863388156072646}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: West Face
@@ -2436,12 +2446,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
   m_PrefabInstance: {fileID: 2548195315564920550}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7058019853343381274}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7058019853343381274 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4804810331440310780, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
+  m_PrefabInstance: {fileID: 2548195315564920550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3549078840278969454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2520,6 +2535,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
       objectReference: {fileID: 3590359939389995174}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: Back
@@ -2734,6 +2757,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 3205967807903927458}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: D-Pad Down
@@ -2952,6 +2983,10 @@ PrefabInstance:
       objectReference: {fileID: 2848532126539766196}
     - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 7996087714692832464, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
@@ -3232,12 +3267,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
+--- !u!1 &1505499500723804722 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4804810331440310780, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
+  m_PrefabInstance: {fileID: 6217929964638696398}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5347813808793564980 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
   m_PrefabInstance: {fileID: 6217929964638696398}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1505499500723804722}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -3336,6 +3376,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 3501400784675208377}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: East Face
@@ -3550,6 +3598,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 3590359939389995174}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: D-Pad Right
@@ -3764,6 +3820,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 2307167594845306040}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: D-Pad Left
@@ -3978,6 +4042,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 8360697179702159214}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: D-Pad Up
@@ -4192,6 +4264,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 8427798624068461533}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: Confirm
@@ -4412,6 +4492,14 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 6299775390805091202}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023011484302479283, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4548851315158415900}
     - target: {fileID: 6552670436248920706, guid: 0f96e7727686b1a4a9e7a0d27e638c50, type: 3}
       propertyPath: m_text
       value: South Face

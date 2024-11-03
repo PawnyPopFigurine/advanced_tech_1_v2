@@ -31,6 +31,11 @@ namespace JZK.UI
         [SerializeField] ScrollRect _scrollRect;
         [SerializeField] RectTransform _contentPanel;
 
+        [SerializeField] GameObject _resetButton;
+        [SerializeField] GameObject _backButton;
+
+        bool _leftPopupLastFrame;
+
 
         public override void SetActive(bool active)
         {
@@ -67,6 +72,8 @@ namespace JZK.UI
             base.UpdateController();
 
             UpdateInput();
+
+            _leftPopupLastFrame = false;
         }
 
         public void UpdateInput()
@@ -81,11 +88,11 @@ namespace JZK.UI
             {
                 if(SpeechInputSystem.Instance.UIConfirmPressed)
                 {
-                    Input_ConfirmButtonPressed();
+                    ConfirmPopupRecording();
                 }
                 if(SpeechInputSystem.Instance.UIBackPressed)
                 {
-                    Input_CancelButtonPressed();
+                    CancelPopupRecording();
                 }
             }
 
@@ -116,6 +123,53 @@ namespace JZK.UI
                         SnapScrollTo(scrollToRect);
                     }
                 }
+
+                if (SpeechInputSystem.Instance.DPadLeftPressed)
+                {
+                    Selectable selectOnLeft = currentSelectable.FindSelectableOnLeft();
+                    if (selectOnLeft != null)
+                    {
+                        GameObject selectOnLeftGO = selectOnLeft.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
+                        RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
+                        SnapScrollTo(scrollToRect);
+                    }
+                }
+
+                if (SpeechInputSystem.Instance.DPadRightPressed)
+                {
+                    Selectable selectOnRight = currentSelectable.FindSelectableOnRight();
+                    if (selectOnRight != null)
+                    {
+                        GameObject selectOnRightGO = selectOnRight.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnRightGO);
+                        RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
+                        SnapScrollTo(scrollToRect);
+                    }
+                }
+
+                if (!_leftPopupLastFrame)
+                {
+                    if (SpeechInputSystem.Instance.UIConfirmPressed)
+                    {
+                        RecordButton selectedRecordButton = currentSelectable.gameObject.GetComponent<RecordButton>();
+                        if (selectedRecordButton != null)
+                        {
+                            selectedRecordButton.Input_ButtonPressed();
+                        }
+                        else
+                        {
+                            if(currentSelectable.gameObject == _resetButton)
+                            {
+                                Input_ResetButtonPressed();
+                            }
+                            if(currentSelectable.gameObject == _backButton)
+                            {
+                                Input_BackButtonPressed();
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -134,6 +188,7 @@ namespace JZK.UI
             else
             {
                 SpeechRecognitionSystem.Instance.IsSettingTerm = false;
+                _leftPopupLastFrame = true;
             }
         }
 
@@ -147,7 +202,15 @@ namespace JZK.UI
 
         public void Input_BackButtonPressed()
         {
-            ControlSettingsUISystem.Instance.Input_BackButtonPressed();
+            if(_popupOpen)
+            {
+                TogglePopup(false);
+            }
+
+            else
+            {
+                ControlSettingsUISystem.Instance.Input_BackButtonPressed();
+            }
         }
 
         public void Input_RecordButtonPressed(ESpeechInputType type)
@@ -156,7 +219,7 @@ namespace JZK.UI
             TogglePopup(true);
         }
 
-        public void Input_ConfirmButtonPressed()
+        public void ConfirmPopupRecording()
         {
             if(_latestRecordedTerm == string.Empty)
             {
@@ -169,7 +232,7 @@ namespace JZK.UI
             TogglePopup(false);
         }
 
-        public void Input_CancelButtonPressed()
+        public void CancelPopupRecording()
         {
             TogglePopup(false);
         }
@@ -211,6 +274,11 @@ namespace JZK.UI
             }
 
             if(!SpeechInputSystem.Instance.VoiceControlEnabled)
+            {
+                return;
+            }
+
+            if (_latestRecordedTerm != string.Empty)
             {
                 return;
             }

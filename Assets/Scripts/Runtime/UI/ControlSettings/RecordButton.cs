@@ -10,6 +10,7 @@ namespace JZK.UI
         [SerializeField] ESpeechInputType _type;
         public ESpeechInputType Type => _type;
 
+
         public void Input_ButtonPressed()
         {
             ControlSettingsUISystem.Instance.Input_RecordButtonPressed(_type);
