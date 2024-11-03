@@ -170,6 +170,14 @@ namespace JZK.UI
                         }
                     }
                 }
+
+                if (InputSystem.Instance.DPadDownPressed ||
+                    InputSystem.Instance.DPadUpPressed ||
+                    InputSystem.Instance.DPadLeftPressed ||
+                    InputSystem.Instance.DPadRightPressed)
+                {
+                    SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                }
             }
         }
 
