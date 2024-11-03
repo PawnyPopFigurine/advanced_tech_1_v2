@@ -66,32 +66,32 @@ namespace JZK.UI
 
         public void RefreshTerms()
         {
-            Dictionary<string, ESpeechInputType> currentTerms = new(SpeechInputSystem.Instance.SpeechTermInput_LUT);
-            foreach (string validTerm in currentTerms.Keys)
+            Dictionary<ESpeechInputType, string> currentTerms = new(SpeechInputSystem.Instance.SpeechInputTerm_LUT);
+            foreach (ESpeechInputType validType in currentTerms.Keys)
             {
-                ESpeechInputType type = currentTerms[validTerm];
-                switch(type)
+                string term = currentTerms[validType];
+                switch(validType)
                 {
                     case ESpeechInputType.Game_DPadUp:
-                        _up.SetText(validTerm); break;
+                        _up.SetText(term); break;
                     case ESpeechInputType.Game_DPadDown:
-                        _down.SetText(validTerm); break;
+                        _down.SetText(term); break;
                     case ESpeechInputType.Game_DPadLeft:
-                        _left.SetText(validTerm); break;
+                        _left.SetText(term); break;
                     case ESpeechInputType.Game_DPadRight:
-                        _right.SetText(validTerm); break;
+                        _right.SetText(term); break;
                     case ESpeechInputType.Game_FaceNorth:
-                        _north.SetText(validTerm); break;
+                        _north.SetText(term); break;
                     case ESpeechInputType.Game_FaceSouth:
-                        _south.SetText(validTerm); break;
+                        _south.SetText(term); break;
                     case ESpeechInputType.Game_FaceEast:
-                        _east.SetText(validTerm); break;
+                        _east.SetText(term); break;
                     case ESpeechInputType.Game_FaceWest:
-                        _west.SetText(validTerm); break;
+                        _west.SetText(term); break;
                     case ESpeechInputType.UI_Confirm:
-                        _confirm.SetText(validTerm); break;
+                        _confirm.SetText(term); break;
                     case ESpeechInputType.UI_Back:
-                        _back.SetText(validTerm); break;
+                        _back.SetText(term); break;
                     default:
                         break;
                 }

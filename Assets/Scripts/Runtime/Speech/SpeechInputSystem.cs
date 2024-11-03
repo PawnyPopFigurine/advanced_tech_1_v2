@@ -73,8 +73,8 @@ namespace JZK.Input
 
         public override SystemLoadData LoadData => _loadData;
 
-        Dictionary<string, ESpeechInputType> _speechTermInput_LUT = new();
-        public Dictionary<string, ESpeechInputType> SpeechTermInput_LUT => _speechTermInput_LUT;
+        Dictionary<ESpeechInputType, string> _speechInputTerm_LUT = new();
+        public Dictionary<ESpeechInputType, string> SpeechInputTerm_LUT => _speechInputTerm_LUT;
 
         public bool NorthFacePressed { get; private set; }
         public bool SouthFacePressed { get; private set; }
@@ -141,11 +141,12 @@ namespace JZK.Input
         {
             ESpeechInputType_Flag typeFlag = ESpeechInputType_Flag.None;
 
-            foreach(string keyString in _speechTermInput_LUT.Keys)
+            foreach(ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
             {
+                string keyString = _speechInputTerm_LUT[termKey];
                 if(speech.Contains(keyString))
                 {
-                    ESpeechInputType_Flag enumFlag = SpeechHelper.FlagFromEnum(_speechTermInput_LUT[keyString]);
+                    ESpeechInputType_Flag enumFlag = SpeechHelper.FlagFromEnum(termKey);
                     typeFlag = typeFlag | enumFlag;
                 }
             }
@@ -155,15 +156,9 @@ namespace JZK.Input
 
         public string GetTermForType(ESpeechInputType type)
         {
-            foreach(string keyString in _speechTermInput_LUT.Keys)
+            if(_speechInputTerm_LUT.TryGetValue(type, out string term))
             {
-                ESpeechInputType typeValue = _speechTermInput_LUT[keyString];
-                if(typeValue != type)
-                {
-                    continue;
-                }
-
-                return keyString;
+                return term;
             }
 
             Debug.LogWarning(this.name + " - failed to find term for type " + type.ToString() + " - returning empty string");
@@ -172,18 +167,11 @@ namespace JZK.Input
 
         public void SetTermForType(ESpeechInputType type, string newTerm)
         {
-            Dictionary<string, ESpeechInputType> _speechTermInput_LUT_Cache = new(_speechTermInput_LUT);
+            Dictionary<ESpeechInputType, string> _speechInputTerm_LUT_Cache = new(_speechInputTerm_LUT);
 
-            foreach (string keyString in _speechTermInput_LUT_Cache.Keys)
+            if(_speechInputTerm_LUT.ContainsKey(type))
             {
-                ESpeechInputType typeValue = _speechTermInput_LUT_Cache[keyString];
-                if (typeValue != type)
-                {
-                    continue;
-                }
-
-                _speechTermInput_LUT.Remove(keyString);
-                _speechTermInput_LUT.Add(newTerm, type);
+                _speechInputTerm_LUT[type] = newTerm;
 
                 Debug.Log(this.name + " - set new term - " + newTerm + " - for input type - " + type.ToString());
 
@@ -195,7 +183,7 @@ namespace JZK.Input
 
         public void ResetTermsToDefault()
         {
-            _speechTermInput_LUT.Clear();
+            _speechInputTerm_LUT.Clear();
 
             foreach (ESpeechInputType type in Enum.GetValues(typeof(ESpeechInputType)))
             {
@@ -205,7 +193,7 @@ namespace JZK.Input
                 }
 
                 string defaultTerm = SpeechHelper.DEFAULT_TERMS[type];
-                _speechTermInput_LUT.Add(defaultTerm, type);
+                _speechInputTerm_LUT.Add(type, defaultTerm);
             }
         }
 
@@ -272,46 +260,6 @@ namespace JZK.Input
             }
 
             DebugLatestInputFlag = inputType;
-            //ESpeechInputType inputType = GetInputForRecognisedSpeech(processedTerm);
-
-            /*switch(inputType)
-            {
-                case ESpeechInputType.Game_FaceNorth:
-                    NorthFacePressed = true;
-                    break;
-                case ESpeechInputType.Game_FaceSouth:
-                    SouthFacePressed = true;
-                    break;
-                case ESpeechInputType.Game_FaceWest:
-                    WestFacePressed = true;
-                    break;
-                case ESpeechInputType.Game_FaceEast:
-                    EastFacePressed = true;
-                    break;
-                case ESpeechInputType.Game_DPadUp:
-                    DPadUpPressed = true;
-                    break;
-                case ESpeechInputType.Game_DPadDown:
-                    DPadDownPressed = true;
-                    break;
-                case ESpeechInputType.Game_DPadLeft:
-                    DPadLeftPressed = true;
-                    break;
-                case ESpeechInputType.Game_DPadRight:
-                    DPadRightPressed = true;
-                    break;
-                case ESpeechInputType.UI_Confirm:
-                    UIConfirmPressed = true;
-                    break;
-                case ESpeechInputType.UI_Back:
-                    UIBackPressed = true;
-                    break;
-                default:
-                    Debug.Log(this.name + " - no recognised input type for speech " + processedTerm);
-                    break;
-            }
-
-            DebugLatestInput = inputType;*/
         }
 
         void ClearSpeechInput()
@@ -340,17 +288,17 @@ namespace JZK.Input
                 return;
             }
 
-            _speechTermInput_LUT.Clear();
+            _speechInputTerm_LUT.Clear();
 
             foreach(SpeechSaveData.SpeechSaveDataTerm term in saveData.Terms)
             {
-                if(_speechTermInput_LUT.ContainsValue(term.Type))
+                if(_speechInputTerm_LUT.ContainsKey(term.Type))
                 {
                     Debug.LogError(this.name + " - has recieved duplicate term for type " + term.Type.ToString() + " - skipping addition for Term" + term.Term);
                     continue;
                 }
 
-                _speechTermInput_LUT.Add(term.Term, term.Type);
+                _speechInputTerm_LUT.Add(term.Type, term.Term);
                 Debug.Log(this.name + " - adding term " + term.Term + " - for input type " + term.Type.ToString());
             }
         }
@@ -361,12 +309,12 @@ namespace JZK.Input
 
             saveData.Terms = new();
 
-            foreach(string termString in _speechTermInput_LUT.Keys)
+            foreach(ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
             {
                 SpeechSaveData.SpeechSaveDataTerm term = new()
                 {
-                    Term = termString,
-                    Type = _speechTermInput_LUT[termString]
+                    Term = _speechInputTerm_LUT[termKey],
+                    Type = termKey,
                 };
 
                 saveData.Terms.Add(term);
