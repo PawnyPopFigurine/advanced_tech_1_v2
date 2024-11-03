@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace JZK.UI
 {
@@ -23,6 +26,11 @@ namespace JZK.UI
 
         [SerializeField] List<ScrollItemTermText> _scrollItemTermTexts;
 
+        [SerializeField] GameObject _defaultSelected;
+
+        [SerializeField] ScrollRect _scrollRect;
+        [SerializeField] RectTransform _contentPanel;
+
 
         public override void SetActive(bool active)
         {
@@ -39,6 +47,9 @@ namespace JZK.UI
 
             TogglePopup(false);
             RefreshDisplayedTerms();
+            EventSystem.current.SetSelectedGameObject(_defaultSelected);
+            RectTransform defaultSelectRect = _defaultSelected.gameObject.GetComponent<RectTransform>();
+            SnapScrollTo(defaultSelectRect);
         }
 
         void RefreshDisplayedTerms()
@@ -75,6 +86,35 @@ namespace JZK.UI
                 if(SpeechInputSystem.Instance.UIBackPressed)
                 {
                     Input_CancelButtonPressed();
+                }
+            }
+
+            if(!_popupOpen)
+            {
+                Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+                if (SpeechInputSystem.Instance.DPadDownPressed)
+                {
+                    Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
+                    if (selectOnDown != null)
+                    {
+                        GameObject selectOnDownGO = selectOnDown.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                        RectTransform scrollToRect = selectOnDownGO.GetComponent<RectTransform>();
+                        SnapScrollTo(scrollToRect);
+                    }
+                }
+
+                if (SpeechInputSystem.Instance.DPadUpPressed)
+                {
+                    Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
+                    if (selectOnUp != null)
+                    {
+                        GameObject selectOnUpGO = selectOnUp.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnUpGO);
+                        RectTransform scrollToRect = selectOnUpGO.GetComponent<RectTransform>();
+                        SnapScrollTo(scrollToRect);
+                    }
                 }
             }
         }
@@ -139,6 +179,22 @@ namespace JZK.UI
             SpeechInputSystem.Instance.ResetTermsToDefault();
             SpeechInputSystem.Instance.SaveCurrentTerms();
             RefreshDisplayedTerms();
+        }
+
+        public void SnapScrollTo(RectTransform targetRect)
+        {
+            if(!targetRect.IsChildOf(_scrollRect.transform))
+            {
+                Debug.Log("Tried to snap scroll to item not in scroll rect - aborting action");
+                return;
+            }
+
+            Canvas.ForceUpdateCanvases();
+
+            Vector2 newPos = (Vector2)_scrollRect.transform.InverseTransformPoint(_contentPanel.position)
+                    - (Vector2)_scrollRect.transform.InverseTransformPoint(targetRect.position);
+
+            _contentPanel.anchoredPosition = new(_contentPanel.anchoredPosition.x, newPos.y);
         }
 
 
