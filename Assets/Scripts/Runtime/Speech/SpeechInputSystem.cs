@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using JZK.Save;
 using System;
 using UnityEngine.UIElements;
+using System.Linq;
 
 namespace JZK.Input
 {
@@ -141,13 +142,17 @@ namespace JZK.Input
         {
             ESpeechInputType_Flag typeFlag = ESpeechInputType_Flag.None;
 
-            foreach(ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
+            string[] words = speech.Split(" ");
+            foreach(string word in words)
             {
-                string keyString = _speechInputTerm_LUT[termKey];
-                if(speech.Contains(keyString))
+                foreach (ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
                 {
-                    ESpeechInputType_Flag enumFlag = SpeechHelper.FlagFromEnum(termKey);
-                    typeFlag = typeFlag | enumFlag;
+                    string keyString = _speechInputTerm_LUT[termKey];
+                    if (keyString == word)
+                    {
+                        ESpeechInputType_Flag enumFlag = SpeechHelper.FlagFromEnum(termKey);
+                        typeFlag = typeFlag | enumFlag;
+                    }
                 }
             }
 

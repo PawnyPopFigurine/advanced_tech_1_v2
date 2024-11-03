@@ -34,6 +34,8 @@ namespace JZK.UI
         [SerializeField] GameObject _resetButton;
         [SerializeField] GameObject _backButton;
 
+        [SerializeField] GameObject _backOutPrompt;
+
         bool _leftPopupLastFrame;
 
 
@@ -204,6 +206,7 @@ namespace JZK.UI
         {
             _popupHeader.SetActive(true);
             _recordedTerm.SetActive(false);
+            _backOutPrompt.SetActive(true);
             _latestRecordedTerm = string.Empty;
             _recordedTermText.text = string.Empty;
         }
@@ -295,6 +298,7 @@ namespace JZK.UI
 
             _popupHeader.SetActive(false);
             _recordedTerm.SetActive(true);
+            _backOutPrompt.SetActive(true);
             _recordedTermText.text = processedSpeech;
             _latestRecordedTerm = processedSpeech;
         }
