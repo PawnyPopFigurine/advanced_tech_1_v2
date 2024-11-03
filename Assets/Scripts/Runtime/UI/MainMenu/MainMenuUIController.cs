@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace JZK.UI
 {
@@ -49,6 +50,28 @@ namespace JZK.UI
                 {
                     Input_QuitButton();
                     return;
+                }
+            }
+
+            Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+            if(SpeechInputSystem.Instance.DPadDownPressed)
+            {
+                Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
+                if(selectOnDown != null)
+                {
+                    GameObject selectOnDownGO = selectOnDown.gameObject;
+                    EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                }
+            }
+
+            if(SpeechInputSystem.Instance.DPadUpPressed)
+            {
+                Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
+                if (selectOnUp != null)
+                {
+                    GameObject selectOnUpGO = selectOnUp.gameObject;
+                    EventSystem.current.SetSelectedGameObject(selectOnUpGO);
                 }
             }
         }
