@@ -38,6 +38,8 @@ namespace JZK.UI
 
         bool _leftPopupLastFrame;
 
+        GameObject _lastSelectedBeforePopupOpen;
+
 
         public override void SetActive(bool active)
         {
@@ -194,11 +196,13 @@ namespace JZK.UI
                 string inputName = SpeechHelper.INPUT_NAMES[_recordForType];
                 _settingInputText.text = inputName;
                 SpeechRecognitionSystem.Instance.IsSettingTerm = true;
+                _lastSelectedBeforePopupOpen = EventSystem.current.currentSelectedGameObject;
             }
             else
             {
                 SpeechRecognitionSystem.Instance.IsSettingTerm = false;
                 _leftPopupLastFrame = true;
+                EventSystem.current.SetSelectedGameObject(_lastSelectedBeforePopupOpen);
             }
         }
 
@@ -253,6 +257,16 @@ namespace JZK.UI
             SpeechInputSystem.Instance.ResetTermsToDefault();
             SpeechInputSystem.Instance.SaveCurrentTerms();
             RefreshDisplayedTerms();
+        }
+
+        public void Input_PopupConfirmPressed()
+        {
+            ConfirmPopupRecording();
+        }
+
+        public void Input_PopupBackPressed()
+        {
+            CancelPopupRecording();
         }
 
         public void SnapScrollTo(RectTransform targetRect)

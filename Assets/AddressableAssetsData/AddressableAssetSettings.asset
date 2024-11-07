@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 9258ebff4cf1034419acc3dc51ee2c99
   m_currentHash:
     serializedVersion: 2
-    Hash: 9f241eeeb5847995c8ce891b818fcdf2
+    Hash: ee614bbd1e8d95b868b4a1e8fa9080fd
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -90,6 +90,8 @@ MonoBehaviour:
     - default
     - input
     - ui
+    - player
+    - hazards
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f5b1f530ad3713d4db9f12c72d118b99, type: 2}

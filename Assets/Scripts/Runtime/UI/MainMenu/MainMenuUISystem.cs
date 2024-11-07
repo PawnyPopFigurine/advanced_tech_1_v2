@@ -5,6 +5,7 @@ using JZK.Framework;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using JetBrains.Annotations;
+using JZK.Gameplay;
 
 namespace JZK.UI
 {
@@ -96,6 +97,12 @@ namespace JZK.UI
         }
 
         #endregion //Load
+
+        public void Input_StartGameButton()
+        {
+            UIStateSystem.Instance.EnterScreen(UIStateSystem.EUIState.Gameplay);
+            GameplaySystem.Instance.StartGameplay();
+        }
 
         public void Input_ControlSettingsButton()
         {

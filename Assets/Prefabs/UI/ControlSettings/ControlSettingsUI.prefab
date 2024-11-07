@@ -1955,7 +1955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Input_ConfirmButtonPressed
+      value: Input_PopupConfirmPressed
       objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2091,7 +2091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Input_CancelButtonPressed
+      value: Input_PopupBackPressed
       objectReference: {fileID: 0}
     - target: {fileID: 2053014746614613242, guid: eb1a28709b17b15428ad13f2131d7952, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

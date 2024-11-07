@@ -23,6 +23,16 @@ MonoBehaviour:
     m_SerializedLabels:
     - input
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1bacb5015fe6d3409e25b6b7e43eb05
+    m_Address: Assets/Prefabs/Gameplay/Player/Player.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29b1cd45aecaa6b45b6632d57eb85b22
+    m_Address: Assets/Prefabs/Gameplay/Hazards/HazardBlock.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d46275014cbfb8f469cd69782521e9d9, type: 2}
   m_SchemaSet:

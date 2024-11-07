@@ -1,3 +1,4 @@
+using JZK.Gameplay;
 using JZK.Input;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace JZK.UI
     {
         [SerializeField] GameObject _defaultSelected;
 
+        [SerializeField] GameObject _startGameButton;
         [SerializeField] GameObject _controlSettingsButton;
         [SerializeField] GameObject _quitButton;
 
@@ -51,29 +53,43 @@ namespace JZK.UI
                     Input_QuitButton();
                     return;
                 }
-            }
 
-            Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
-
-            if(SpeechInputSystem.Instance.DPadDownPressed)
-            {
-                Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
-                if(selectOnDown != null)
+                if(EventSystem.current.currentSelectedGameObject == _startGameButton)
                 {
-                    GameObject selectOnDownGO = selectOnDown.gameObject;
-                    EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                    Input_StartGameButton();
+                    return;
                 }
             }
 
-            if(SpeechInputSystem.Instance.DPadUpPressed)
+            if(null != EventSystem.current.currentSelectedGameObject)
             {
-                Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
-                if (selectOnUp != null)
+                Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+                if (SpeechInputSystem.Instance.DPadDownPressed)
                 {
-                    GameObject selectOnUpGO = selectOnUp.gameObject;
-                    EventSystem.current.SetSelectedGameObject(selectOnUpGO);
+                    Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
+                    if (selectOnDown != null)
+                    {
+                        GameObject selectOnDownGO = selectOnDown.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                    }
+                }
+
+                if (SpeechInputSystem.Instance.DPadUpPressed)
+                {
+                    Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
+                    if (selectOnUp != null)
+                    {
+                        GameObject selectOnUpGO = selectOnUp.gameObject;
+                        EventSystem.current.SetSelectedGameObject(selectOnUpGO);
+                    }
                 }
             }
+        }
+
+        public void Input_StartGameButton()
+        {
+            MainMenuUISystem.Instance.Input_StartGameButton();
         }
 
         public void Input_ControlSettingsButton()

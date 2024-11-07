@@ -54,7 +54,19 @@ namespace JZK.Input
             SceneInit.CurrentSceneInit.OnLoadingStateComplete += OnLoadingStateComplete;
         }
 
-        public async void StartContinuousRecognition()
+        public void StartContinuousRecognition()
+        {
+            Debug.Log("[HELLO] starting continuous recognition");
+            StartContinuousRecognitionAsync();
+        }
+
+        public void StopContinuousRecognition()
+        {
+            Debug.Log("[HELLO] stopping continuous recognition");
+            StopContinuousRecognitionAsync();
+        }
+
+        async void StartContinuousRecognitionAsync()
         {
             SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
@@ -84,7 +96,7 @@ namespace JZK.Input
             Task.WaitAny(new[] { _stopRecognition.Task });
         }
 
-        public async void StopContinuousRecognition()
+        async void StopContinuousRecognitionAsync()
         {
             await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
             _recognizer.Dispose();

@@ -29,9 +29,6 @@ namespace JZK.Framework
 		public void Start()
 		{
 			Setup(_systems);
-
-			//SpeechRecognitionSystem.Instance.StartContinuousRecognition();
-
 		}
 
 		private void Update()

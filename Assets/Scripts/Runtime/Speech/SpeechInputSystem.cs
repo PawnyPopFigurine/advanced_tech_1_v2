@@ -63,6 +63,12 @@ namespace JZK.Input
         Invalid = 32768,
     }
 
+    public class SpeechInputData
+    {
+        public Dictionary<ESpeechInputType, int> InputTypePressCount_LUT = new();
+        public float TimeToNextEventFire;
+    }
+
     //Takes in recognised speech and matches it to game input.
     public class SpeechInputSystem : GameSystem<SpeechInputSystem>
     {
@@ -93,6 +99,10 @@ namespace JZK.Input
         public ESpeechInputType_Flag DebugLatestInputFlag { get; private set; }
 
         public bool VoiceControlEnabled { get; private set; }
+
+        SpeechInputData _latestSpeechInputData;
+
+        static float SPEECH_INPUT_DELAY = 0.2f;
 
         public bool PressedThisFrame
         {
@@ -127,6 +137,8 @@ namespace JZK.Input
             {
                 OnSpeechRecognized(SpeechRecognitionSystem.Instance.LatestRecordedSpeech);
             }
+
+            UpdateInputForLatestSpeechData();
         }
 
         public override void SetCallbacks()
@@ -136,6 +148,34 @@ namespace JZK.Input
             SpeechDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
             SpeechDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;
 
+        }
+
+        SpeechInputData GetInputDataForRecognisedSpeech(string speech)
+        {
+            SpeechInputData speechInputData = new();
+            speechInputData.TimeToNextEventFire = SPEECH_INPUT_DELAY;
+
+            string[] words = speech.Split(" ");
+            foreach(string word in words)
+            {
+                foreach(ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
+                {
+                    string keyString = _speechInputTerm_LUT[termKey];
+                    if (keyString == word)
+                    {
+                        if(speechInputData.InputTypePressCount_LUT.ContainsKey(termKey))
+                        {
+                            speechInputData.InputTypePressCount_LUT[termKey] += 1;
+                        }
+                        else
+                        {
+                            speechInputData.InputTypePressCount_LUT.Add(termKey, 1);
+                        }
+                    }
+                }
+            }
+
+            return speechInputData;
         }
 
         ESpeechInputType_Flag GetInputForRecognisedSpeech(string speech)
@@ -202,6 +242,65 @@ namespace JZK.Input
             }
         }
 
+        void UpdateInputForLatestSpeechData()
+        {
+            if(null == _latestSpeechInputData)
+            {
+                return;
+            }
+
+            _latestSpeechInputData.TimeToNextEventFire -= Time.deltaTime;
+
+            if(_latestSpeechInputData.TimeToNextEventFire <= 0)
+            {
+                _latestSpeechInputData.TimeToNextEventFire = SPEECH_INPUT_DELAY;
+                Dictionary<ESpeechInputType, int> inputLUT_Cache = new(_latestSpeechInputData.InputTypePressCount_LUT);
+
+                foreach (ESpeechInputType type in inputLUT_Cache.Keys)
+                {
+                    switch(type)
+                    {
+                        case ESpeechInputType.Game_DPadUp:
+                            DPadUpPressed = true;
+                            break;
+                        case ESpeechInputType.Game_DPadDown:
+                            DPadDownPressed = true;
+                            break;
+                        case ESpeechInputType.Game_DPadLeft:
+                            DPadLeftPressed = true;
+                            break;
+                        case ESpeechInputType.Game_DPadRight:
+                            DPadRightPressed = true;
+                            break;
+                        case ESpeechInputType.Game_FaceNorth:
+                            NorthFacePressed = true;
+                            break;
+                        case ESpeechInputType.Game_FaceSouth:
+                            SouthFacePressed = true;
+                            break;
+                        case ESpeechInputType.Game_FaceWest:
+                            WestFacePressed = true;
+                            break;
+                        case ESpeechInputType.Game_FaceEast:
+                            EastFacePressed = true;
+                            break;
+                        case ESpeechInputType.UI_Confirm:
+                            UIConfirmPressed = true;
+                            break;
+                        case ESpeechInputType.UI_Back:
+                            UIBackPressed = true;
+                            break;
+                    }
+
+                    _latestSpeechInputData.InputTypePressCount_LUT[type] -= 1;
+                    if(_latestSpeechInputData.InputTypePressCount_LUT[type] == 0)
+                    {
+                        _latestSpeechInputData.InputTypePressCount_LUT.Remove(type);
+                    }
+                }
+            }
+        }
+
         public void OnSpeechRecognized(string speechTerm)
         {            
             if(!VoiceControlEnabled)
@@ -213,8 +312,12 @@ namespace JZK.Input
             string processedTerm = SpeechHelper.ProcessSpeechTerm(speechTerm);
 
             ESpeechInputType_Flag inputType = GetInputForRecognisedSpeech(processedTerm);
+            SpeechInputData speechInputData = GetInputDataForRecognisedSpeech(processedTerm);
+            _latestSpeechInputData = speechInputData;
 
-            if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceNorth))
+            //foreach()
+
+            /*if(inputType.HasFlag(ESpeechInputType_Flag.Game_FaceNorth))
             {
                 NorthFacePressed = true;
             }
@@ -262,7 +365,7 @@ namespace JZK.Input
             if(inputType.HasFlag(ESpeechInputType_Flag.UI_Back))
             {
                 UIBackPressed = true;
-            }
+            }*/
 
             DebugLatestInputFlag = inputType;
         }
