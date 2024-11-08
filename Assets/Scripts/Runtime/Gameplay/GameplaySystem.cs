@@ -63,7 +63,12 @@ namespace JZK.Gameplay
         {
             ESpeechInputType_Flag.Game_FaceNorth,
             ESpeechInputType_Flag.Game_FaceSouth,
-
+            ESpeechInputType_Flag.Game_FaceWest,
+            ESpeechInputType_Flag.Game_FaceEast,
+            ESpeechInputType_Flag.Game_DPadUp,
+            ESpeechInputType_Flag.Game_DPadDown,
+            ESpeechInputType_Flag.Game_DPadLeft,
+            ESpeechInputType_Flag.Game_DPadRight,
         };
 
         #region Load
@@ -185,6 +190,42 @@ namespace JZK.Gameplay
                         break;
                     case ESpeechInputType_Flag.Game_FaceSouth:
                         if (Input.InputSystem.Instance.FaceButtonSouthPressed || SpeechInputSystem.Instance.SouthFacePressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_FaceWest:
+                        if (Input.InputSystem.Instance.FaceButtonWestPressed || SpeechInputSystem.Instance.WestFacePressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_FaceEast:
+                        if (Input.InputSystem.Instance.FaceButtonEastPressed || SpeechInputSystem.Instance.EastFacePressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_DPadUp:
+                        if (Input.InputSystem.Instance.DPadUpPressed || SpeechInputSystem.Instance.DPadUpPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_DPadDown:
+                        if (Input.InputSystem.Instance.DPadDownPressed || SpeechInputSystem.Instance.DPadDownPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_DPadLeft:
+                        if (Input.InputSystem.Instance.DPadLeftPressed || SpeechInputSystem.Instance.DPadLeftPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_DPadRight:
+                        if (Input.InputSystem.Instance.DPadRightPressed || SpeechInputSystem.Instance.DPadRightPressed)
                         {
                             DestroyHazardBlock(hazardToDestroy);
                         }
