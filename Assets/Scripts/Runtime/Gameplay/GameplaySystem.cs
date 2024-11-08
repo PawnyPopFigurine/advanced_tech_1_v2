@@ -129,6 +129,23 @@ namespace JZK.Gameplay
             _isInGameplay = true;
             _timeSinceGameStart = 0f;
             PlaceHazardBlock();
+
+            GameplayUISystem.Instance.OnGameplayStart();
+        }
+
+        public void RestartGameplay()
+        {
+            DestroyAllHazardBlocks();
+            StartGameplay();
+        }
+
+        public void DestroyAllHazardBlocks()
+        {
+            List<HazardBlockController> hazardsCache = new(_activeBlocks);
+            foreach(HazardBlockController hazardBlockController in hazardsCache)
+            {
+                DestroyHazardBlock(hazardBlockController);
+            }
         }
 
         ESpeechInputType_Flag GetSpeechInputForHazardBlock()
@@ -264,6 +281,8 @@ namespace JZK.Gameplay
         {
             Debug.Log("[YOU DIED]");
             _currentState = EGameState.Failure;
+
+            GameplayUISystem.Instance.OnPlayerDeath();
         }
     }
 }

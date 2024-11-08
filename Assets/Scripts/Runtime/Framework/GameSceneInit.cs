@@ -19,6 +19,7 @@ namespace JZK.Framework
 
 			new SystemReference<UI.ControlSettingsUISystem>(),
 			new SystemReference<UI.DebugOverlayUISystem>(),
+			new SystemReference<UI.GameplayUISystem>(),
 			new SystemReference<UI.MainMenuUISystem>(),
             new SystemReference<UI.UIStateSystem>(),
 
