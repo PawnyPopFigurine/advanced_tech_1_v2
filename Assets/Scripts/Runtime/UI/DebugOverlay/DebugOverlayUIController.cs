@@ -27,6 +27,9 @@ namespace JZK.UI
 
         [SerializeField] TMP_Text _voiceControlEnabledText;
 
+        [SerializeField] TMP_Text _isRecordingTrue;
+        [SerializeField] TMP_Text _isRecordingFalse;
+
 
         public override void SetActive(bool active)
         {
@@ -62,6 +65,10 @@ namespace JZK.UI
             string voiceEnabledText = SpeechInputSystem.Instance.VoiceControlEnabled ? "ON" : "OFF";
 
             _voiceControlEnabledText.text = voiceEnabledText;
+
+            bool isRecording = SpeechRecognitionSystem.Instance.IsRecording;
+            _isRecordingTrue.gameObject.SetActive(isRecording);
+            _isRecordingFalse.gameObject.SetActive(!isRecording);
         }
 
         public void RefreshTerms()

@@ -58,12 +58,14 @@ namespace JZK.Input
         {
             Debug.Log("[HELLO] starting continuous recognition");
             StartContinuousRecognitionAsync();
+            _isRecording = true;
         }
 
         public void StopContinuousRecognition()
         {
             Debug.Log("[HELLO] stopping continuous recognition");
             StopContinuousRecognitionAsync();
+            _isRecording = false;
         }
 
         async void StartContinuousRecognitionAsync()
@@ -71,7 +73,7 @@ namespace JZK.Input
             SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
 
-            _isRecording = true;
+            //_isRecording = true;
 
             _recognizer = new SpeechRecognizer(config);
 
@@ -101,7 +103,7 @@ namespace JZK.Input
             await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
             _recognizer.Dispose();
 
-            _isRecording = false;
+            //_isRecording = false;
         }
 
         void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
@@ -127,7 +129,11 @@ namespace JZK.Input
 
         void OnSpeechSessionCancelled(object sender, SpeechRecognitionEventArgs e)
         {
+            Debug.Log("[HELLO] speech session cancelled - trying again");
             _stopRecognition.TrySetResult(0);
+            _isRecording = false;
+
+            StartContinuousRecognition();
         }
 
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)

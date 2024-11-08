@@ -12,10 +12,27 @@ namespace JZK.Gameplay
         ESpeechInputType_Flag _inputType;
         public ESpeechInputType_Flag InputType => _inputType;
 
+        [SerializeField] List<HazardButtonPrompt> _promptVisuals;
+
         public void Initialise(ESpeechInputType_Flag inputType)
         {
             _inputType = inputType;
-            _hitbox.gameObject.transform.localPosition = Vector3.zero;
+            RefreshPromptForInputType();
+        }
+
+        void RefreshPromptForInputType()
+        {
+            foreach(HazardButtonPrompt prompt in _promptVisuals)
+            {
+                if(prompt.InputType == _inputType)
+                {
+                    prompt.gameObject.SetActive(true);
+                }
+                else
+                {
+                    prompt.gameObject.SetActive(false);
+                }
+            }
         }
 
         public void OnCollide(GameObject collision)

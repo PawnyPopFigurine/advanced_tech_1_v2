@@ -59,6 +59,13 @@ namespace JZK.Gameplay
         float _timeSinceGameStart = 0;
         float _timeToNextBlock;
 
+        static List<ESpeechInputType_Flag> VALID_HAZARD_FLAGS = new()
+        {
+            ESpeechInputType_Flag.Game_FaceNorth,
+            ESpeechInputType_Flag.Game_FaceSouth,
+
+        };
+
         #region Load
 
         void Load()
@@ -119,6 +126,12 @@ namespace JZK.Gameplay
             PlaceHazardBlock();
         }
 
+        ESpeechInputType_Flag GetSpeechInputForHazardBlock()
+        {
+            int flagIndex = Random.Range(0, VALID_HAZARD_FLAGS.Count);
+            return VALID_HAZARD_FLAGS[flagIndex];
+        }
+
         void PlaceHazardBlock()
         {
             GameObject hazardBlock = Instantiate(_hazardPrefab);
@@ -127,7 +140,7 @@ namespace JZK.Gameplay
 
             HazardBlockController controller = hazardBlock.GetComponent<HazardBlockController>();
 
-            ESpeechInputType_Flag blockInput = ESpeechInputType_Flag.Game_FaceNorth;
+            ESpeechInputType_Flag blockInput = GetSpeechInputForHazardBlock();
             controller.Initialise(blockInput);
 
             _activeBlocks.Add(controller);
@@ -166,6 +179,12 @@ namespace JZK.Gameplay
                 {
                     case ESpeechInputType_Flag.Game_FaceNorth:
                         if (Input.InputSystem.Instance.FaceButtonNorthPressed || SpeechInputSystem.Instance.NorthFacePressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_FaceSouth:
+                        if (Input.InputSystem.Instance.FaceButtonSouthPressed || SpeechInputSystem.Instance.SouthFacePressed)
                         {
                             DestroyHazardBlock(hazardToDestroy);
                         }
