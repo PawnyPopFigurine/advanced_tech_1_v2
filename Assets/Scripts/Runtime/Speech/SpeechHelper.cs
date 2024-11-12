@@ -29,6 +29,12 @@ namespace JZK.Input
             { ESpeechInputType.Game_FaceSouth, "south" },
             { ESpeechInputType.Game_FaceWest, "west" },
 
+            { ESpeechInputType.Game_LeftShoulder, "bumper" },
+            { ESpeechInputType.Game_LeftTrigger, "trigger" },
+
+            { ESpeechInputType.Game_RightShoulder, "shoulder" },
+            { ESpeechInputType.Game_RightTrigger, "guard" },
+
             { ESpeechInputType.UI_Back, "back" },
             { ESpeechInputType.UI_Confirm, "confirm" },
 
@@ -45,6 +51,12 @@ namespace JZK.Input
             { ESpeechInputType.Game_FaceNorth, "Face North" },
             { ESpeechInputType.Game_FaceSouth, "Face South" },
             { ESpeechInputType.Game_FaceWest, "Face West" },
+
+            { ESpeechInputType.Game_LeftShoulder, "Left Shoulder" },
+            { ESpeechInputType.Game_LeftTrigger, "Left Trigger" },
+
+            { ESpeechInputType.Game_RightShoulder, "Right Shoulder" },
+            { ESpeechInputType.Game_RightTrigger, "Right Trigger" },
 
             { ESpeechInputType.UI_Confirm, "UI Confirm" },
             { ESpeechInputType.UI_Back, "UI Back" },

@@ -53,6 +53,14 @@ namespace JZK.Input
 		public bool DPadLeftPressed { get; private set; }
 		public bool DPadRight { get; private set; }
 		public bool DPadRightPressed { get; private set; }
+        public bool RightShoulder { get; private set; }
+        public bool RightShoulderPressed { get; private set; }
+        public bool LeftShoulder { get; private set; }
+        public bool LeftShoulderPressed { get; private set; }
+        public bool RightTrigger { get; private set; }
+        public bool RightTriggerPressed { get; private set; }
+        public bool LeftTrigger { get; private set; }
+        public bool LeftTriggerPressed { get; private set; }
 
 		public bool AnyButtonPressed
 		{
@@ -65,7 +73,11 @@ namespace JZK.Input
 						DPadDownPressed ||
 						DPadLeftPressed ||
 						DPadRightPressed ||
-						DPadUpPressed);
+						DPadUpPressed ||
+						LeftShoulderPressed ||
+						LeftTriggerPressed ||
+						RightTriggerPressed ||
+						RightShoulderPressed);
 
 			}
 		}
@@ -216,6 +228,35 @@ namespace JZK.Input
 				DPadRightPressed = true;
 			}
 
+			bool lastLeftShoulder = LeftShoulder;
+			LeftShoulder = inputAction_LeftShoulder.triggered;
+			if(LeftShoulder && !lastLeftShoulder)
+			{
+				LeftShoulderPressed = true;
+			}
+
+			bool lastRightShoulder = RightShoulder;
+			RightShoulder = inputAction_RightShoulder.triggered;
+			if(RightShoulder && !lastRightShoulder)
+			{
+				RightShoulderPressed = true;
+			}
+
+			bool lastLeftTrigger = LeftTrigger;
+			LeftTrigger = inputAction_LeftTrigger.triggered;
+			if(LeftTrigger && !lastLeftTrigger)
+			{
+				LeftTriggerPressed = true;
+			}
+
+			bool lastRightTrigger = RightTrigger;
+			RightTrigger = inputAction_RightTrigger.triggered;
+			if(RightTrigger && !lastRightTrigger)
+			{
+				RightTriggerPressed = true;
+			}
+
+
 			ESpeechInputType type = GetDebugInputType();
 			if(type != ESpeechInputType.None)
 			{
@@ -281,6 +322,11 @@ namespace JZK.Input
 		private InputAction inputAction_DPadLeft;
 		private InputAction inputAction_DPadRight;
 
+		private InputAction inputAction_RightShoulder;
+		private InputAction inputAction_LeftShoulder;
+		private InputAction inputAction_RightTrigger;
+		private InputAction inputAction_LeftTrigger;
+
 		private void SetUpActions()
 		{
 			inputAction_FaceButtonDown = _playerInput.actions["Gameplay/FaceButtonDown"];
@@ -292,6 +338,11 @@ namespace JZK.Input
 			inputAction_DPadDown = _playerInput.actions["Gameplay/DPadDown"];
 			inputAction_DPadLeft = _playerInput.actions["Gameplay/DPadLeft"];
 			inputAction_DPadRight = _playerInput.actions["Gameplay/DPadRight"];
+
+			inputAction_LeftShoulder = _playerInput.actions["Gameplay/LeftShoulder"];
+			inputAction_RightShoulder = _playerInput.actions["Gameplay/RightShoulder"];
+			inputAction_LeftTrigger = _playerInput.actions["Gameplay/LeftTrigger"];
+			inputAction_RightTrigger = _playerInput.actions["Gameplay/RightTrigger"];
         }
 
 		public void Clear()
@@ -314,6 +365,16 @@ namespace JZK.Input
 			DPadLeftPressed = false;
 			DPadRightPressed = false;
 			DPadUpPressed = false;
+
+            LeftShoulder = false;
+            LeftTrigger = false;
+            RightShoulder = false;
+            RightTrigger = false;
+
+            LeftShoulderPressed = false;
+			LeftTriggerPressed = false;
+			RightShoulderPressed = false;
+			RightTriggerPressed = false;
 		}
 
 		EControllerType GetCurrentController(out EControllerPlatformType lastPlatformType, out InputDevice lastDevice)
@@ -465,6 +526,22 @@ namespace JZK.Input
 			if(DPadRightPressed)
 			{
 				return ESpeechInputType.Game_DPadRight;
+			}
+			if(RightTriggerPressed)
+			{
+				return ESpeechInputType.Game_RightTrigger;
+			}
+            if(RightShoulderPressed)
+            {
+				return ESpeechInputType.Game_RightShoulder;
+            }
+            if (LeftTriggerPressed)
+			{
+				return ESpeechInputType.Game_LeftTrigger;
+			}
+			if(LeftShoulderPressed)
+			{
+				return ESpeechInputType.Game_LeftShoulder;
 			}
 
             return ESpeechInputType.None;

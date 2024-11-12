@@ -69,6 +69,18 @@ namespace JZK.Gameplay
                 case ESpeechInputType_Flag.Game_FaceEast:
                     typeEnum = ESpeechInputType.Game_FaceEast;
                     break;
+                case ESpeechInputType_Flag.Game_LeftShoulder:
+                    typeEnum = ESpeechInputType.Game_LeftShoulder;
+                    break;
+                case ESpeechInputType_Flag.Game_LeftTrigger:
+                    typeEnum = ESpeechInputType.Game_LeftTrigger;
+                    break;
+                case ESpeechInputType_Flag.Game_RightShoulder:
+                    typeEnum = ESpeechInputType.Game_RightShoulder;
+                    break;
+                case ESpeechInputType_Flag.Game_RightTrigger:
+                    typeEnum = ESpeechInputType.Game_RightTrigger;
+                    break;
             }
 
             if(typeEnum != ESpeechInputType.None)

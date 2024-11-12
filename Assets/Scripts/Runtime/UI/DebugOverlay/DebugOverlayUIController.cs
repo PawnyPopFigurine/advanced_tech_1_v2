@@ -22,6 +22,11 @@ namespace JZK.UI
         [SerializeField] TMP_Text _left;
         [SerializeField] TMP_Text _right;
 
+        [SerializeField] TMP_Text _leftShoulder;
+        [SerializeField] TMP_Text _leftTrigger;
+        [SerializeField] TMP_Text _rightShoulder;
+        [SerializeField] TMP_Text _rightTrigger;
+
         [SerializeField] TMP_Text _confirm;
         [SerializeField] TMP_Text _back;
 
@@ -99,6 +104,14 @@ namespace JZK.UI
                         _confirm.SetText(term); break;
                     case ESpeechInputType.UI_Back:
                         _back.SetText(term); break;
+                    case ESpeechInputType.Game_LeftShoulder:
+                        _leftShoulder.SetText(term); break;
+                    case ESpeechInputType.Game_LeftTrigger:
+                        _leftTrigger.SetText(term); break;
+                    case ESpeechInputType.Game_RightShoulder:
+                        _rightShoulder.SetText(term); break;
+                    case ESpeechInputType.Game_RightTrigger:
+                        _rightTrigger.SetText(term); break;
                     default:
                         break;
                 }

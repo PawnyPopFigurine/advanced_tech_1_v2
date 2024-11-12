@@ -69,6 +69,10 @@ namespace JZK.Gameplay
             ESpeechInputType_Flag.Game_DPadDown,
             ESpeechInputType_Flag.Game_DPadLeft,
             ESpeechInputType_Flag.Game_DPadRight,
+            ESpeechInputType_Flag.Game_LeftShoulder,
+            ESpeechInputType_Flag.Game_RightShoulder,
+            ESpeechInputType_Flag.Game_LeftTrigger,
+            ESpeechInputType_Flag.Game_RightTrigger,
         };
 
         #region Load
@@ -243,6 +247,30 @@ namespace JZK.Gameplay
                         break;
                     case ESpeechInputType_Flag.Game_DPadRight:
                         if (Input.InputSystem.Instance.DPadRightPressed || SpeechInputSystem.Instance.DPadRightPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_LeftShoulder:
+                        if (Input.InputSystem.Instance.LeftShoulderPressed || SpeechInputSystem.Instance.LeftShoulderPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_LeftTrigger:
+                        if (Input.InputSystem.Instance.LeftTriggerPressed || SpeechInputSystem.Instance.LeftTriggerPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_RightTrigger:
+                        if (Input.InputSystem.Instance.RightTriggerPressed || SpeechInputSystem.Instance.RightTriggerPressed)
+                        {
+                            DestroyHazardBlock(hazardToDestroy);
+                        }
+                        break;
+                    case ESpeechInputType_Flag.Game_RightShoulder:
+                        if (Input.InputSystem.Instance.RightShoulderPressed || SpeechInputSystem.Instance.RightShoulderPressed)
                         {
                             DestroyHazardBlock(hazardToDestroy);
                         }

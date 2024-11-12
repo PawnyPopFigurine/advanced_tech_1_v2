@@ -95,6 +95,11 @@ namespace JZK.Input
         public bool UIConfirmPressed { get; private set; }
         public bool UIBackPressed { get; private set; }
 
+        public bool LeftShoulderPressed { get; private set; }
+        public bool RightShoulderPressed { get; private set; }
+        public bool LeftTriggerPressed { get; private set; }
+        public bool RightTriggerPressed { get; private set; }
+
         public ESpeechInputType DebugLatestInput { get; private set; }
         public ESpeechInputType_Flag DebugLatestInputFlag { get; private set; }
 
@@ -117,7 +122,11 @@ namespace JZK.Input
                     DPadLeftPressed ||
                     DPadRightPressed ||
                     UIConfirmPressed ||
-                    UIBackPressed);
+                    UIBackPressed ||
+                    LeftShoulderPressed ||
+                    LeftTriggerPressed ||
+                    RightShoulderPressed ||
+                    RightTriggerPressed);
             }
         }
 
@@ -298,6 +307,22 @@ namespace JZK.Input
                             UIBackPressed = true;
                             hasPressed = true;
                             break;
+                        case ESpeechInputType.Game_LeftShoulder:
+                            LeftShoulderPressed = true;
+                            hasPressed = true;
+                            break;
+                        case ESpeechInputType.Game_RightShoulder:
+                            RightShoulderPressed = true;
+                            hasPressed = true;
+                            break;
+                        case ESpeechInputType.Game_LeftTrigger:
+                            LeftTriggerPressed = true;
+                            hasPressed = true;
+                            break;
+                        case ESpeechInputType.Game_RightTrigger:
+                            RightTriggerPressed = true;
+                            hasPressed = true;
+                            break;
                     }
 
                     _latestSpeechInputData.InputQueue.RemoveAt(0);
@@ -333,6 +358,11 @@ namespace JZK.Input
             DPadDownPressed = false;
             DPadLeftPressed = false;
             DPadRightPressed = false;
+
+            LeftShoulderPressed = false;
+            RightShoulderPressed = false;
+            LeftTriggerPressed = false;
+            RightShoulderPressed = false;
 
             UIConfirmPressed = false;
             UIBackPressed = false;

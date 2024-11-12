@@ -76,6 +76,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RightTrigger",
+                    "type": "Button",
+                    "id": "aa2cfbdb-790c-4eee-8c2d-1e1e0a90a576",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftTrigger",
+                    "type": "Button",
+                    "id": "c1166a9a-109d-4613-a349-9dee289a3333",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightShoulder",
+                    "type": "Button",
+                    "id": "7956a8db-b169-48c6-a8fd-4cfc9abbd72a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftShoulder",
+                    "type": "Button",
+                    "id": "18d37de2-9486-4fd4-b6c0-efa1f963fbfc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -164,6 +200,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "DPadRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "93e1b45f-3029-4adb-857d-38dd8099b966",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1512f6d6-ebfc-4b90-8c0f-40f8fdfbd919",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59c249c0-4ef5-496e-aeab-8230801787df",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightShoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e11b48f8-93f5-440e-b994-5b1052e50265",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftShoulder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
