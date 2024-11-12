@@ -65,8 +65,8 @@ namespace JZK.Input
 
     public class SpeechInputData
     {
-        public Dictionary<ESpeechInputType, int> Input_LUT = new();
         public float TimeToNextPress;
+        public List<ESpeechInputType> InputQueue = new List<ESpeechInputType>();
     }
 
     //Takes in recognised speech and matches it to game input.
@@ -162,14 +162,7 @@ namespace JZK.Input
                     string keyString = _speechInputTerm_LUT[termKey];
                     if (keyString == word)
                     {
-                        if(speechInputData.Input_LUT.ContainsKey(termKey))
-                        {
-                            speechInputData.Input_LUT[termKey] += 1;
-                        }
-                        else
-                        {
-                            speechInputData.Input_LUT.Add(termKey, 1);
-                        }
+                        speechInputData.InputQueue.Add(termKey);
                     }
                 }
             }
@@ -248,21 +241,22 @@ namespace JZK.Input
                 return;
             }
 
-            Dictionary<ESpeechInputType, int> inputLUT_Cache = new(_latestSpeechInputData.Input_LUT);
+            if (_latestSpeechInputData.InputQueue.Count == 0)
+            {
+                return;
+            }
 
             bool hasPressed = false;
 
-            foreach (ESpeechInputType type in inputLUT_Cache.Keys)
+            if(!hasPressed)
             {
-                if(hasPressed)
-                {
-                    continue;
-                }
                 _latestSpeechInputData.TimeToNextPress -= Time.deltaTime;
-                if (_latestSpeechInputData.TimeToNextPress <= 0)
+                if(_latestSpeechInputData.TimeToNextPress <= 0)
                 {
                     _latestSpeechInputData.TimeToNextPress = SPEECH_INPUT_DELAY;
-                    switch(type)
+                    ESpeechInputType type = _latestSpeechInputData.InputQueue[0];
+
+                    switch (type)
                     {
                         case ESpeechInputType.Game_DPadUp:
                             DPadUpPressed = true;
@@ -306,11 +300,7 @@ namespace JZK.Input
                             break;
                     }
 
-                    _latestSpeechInputData.Input_LUT[type] -= 1;
-                    if (_latestSpeechInputData.Input_LUT[type] == 0)
-                    {
-                        _latestSpeechInputData.Input_LUT.Remove(type);
-                    }
+                    _latestSpeechInputData.InputQueue.RemoveAt(0);
                 }
             }
         }
