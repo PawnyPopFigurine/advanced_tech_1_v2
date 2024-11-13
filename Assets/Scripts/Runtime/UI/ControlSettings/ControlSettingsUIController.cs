@@ -236,15 +236,35 @@ namespace JZK.UI
 
         public void ConfirmPopupRecording()
         {
-            if(_latestRecordedTerm == string.Empty)
+            if(!IsTermValidForCustomInput(_latestRecordedTerm))
             {
-                Debug.Log(this.name + " - tried to confirm an empty recording. aborting action");
+                Debug.Log(this.name + " - tried to confirm an invalid term " + _latestRecordedTerm + " - aborting action");
                 return;
             }
             SpeechInputSystem.Instance.SetTermForType(_recordForType, _latestRecordedTerm);
             SpeechInputSystem.Instance.SaveCurrentTerms();
             RefreshDisplayedTerms();
             TogglePopup(false);
+        }
+
+        bool IsTermValidForCustomInput(string term)
+        {
+            if(term == string.Empty)
+            {
+                return false;
+            }
+
+            if(string.IsNullOrWhiteSpace(term))
+            {
+                return false;
+            }
+
+            if(term.Contains(" "))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void CancelPopupRecording()
@@ -303,18 +323,30 @@ namespace JZK.UI
                 return;
             }
 
-            if (_latestRecordedTerm != string.Empty)
+            if (IsTermValidForCustomInput(_latestRecordedTerm))
             {
                 return;
             }
 
             string processedSpeech = SpeechHelper.ProcessSpeechTerm(speech);
 
+            string displaySpeech = new(processedSpeech);
+            if(!IsTermValidForCustomInput(processedSpeech))
+            {
+                displaySpeech = string.Concat(displaySpeech, " - INVALID");
+                _backOutPrompt.SetActive(false);
+            }
+
+            else
+            {
+                _backOutPrompt.SetActive(true);
+                _latestRecordedTerm = processedSpeech;
+            }
+
             _popupHeader.SetActive(false);
+
+            _recordedTermText.text = displaySpeech;
             _recordedTerm.SetActive(true);
-            _backOutPrompt.SetActive(true);
-            _recordedTermText.text = processedSpeech;
-            _latestRecordedTerm = processedSpeech;
         }
     }
 }
