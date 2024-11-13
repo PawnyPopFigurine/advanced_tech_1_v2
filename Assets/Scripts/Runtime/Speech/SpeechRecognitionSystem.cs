@@ -78,7 +78,7 @@ namespace JZK.Input
         {
             SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
-            config.SetProperty(PropertyId.Speech_LogFilename, "LogfilePathAndName");
+            config.SpeechRecognitionLanguage = "en-GB";
 
             //_isRecording = true;
 
