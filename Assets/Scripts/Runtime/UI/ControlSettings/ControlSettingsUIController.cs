@@ -1,7 +1,10 @@
 using JZK.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -39,6 +42,31 @@ namespace JZK.UI
         bool _leftPopupLastFrame;
 
         GameObject _lastSelectedBeforePopupOpen;
+
+        [SerializeField] TMP_Dropdown _languageDropdown;
+        [SerializeField] RectTransform _languageDropdownContentPanel;
+        [SerializeField] ScrollRect _languageDropdownScrollRect;
+
+        [SerializeField] GameObject _confirmLanguageButton;
+
+        public override void Initialise()
+        {
+            base.Initialise();
+
+            _languageDropdown.ClearOptions();
+
+            List<TMP_Dropdown.OptionData> optionDataList = new();
+            //List<ESpeechRegion> allLanguageEnums = Enum.GetValues(typeof(ESpeechRegion)).Cast<ESpeechRegion>().ToList();
+            foreach(ESpeechRegion region in SpeechHelper.ALL_LANGUAGE_ENUMS)
+            {
+                string regionString = region.ToString();
+                TMP_Dropdown.OptionData optionData = new();
+                optionData.text = regionString;
+                optionDataList.Add(optionData);
+            }
+
+            _languageDropdown.AddOptions(optionDataList);
+        }
 
 
         public override void SetActive(bool active)
@@ -102,85 +130,110 @@ namespace JZK.UI
 
             if(!_popupOpen)
             {
-                Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
-
-                if (SpeechInputSystem.Instance.DPadDownPressed)
+                GameObject currentSelectedGO = EventSystem.current.currentSelectedGameObject;
+                if (null != currentSelectedGO)
                 {
-                    Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
-                    if (selectOnDown != null)
-                    {
-                        GameObject selectOnDownGO = selectOnDown.gameObject;
-                        EventSystem.current.SetSelectedGameObject(selectOnDownGO);
-                        RectTransform scrollToRect = selectOnDownGO.GetComponent<RectTransform>();
-                        SnapScrollTo(scrollToRect);
-                    }
-                }
+                    Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
 
-                if (SpeechInputSystem.Instance.DPadUpPressed)
-                {
-                    Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
-                    if (selectOnUp != null)
+                    if (null != currentSelectable)
                     {
-                        GameObject selectOnUpGO = selectOnUp.gameObject;
-                        EventSystem.current.SetSelectedGameObject(selectOnUpGO);
-                        RectTransform scrollToRect = selectOnUpGO.GetComponent<RectTransform>();
-                        SnapScrollTo(scrollToRect);
-                    }
-                }
-
-                if (SpeechInputSystem.Instance.DPadLeftPressed)
-                {
-                    Selectable selectOnLeft = currentSelectable.FindSelectableOnLeft();
-                    if (selectOnLeft != null)
-                    {
-                        GameObject selectOnLeftGO = selectOnLeft.gameObject;
-                        EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
-                        RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
-                        SnapScrollTo(scrollToRect);
-                    }
-                }
-
-                if (SpeechInputSystem.Instance.DPadRightPressed)
-                {
-                    Selectable selectOnRight = currentSelectable.FindSelectableOnRight();
-                    if (selectOnRight != null)
-                    {
-                        GameObject selectOnRightGO = selectOnRight.gameObject;
-                        EventSystem.current.SetSelectedGameObject(selectOnRightGO);
-                        RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
-                        SnapScrollTo(scrollToRect);
-                    }
-                }
-
-                if (!_leftPopupLastFrame)
-                {
-                    if (SpeechInputSystem.Instance.UIConfirmPressed)
-                    {
-                        RecordButton selectedRecordButton = currentSelectable.gameObject.GetComponent<RecordButton>();
-                        if (selectedRecordButton != null)
+                        if (!_languageDropdown.IsExpanded)
                         {
-                            selectedRecordButton.Input_ButtonPressed();
-                        }
-                        else
-                        {
-                            if(currentSelectable.gameObject == _resetButton)
+                            if (SpeechInputSystem.Instance.DPadDownPressed)
                             {
-                                Input_ResetButtonPressed();
+                                Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
+                                if (selectOnDown != null)
+                                {
+                                    GameObject selectOnDownGO = selectOnDown.gameObject;
+                                    EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                                    RectTransform scrollToRect = selectOnDownGO.GetComponent<RectTransform>();
+                                    SnapScrollTo(scrollToRect);
+                                }
                             }
-                            if(currentSelectable.gameObject == _backButton)
+
+                            if (SpeechInputSystem.Instance.DPadUpPressed)
                             {
-                                Input_BackButtonPressed();
+                                Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
+                                if (selectOnUp != null)
+                                {
+                                    GameObject selectOnUpGO = selectOnUp.gameObject;
+                                    EventSystem.current.SetSelectedGameObject(selectOnUpGO);
+                                    RectTransform scrollToRect = selectOnUpGO.GetComponent<RectTransform>();
+                                    SnapScrollTo(scrollToRect);
+                                }
                             }
                         }
-                    }
-                }
 
-                if (InputSystem.Instance.DPadDownPressed ||
-                    InputSystem.Instance.DPadUpPressed ||
-                    InputSystem.Instance.DPadLeftPressed ||
-                    InputSystem.Instance.DPadRightPressed)
-                {
-                    SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                        if (SpeechInputSystem.Instance.DPadLeftPressed)
+                        {
+                            Selectable selectOnLeft = currentSelectable.FindSelectableOnLeft();
+                            if (selectOnLeft != null)
+                            {
+                                GameObject selectOnLeftGO = selectOnLeft.gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
+                                RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
+                                SnapScrollTo(scrollToRect);
+                            }
+                        }
+
+                        if (SpeechInputSystem.Instance.DPadRightPressed)
+                        {
+                            Selectable selectOnRight = currentSelectable.FindSelectableOnRight();
+                            if (selectOnRight != null)
+                            {
+                                GameObject selectOnRightGO = selectOnRight.gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnRightGO);
+                                RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
+                                SnapScrollTo(scrollToRect);
+                            }
+                        }
+
+                        if (!_leftPopupLastFrame)
+                        {
+                            if (SpeechInputSystem.Instance.UIConfirmPressed)
+                            {
+                                RecordButton selectedRecordButton = currentSelectable.gameObject.GetComponent<RecordButton>();
+                                if (selectedRecordButton != null)
+                                {
+                                    selectedRecordButton.Input_ButtonPressed();
+                                }
+                                else
+                                {
+                                    if (currentSelectable.gameObject == _resetButton)
+                                    {
+                                        Input_ResetButtonPressed();
+                                    }
+                                    if (currentSelectable.gameObject == _backButton)
+                                    {
+                                        Input_BackButtonPressed();
+                                    }
+                                    if (currentSelectable.gameObject == _confirmLanguageButton)
+                                    {
+                                        Input_ConfirmLanguageButtonPressed();
+                                    }
+                                }
+                            }
+                        }
+
+                        if (InputSystem.Instance.DPadLeftPressed ||
+                            InputSystem.Instance.DPadRightPressed)
+                        {
+                            SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                        }
+
+                        if (InputSystem.Instance.DPadUpPressed ||
+                                InputSystem.Instance.DPadDownPressed)
+                        {
+                            /*if(!_languageDropdown.IsExpanded)
+                            {
+                                SnapDropdownScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                            }*/
+                            if (!_languageDropdown.IsExpanded)
+                            {
+                                SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -242,7 +295,7 @@ namespace JZK.UI
                 return;
             }
             SpeechInputSystem.Instance.SetTermForType(_recordForType, _latestRecordedTerm);
-            SpeechInputSystem.Instance.SaveCurrentTerms();
+            SpeechInputSystem.Instance.SaveCurrentSpeechData();
             RefreshDisplayedTerms();
             TogglePopup(false);
         }
@@ -275,7 +328,7 @@ namespace JZK.UI
         public void Input_ResetButtonPressed()
         {
             SpeechInputSystem.Instance.ResetTermsToDefault();
-            SpeechInputSystem.Instance.SaveCurrentTerms();
+            SpeechInputSystem.Instance.SaveCurrentSpeechData();
             RefreshDisplayedTerms();
         }
 
@@ -287,6 +340,16 @@ namespace JZK.UI
         public void Input_PopupBackPressed()
         {
             CancelPopupRecording();
+        }
+
+        public void Input_ConfirmLanguageButtonPressed()
+        {
+            int dropdownIndex = _languageDropdown.value;
+            ESpeechRegion regionEnum = SpeechHelper.ALL_LANGUAGE_ENUMS[dropdownIndex];
+            string languageCode = SpeechHelper.RegionStringFromEnum(regionEnum);
+            Debug.Log("[HELLO] set language to " + languageCode + " - " + regionEnum.ToString());
+            SpeechRecognitionSystem.Instance.SetLanguageString(languageCode);
+            SpeechInputSystem.Instance.SaveCurrentSpeechData();
         }
 
         public void SnapScrollTo(RectTransform targetRect)
@@ -303,8 +366,8 @@ namespace JZK.UI
                     - (Vector2)_scrollRect.transform.InverseTransformPoint(targetRect.position);
 
             _contentPanel.anchoredPosition = new(_contentPanel.anchoredPosition.x, newPos.y);
-        }
 
+        }
 
         public void OnSpeechRecognised(string speech)
         {

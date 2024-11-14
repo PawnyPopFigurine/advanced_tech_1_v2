@@ -22,6 +22,7 @@ namespace JZK.Input
         }
 
         public List<SpeechSaveDataTerm> Terms = new();
+        public string LanguageCode;
 
     }
 

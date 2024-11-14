@@ -63,6 +63,153 @@ namespace JZK.Input
         Invalid = 32768,
     }
 
+    public enum ESpeechRegion
+    {
+        English_GB, //british english
+        English_AU, //aussie engilsh
+        English_CA, //canada english
+        English_GH, //ghana english
+        English_HK, //hong kong english
+        English_IE, //ireland english
+        English_IN, //indian english
+        English_KE, //kenyan english
+        English_NG, //nigerian english
+        English_NZ, //new zealand english
+        English_PH, //phillipines english
+        English_SG, //singapore english
+        English_TZ, //tanzania english
+        English_ZA, //south africa english
+        English_US, //american english
+        Afrikaans,  //afrikaans
+        Amharic,    //amharic (ethiopia)
+        Arabic_UAE, //UAE arabic
+        Arabic_BH,  //Bahrain arabic
+        Arabic_AL,  //Algeria arabic
+        Arabic_EG,  //Egypt arabic
+        Arabic_IL,  //Israel arabic
+        Arabic_IQ,  //Iraq arabic
+        Arabic_JO,  //Jordan arabic
+        Arabic_KW,  //Kuwait arabic
+        Arabic_LB,  //Lebanon arabic
+        Arabic_LY,  //Lybian arabic
+        Arabic_MA,  //Morocco arabic
+        Arabic_OM,  //Oman arabic
+        Arabic_PS,  //Palestine arabic
+        Arabic_QA,  //Qatar arabic
+        Arabic_SA,  //Saudi arabic
+        Arabic_SY,  //Syrian arabic
+        Arabic_TN,  //Tunisian arabic
+        Arabic_YE,  //Yemen arabic
+        Azerbaijani,
+        Bulgarian,
+        Bengali,
+        Bosnian,
+        Catalan,
+        Czech,
+        Welsh,
+        Danish,
+        German_AU,  //Austrian german
+        German_SZ,  //Swiss german
+        German_GE,  //German German
+        Greek,
+        Spanish_AR, //Argentinian spanish
+        Spanish_BO, //Bolivian spanish
+        Spanish_CL, //Chilean spanish
+        Spanish_CO, //Colombian spanish
+        Spanish_CR, //Costa Rica spanish
+        Spanish_CU, //Cuban spanish
+        Spanish_DO, //Dominican spanish
+        Spanish_EC, //Ecuador spanish
+        Spanish_SP, //Spanish spanish
+        Spanish_EQ, //Equatorial guinea spanish
+        Spanish_GU, //Guatemalan spanish
+        Spanish_HN, //Honduras spanish
+        Spanish_MX, //Mexican spanish
+        Spanish_NI, //Nicaraguan spanish
+        Spanish_PA, //Panama spanish
+        Spanish_PE, //Peru spanish
+        Spanish_PR, //Puerto rico spanish
+        Spanish_PG, //Paraguay spanish
+        Spanish_SV, //El Salvador spanish
+        Spanish_US, //American spanish
+        Spanish_UG, //Uruguay spanish
+        Spanish_VE, //Venezuelan spanish
+        Estonian,   
+        Basque,
+        Persian,
+        Finnish,
+        Filipino,
+        French_BE, //Belgian french
+        French_CA, //Canadian french
+        French_SW, //Swiss french
+        French_FR, //French french
+        Irish,     //Irish
+        Galician,  //Galician
+        Gujarati,  //Gujarati (indian)
+        Hebrew,
+        Hindi,     //Hindi
+        Croatian,
+        Hungarian,
+        Armenian,
+        Indonesian,
+        Icelandic,
+        Italian_SW, //Swiss italian
+        Italian_IT, //Italian italian
+        Japanese,
+        Javanese,
+        Georgian,
+        Kazakh,
+        Khmer,
+        Kannada,    //Kannada (indian)
+        Korean,
+        Lao,
+        Lithuanian,
+        Latvian,
+        Macedonian,
+        Malaylam,  //Malaylan (indian)
+        Mongolian,
+        Marathi,
+        Malay,
+        Maltese,
+        Burmese,
+        Bokmal,    //Norwegian bokmal
+        Nepali,
+        Dutch_BE,  //Belgian dutch
+        Dutch_NL,  //Netherlands dutch
+        Punjabi,
+        Polish,
+        Pashto_AF,  //Afghan pashto
+        Portuguese_BR, //Brazilian
+        Portuguese_PT, //Portuguese portuguese
+        Romanian,
+        Russian,
+        Sinhala,    //Sinhala (sri lankan)
+        Slovak,
+        Slovenian,
+        Somali,
+        Albanian,
+        Serbian,
+        Swedish,
+        Kiswahili_KE, //Kenyan Kiswahili
+        Kiswahili_TZ, //Tanzanian Kiswahili
+        Tamil,
+        Telugu,
+        Thai,
+        Turkish,
+        Ukrainian,
+        Urdu,
+        Uzbek,
+        Vietnamese,
+        Chinese_WU,  //simplified wu chinese
+        Cantonese_Simp,  //simplified cantonese
+        Cantonese_Trad,  //traditional cantonese
+        Mandarin,    //simplified mandarin
+        Mandarin_JL, //jilu mandarin
+        Mandarin_SW, //simplified southwest mandarin
+        Mandarin_TW, //traditional taiwanese mandarin
+        IsiZulu,
+    }
+
     public class SpeechInputData
     {
         public float TimeToNextPress;
@@ -372,6 +519,8 @@ namespace JZK.Input
         {
             SpeechSaveData saveData = (SpeechSaveData)loadedData;
 
+            SpeechRecognitionSystem.Instance.SetLanguageString(saveData.LanguageCode);
+
             if(saveData.Terms.Count == 0)
             {
                 Debug.LogError(this.name + " - has recieved save data with 0 terms");
@@ -393,7 +542,7 @@ namespace JZK.Input
             }
         }
 
-        public void SaveCurrentTerms()
+        public void SaveCurrentSpeechData()
         {
             SpeechSaveData saveData = new();
 
@@ -408,6 +557,7 @@ namespace JZK.Input
                 };
 
                 saveData.Terms.Add(term);
+                saveData.LanguageCode = SpeechRecognitionSystem.Instance.CurrentLanguageString;
             }
 
             SpeechDataSystem.Instance.SaveGameData(saveData);

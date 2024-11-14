@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
 using JZK.UI;
 using static JZK.UI.UIStateSystem;
+using System;
 
 namespace JZK.Input
 {
@@ -24,6 +25,9 @@ namespace JZK.Input
 
         public delegate void SpeechEvent(string speech);
         public event SpeechEvent OnSpeechRecognised;
+
+        private string _currentLanguageString = "en-GB";
+        public string CurrentLanguageString => _currentLanguageString;
 
         public SystemLoadData _loadData = new SystemLoadData()
         {
@@ -52,6 +56,9 @@ namespace JZK.Input
 
             SceneInit.CurrentSceneInit.OnLoadingStateComplete -= OnLoadingStateComplete;
             SceneInit.CurrentSceneInit.OnLoadingStateComplete += OnLoadingStateComplete;
+
+            /*SpeechDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
+            SpeechDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;*/
         }
 
         public void StartContinuousRecognition()
@@ -78,7 +85,8 @@ namespace JZK.Input
         {
             SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
-            config.SpeechRecognitionLanguage = "en-GB";
+            config.SpeechRecognitionLanguage = _currentLanguageString;
+            //config.SpeechRecognitionLanguage = "en-GB";
 
             //_isRecording = true;
 
@@ -107,8 +115,22 @@ namespace JZK.Input
 
         async void StopContinuousRecognitionAsync()
         {
-            await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
-            _recognizer.Dispose();
+            try
+            {
+                if(null != _recognizer)
+                {
+                    await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(false);
+                    _recognizer.Dispose();
+                }
+                else
+                {
+                    //Debug.LogWarning()
+                }
+            }
+            catch(ObjectDisposedException e)
+            {
+                //Debug.LogWarning(this.name + " - tried to dispose disposed object _recognizer - " + e.ToString());
+            }
 
             //_isRecording = false;
         }
@@ -172,5 +194,37 @@ namespace JZK.Input
         {
             StopContinuousRecognition();
         }
+
+        public void SetLanguageString(string language)
+        {
+            if (language == string.Empty)   //TODO: set up language code list and check this value isn't in that
+            {
+                Debug.LogWarning(this.name + " - recieved save data with empty language string - defaulting to en-GB");
+                language = ("en-GB");
+            }
+
+
+            _currentLanguageString = language;
+            Debug.Log(this.name + " - setting language code to " +  language);
+
+            StopContinuousRecognition();
+            StartContinuousRecognition();
+        }
+
+        /*public void OnSystemDataLoaded(object loadedData)
+        {
+            SpeechSaveData saveData = (SpeechSaveData)loadedData;
+
+            if(saveData.LanguageCode == string.Empty)   //TODO: set up language code list and check this value isn't in that
+            {
+                Debug.LogWarning(this.name + " - recieved save data with empty language string - defaulting to en-GB");
+                SetLanguageString("en-GB");
+            }
+
+            else
+            {
+                SetLanguageString(saveData.LanguageCode);
+            }
+        }*/
     }
 }
