@@ -510,7 +510,7 @@ namespace JZK.Input
             LeftShoulderPressed = false;
             RightShoulderPressed = false;
             LeftTriggerPressed = false;
-            RightShoulderPressed = false;
+            RightTriggerPressed = false;
 
             UIConfirmPressed = false;
             UIBackPressed = false;
