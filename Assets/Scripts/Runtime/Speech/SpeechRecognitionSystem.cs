@@ -26,8 +26,11 @@ namespace JZK.Input
         public delegate void SpeechEvent(string speech);
         public event SpeechEvent OnSpeechRecognised;
 
-        private string _currentLanguageString = "en-GB";
+        private string _currentLanguageString = SpeechHelper.FALLBACK_DEFAULT_REGIONCODE;
         public string CurrentLanguageString => _currentLanguageString;
+
+        ESpeechRegion _currentRegion = SpeechHelper.FALLBACK_DEFAULT_REGIONENUM;
+        public ESpeechRegion CurrentRegion => _currentRegion;
 
         public SystemLoadData _loadData = new SystemLoadData()
         {
@@ -40,6 +43,12 @@ namespace JZK.Input
         public override void UpdateSystem()
         {
             base.UpdateSystem();
+
+            if(!_isRecording && !UIStateSystem.Instance.QuitTriggered)
+            {
+                Debug.Log(this.name + " - not recording this frame - starting continuous recognition again");
+                StartContinuousRecognition();
+            }
         }
 
         public override void LateUpdateSystem()
@@ -63,12 +72,11 @@ namespace JZK.Input
 
         public void StartContinuousRecognition()
         {
-            if(!true)
+            if(_isRecording)
             {
-                Debug.Log("[HELLO] trying to start recog when not playing - aborting action");
+                Debug.LogWarning(this.name + " - tried to start recording, when recording already - aborting action");
                 return;
             }
-
             Debug.Log("[HELLO] starting continuous recognition");
             StartContinuousRecognitionAsync();
             _isRecording = true;
@@ -76,6 +84,11 @@ namespace JZK.Input
 
         public void StopContinuousRecognition()
         {
+            /*if(!_isRecording)
+            {
+                Debug.LogWarning(this.name + " - tried to stop recording before recording started - aborting action");
+                return;
+            }*/
             Debug.Log("[HELLO] stopping continuous recognition");
             StopContinuousRecognitionAsync();
             _isRecording = false;
@@ -137,6 +150,7 @@ namespace JZK.Input
 
         void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
         {
+            //Debug.Log("[HELLO] recorded this frame? " + RecordedThisFrame.ToString());
             if(e.Result.Text == string.Empty)
             {
                 return;
@@ -162,11 +176,11 @@ namespace JZK.Input
             _stopRecognition.TrySetResult(0);
             _isRecording = false;
 
-            if (true)
+            /*if (true)
             {
                 Debug.Log("[HELLO] restarting recog after cancel");
                 StartContinuousRecognition();
-            }
+            }*/
         }
 
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
@@ -195,7 +209,7 @@ namespace JZK.Input
             StopContinuousRecognition();
         }
 
-        public void SetLanguageString(string language)
+        public void SetRegionString(string language, ESpeechRegion region)
         {
             if (language == string.Empty)   //TODO: set up language code list and check this value isn't in that
             {
@@ -205,10 +219,17 @@ namespace JZK.Input
 
 
             _currentLanguageString = language;
+            _currentRegion = region;
             Debug.Log(this.name + " - setting language code to " +  language);
 
             StopContinuousRecognition();
             StartContinuousRecognition();
+        }
+
+        public void ResetRegion()
+        {
+            _currentLanguageString = "en-GB";
+            _currentRegion = ESpeechRegion.English_GB;
         }
 
         /*public void OnSystemDataLoaded(object loadedData)

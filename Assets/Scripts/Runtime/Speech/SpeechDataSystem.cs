@@ -23,6 +23,7 @@ namespace JZK.Input
 
         public List<SpeechSaveDataTerm> Terms = new();
         public string LanguageCode;
+        public int LanguageCodeIndex;
 
     }
 
@@ -146,9 +147,17 @@ namespace JZK.Input
                     new(){Type = ESpeechInputType.Game_FaceNorth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceNorth]},
                     new(){Type = ESpeechInputType.Game_FaceSouth, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_FaceSouth]},
 
+                    new(){Type = ESpeechInputType.Game_LeftTrigger, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_LeftTrigger]},
+                    new(){Type = ESpeechInputType.Game_LeftShoulder, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_LeftShoulder]},
+                    new(){Type = ESpeechInputType.Game_RightShoulder, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_RightShoulder]},
+                    new(){Type = ESpeechInputType.Game_RightTrigger, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.Game_RightTrigger]},
+
                     new(){Type = ESpeechInputType.UI_Confirm, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Confirm]},
                     new(){Type = ESpeechInputType.UI_Back, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Back]},
-                }
+                },
+
+                LanguageCode = SpeechHelper.FALLBACK_DEFAULT_REGIONCODE,
+                LanguageCodeIndex = (int)SpeechHelper.FALLBACK_DEFAULT_REGIONENUM
             };
         }
 

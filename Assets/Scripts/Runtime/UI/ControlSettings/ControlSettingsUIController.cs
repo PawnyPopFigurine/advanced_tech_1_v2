@@ -4,11 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace JZK.UI
 {
@@ -49,6 +47,8 @@ namespace JZK.UI
 
         [SerializeField] GameObject _confirmLanguageButton;
 
+        [SerializeField] GameObject _dropdownItemParent;
+
         public override void Initialise()
         {
             base.Initialise();
@@ -56,7 +56,6 @@ namespace JZK.UI
             _languageDropdown.ClearOptions();
 
             List<TMP_Dropdown.OptionData> optionDataList = new();
-            //List<ESpeechRegion> allLanguageEnums = Enum.GetValues(typeof(ESpeechRegion)).Cast<ESpeechRegion>().ToList();
             foreach(ESpeechRegion region in SpeechHelper.ALL_LANGUAGE_ENUMS)
             {
                 string regionString = region.ToString();
@@ -66,6 +65,7 @@ namespace JZK.UI
             }
 
             _languageDropdown.AddOptions(optionDataList);
+            //_languageDropdown.
         }
 
 
@@ -84,9 +84,12 @@ namespace JZK.UI
 
             TogglePopup(false);
             RefreshDisplayedTerms();
+            RefreshRegionDropdown();
             EventSystem.current.SetSelectedGameObject(_defaultSelected);
             RectTransform defaultSelectRect = _defaultSelected.gameObject.GetComponent<RectTransform>();
             SnapScrollTo(defaultSelectRect);
+
+            
         }
 
         void RefreshDisplayedTerms()
@@ -97,6 +100,12 @@ namespace JZK.UI
                 TMP_Text itemText = item.gameObject.GetComponent<TMP_Text>();
                 itemText.text = currentTermForType;
             }
+        }
+
+        void RefreshRegionDropdown()
+        {
+            _languageDropdown.value = (int)SpeechRecognitionSystem.Instance.CurrentRegion;
+            _languageDropdown.RefreshShownValue();
         }
 
         public override void UpdateController()
@@ -137,32 +146,39 @@ namespace JZK.UI
 
                     if (null != currentSelectable)
                     {
-                        if (!_languageDropdown.IsExpanded)
-                        {
-                            if (SpeechInputSystem.Instance.DPadDownPressed)
-                            {
-                                Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
-                                if (selectOnDown != null)
-                                {
-                                    GameObject selectOnDownGO = selectOnDown.gameObject;
-                                    EventSystem.current.SetSelectedGameObject(selectOnDownGO);
-                                    RectTransform scrollToRect = selectOnDownGO.GetComponent<RectTransform>();
-                                    SnapScrollTo(scrollToRect);
-                                }
-                            }
 
-                            if (SpeechInputSystem.Instance.DPadUpPressed)
+                        if (SpeechInputSystem.Instance.DPadDownPressed)
+                        {
+                            Selectable selectOnDown = currentSelectable.FindSelectableOnDown();
+                            if (selectOnDown != null)
                             {
-                                Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
-                                if (selectOnUp != null)
+                                GameObject selectOnDownGO = selectOnDown.gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnDownGO);
+                                RectTransform scrollToRect = selectOnDownGO.GetComponent<RectTransform>();
+                                if (!_languageDropdown.IsExpanded)
                                 {
-                                    GameObject selectOnUpGO = selectOnUp.gameObject;
-                                    EventSystem.current.SetSelectedGameObject(selectOnUpGO);
-                                    RectTransform scrollToRect = selectOnUpGO.GetComponent<RectTransform>();
                                     SnapScrollTo(scrollToRect);
+
                                 }
                             }
                         }
+
+                        if (SpeechInputSystem.Instance.DPadUpPressed)
+                        {
+                            Selectable selectOnUp = currentSelectable.FindSelectableOnUp();
+                            if (selectOnUp != null)
+                            {
+                                GameObject selectOnUpGO = selectOnUp.gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnUpGO);
+                                RectTransform scrollToRect = selectOnUpGO.GetComponent<RectTransform>();
+                                if (!_languageDropdown.IsExpanded)
+                                {
+                                    SnapScrollTo(scrollToRect);
+
+                                }
+                            }
+                        }
+                        
 
                         if (SpeechInputSystem.Instance.DPadLeftPressed)
                         {
@@ -211,6 +227,19 @@ namespace JZK.UI
                                     {
                                         Input_ConfirmLanguageButtonPressed();
                                     }
+                                    if (currentSelectable.gameObject == _languageDropdown.gameObject)
+                                    {
+                                        _languageDropdown.Show();
+                                    }
+                                    if (currentSelectable.transform.IsChildOf(_languageDropdown.transform))
+                                    {
+                                        int dropdownItemIndex = currentSelectable.transform.GetSiblingIndex() - 1;
+                                        if(dropdownItemIndex > 0 && dropdownItemIndex < SpeechHelper.ALL_LANGUAGE_ENUMS.Count)
+                                        {
+                                            _languageDropdown.value = dropdownItemIndex;
+                                            _languageDropdown.RefreshShownValue();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -221,14 +250,32 @@ namespace JZK.UI
                             SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
                         }
 
-                        if (InputSystem.Instance.DPadUpPressed ||
-                                InputSystem.Instance.DPadDownPressed)
+                        if(_languageDropdown.IsExpanded)
                         {
-                            /*if(!_languageDropdown.IsExpanded)
+                            if(SpeechInputSystem.Instance.DPadUpPressed)
                             {
-                                SnapDropdownScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
-                            }*/
-                            if (!_languageDropdown.IsExpanded)
+                                /*int upperDropdownIndex = _languageDropdown.value - 1;
+                                if(upperDropdownIndex > 0)
+                                {
+                                    _languageDropdown.value = upperDropdownIndex;
+                                    _languageDropdown.RefreshShownValue();
+                                }*/
+                            }
+
+                            if(SpeechInputSystem.Instance.DPadDownPressed)
+                            {
+                                /*int lowerDropdownIndex = _languageDropdown.value + 1;
+                                if(lowerDropdownIndex < _languageDropdown.options.Count)
+                                {
+                                    _languageDropdown.value = lowerDropdownIndex;
+                                    _languageDropdown.RefreshShownValue();
+                                }*/
+                            }
+                        }
+                        else
+                        {
+                            if (InputSystem.Instance.DPadUpPressed ||
+                                InputSystem.Instance.DPadDownPressed)
                             {
                                 SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
                             }
@@ -273,6 +320,13 @@ namespace JZK.UI
             if(_popupOpen)
             {
                 TogglePopup(false);
+                return;
+            }
+
+            if(EventSystem.current.currentSelectedGameObject.transform.IsChildOf(_languageDropdown.transform))
+            {
+                _languageDropdown.Hide();
+                return;
             }
 
             else
@@ -317,6 +371,18 @@ namespace JZK.UI
                 return false;
             }
 
+            string existingConfirmTerm = SpeechInputSystem.Instance.SpeechInputTerm_LUT[ESpeechInputType.UI_Confirm];
+            if (existingConfirmTerm == term)
+            {
+                return false;
+            }
+
+            string existingBackTerm = SpeechInputSystem.Instance.SpeechInputTerm_LUT[ESpeechInputType.UI_Back];
+            if (existingBackTerm == term)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -328,8 +394,10 @@ namespace JZK.UI
         public void Input_ResetButtonPressed()
         {
             SpeechInputSystem.Instance.ResetTermsToDefault();
+            SpeechRecognitionSystem.Instance.ResetRegion();
             SpeechInputSystem.Instance.SaveCurrentSpeechData();
             RefreshDisplayedTerms();
+            RefreshRegionDropdown();
         }
 
         public void Input_PopupConfirmPressed()
@@ -348,7 +416,7 @@ namespace JZK.UI
             ESpeechRegion regionEnum = SpeechHelper.ALL_LANGUAGE_ENUMS[dropdownIndex];
             string languageCode = SpeechHelper.RegionStringFromEnum(regionEnum);
             Debug.Log("[HELLO] set language to " + languageCode + " - " + regionEnum.ToString());
-            SpeechRecognitionSystem.Instance.SetLanguageString(languageCode);
+            SpeechRecognitionSystem.Instance.SetRegionString(languageCode, regionEnum);
             SpeechInputSystem.Instance.SaveCurrentSpeechData();
         }
 

@@ -133,5 +133,10 @@ namespace JZK.UI
         {
             _controller.OnSpeechRecognised(speech);
         }
+
+        /*public void SetSavedSpeechString(string speechString)
+        {
+            //_controller.SetSavedSpeechString(speechString);
+        }*/
     }
 }

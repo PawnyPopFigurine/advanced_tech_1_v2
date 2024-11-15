@@ -7,6 +7,7 @@ using JZK.Save;
 using System;
 using UnityEngine.UIElements;
 using System.Linq;
+using JZK.UI;
 
 namespace JZK.Input
 {
@@ -519,7 +520,8 @@ namespace JZK.Input
         {
             SpeechSaveData saveData = (SpeechSaveData)loadedData;
 
-            SpeechRecognitionSystem.Instance.SetLanguageString(saveData.LanguageCode);
+            SpeechRecognitionSystem.Instance.SetRegionString(saveData.LanguageCode, (ESpeechRegion)saveData.LanguageCodeIndex);
+            //ControlSettingsUISystem.Instance.SetSavedSpeechString(saveData.LanguageCode);
 
             if(saveData.Terms.Count == 0)
             {
@@ -558,6 +560,7 @@ namespace JZK.Input
 
                 saveData.Terms.Add(term);
                 saveData.LanguageCode = SpeechRecognitionSystem.Instance.CurrentLanguageString;
+                saveData.LanguageCodeIndex = (int)SpeechRecognitionSystem.Instance.CurrentRegion;
             }
 
             SpeechDataSystem.Instance.SaveGameData(saveData);

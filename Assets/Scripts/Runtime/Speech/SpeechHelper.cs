@@ -10,8 +10,23 @@ namespace JZK.Input
 {
     public static class SpeechHelper
     {
+        public static string FALLBACK_DEFAULT_REGIONCODE = "en-GB";
+        public static ESpeechRegion FALLBACK_DEFAULT_REGIONENUM = ESpeechRegion.English_GB;
 
         public static List<ESpeechRegion> ALL_LANGUAGE_ENUMS => Enum.GetValues(typeof(ESpeechRegion)).Cast<ESpeechRegion>().ToList();
+
+        /*public static List<string> GetAllLanguageStrings()
+        {
+            List<string> stringList = new();
+            foreach(ESpeechRegion region in ALL_LANGUAGE_ENUMS)
+            {
+                string regionstring = RegionStringFromEnum(region);
+                stringList.Add(regionstring);
+            }
+
+            return stringList;
+        }*/
+
         public static string ProcessSpeechTerm(string rawSpeech)
         {
             string processedSpeech = rawSpeech.ToLower();
