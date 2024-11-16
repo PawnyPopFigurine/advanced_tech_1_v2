@@ -1,11 +1,9 @@
 using JZK.Framework;
 using JZK.Input;
 using JZK.UI;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace JZK.Gameplay
@@ -34,6 +32,15 @@ namespace JZK.Gameplay
 
             Load();
         }
+
+        public override void SetCallbacks()
+        {
+            base.SetCallbacks();
+
+            OptionsDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
+            OptionsDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;
+
+        }
         #endregion //PersistentSystem
 
         public static Vector2 PLAYER_START_POS = new(-5f, -2.5f);
@@ -41,7 +48,7 @@ namespace JZK.Gameplay
 
         public static float MIN_BLOCK_INTERVAL = 1f;
         public static float MAX_BLOCK_INTERVAL = 3f;
-        
+
         PlayerController _player;
 
         bool _isInGameplay;
@@ -52,12 +59,23 @@ namespace JZK.Gameplay
 
         private float _currentGameSpeed;
 
-        static float DEFAULT_GAME_SPEED = 2f;
+        private float _maxGameSpeed;
+        public float MaxGameSpeed => _maxGameSpeed;
+
+        public static float DEFAULT_MAX_SPEED = 3.5f;
 
         private EGameState _currentState;
 
-        float _timeSinceGameStart = 0;
+        float _scaledTimeSinceStart = 0;
+        float _unscaledTimeSinceStart = 0;
+
         float _timeToNextBlock;
+
+        float _defaultStartSpeed = 1.5f;
+
+        float _timeToNextSpeedIncrease;
+        static float SPEED_INCREASE_INTERVAL = 4.5f;
+        static float SPEED_INCREASE_BY_AMOUNT = 0.25f;
 
         static List<ESpeechInputType_Flag> VALID_HAZARD_FLAGS = new()
         {
@@ -93,7 +111,7 @@ namespace JZK.Gameplay
 
             GameObject playerGO = Instantiate(op.Result);
 
-            if(!playerGO.TryGetComponent(out PlayerController controller))
+            if (!playerGO.TryGetComponent(out PlayerController controller))
             {
                 Debug.LogError(this.name + " - failed to find PlayerController component on player prefab.");
                 return;
@@ -126,12 +144,14 @@ namespace JZK.Gameplay
             _player.gameObject.SetActive(true);
             _player.transform.position = PLAYER_START_POS;
 
-            _currentGameSpeed = DEFAULT_GAME_SPEED;
+            SetCurrentGameSpeed(_defaultStartSpeed);
 
             _currentState = EGameState.Active;
 
             _isInGameplay = true;
-            _timeSinceGameStart = 0f;
+            _scaledTimeSinceStart = 0f;
+            _unscaledTimeSinceStart = 0f;
+            _timeToNextSpeedIncrease = _unscaledTimeSinceStart + SPEED_INCREASE_INTERVAL;
             PlaceHazardBlock();
 
             GameplayUISystem.Instance.OnGameplayStart();
@@ -146,7 +166,7 @@ namespace JZK.Gameplay
         public void DestroyAllHazardBlocks()
         {
             List<HazardBlockController> hazardsCache = new(_activeBlocks);
-            foreach(HazardBlockController hazardBlockController in hazardsCache)
+            foreach (HazardBlockController hazardBlockController in hazardsCache)
             {
                 DestroyHazardBlock(hazardBlockController);
             }
@@ -173,7 +193,7 @@ namespace JZK.Gameplay
 
             //set time of next block placement
             float nextTimeInterval = Random.Range(MIN_BLOCK_INTERVAL, MAX_BLOCK_INTERVAL);
-            _timeToNextBlock = _timeSinceGameStart + nextTimeInterval;
+            _timeToNextBlock = _scaledTimeSinceStart + nextTimeInterval;
         }
 
         public override void UpdateSystem()
@@ -183,12 +203,16 @@ namespace JZK.Gameplay
                 return;
             }
 
-            switch(_currentState)
+            switch (_currentState)
             {
                 case EGameState.Active:
+                    _scaledTimeSinceStart += Time.deltaTime * (_currentGameSpeed / 2);
+                    _unscaledTimeSinceStart += Time.deltaTime;
+
                     UpdateInput();
                     UpdateBlockPlacement();
                     UpdateBlockMovement();
+                    UpdateGameSpeedIncrease();
                     break;
                 case EGameState.Failure:
                     break;
@@ -278,20 +302,44 @@ namespace JZK.Gameplay
                 }
             }
         }
-        
+
         void UpdateBlockPlacement()
         {
-            _timeSinceGameStart += Time.deltaTime;
-
-            if(_timeSinceGameStart >= _timeToNextBlock)
+            if (_scaledTimeSinceStart >= _timeToNextBlock)
             {
                 PlaceHazardBlock();
             }
         }
 
+        void UpdateGameSpeedIncrease()
+        {
+            if (_currentGameSpeed >= _maxGameSpeed)
+            {
+                return;
+            }
+
+            if (_unscaledTimeSinceStart >= _timeToNextSpeedIncrease)
+            {
+                IncreaseGameSpeedByInterval();
+            }
+        }
+
+        void IncreaseGameSpeedByInterval()
+        {
+            if (_currentGameSpeed >= _maxGameSpeed)
+            {
+                return;
+            }
+
+            float nextGameSpeed = _currentGameSpeed + SPEED_INCREASE_BY_AMOUNT;
+            Debug.Log("[SPEEDUP] - time is " + _unscaledTimeSinceStart + " , set speed from " + _currentGameSpeed + " to " + nextGameSpeed + " - next speed increase at " + (_unscaledTimeSinceStart + _timeToNextSpeedIncrease).ToString());
+            SetCurrentGameSpeed(nextGameSpeed);
+            _timeToNextSpeedIncrease = _unscaledTimeSinceStart + SPEED_INCREASE_INTERVAL;
+        }
+
         void UpdateBlockMovement()
         {
-            foreach(HazardBlockController hazardBlock in _activeBlocks)
+            foreach (HazardBlockController hazardBlock in _activeBlocks)
             {
                 GameObject hazardGO = hazardBlock.gameObject;
                 Vector2 newPos = new(hazardGO.transform.localPosition.x - (_currentGameSpeed * Time.deltaTime), hazardGO.transform.localPosition.y);
@@ -311,6 +359,29 @@ namespace JZK.Gameplay
             _currentState = EGameState.Failure;
 
             GameplayUISystem.Instance.OnPlayerDeath();
+        }
+
+        public void OnSystemDataLoaded(object loadedData)
+        {
+            OptionsSaveData saveData = (OptionsSaveData)loadedData;
+
+            _maxGameSpeed = saveData.MaxGameSpeed;
+        }
+
+        public void SetMaxGameSpeed(float maxSpeed)
+        {
+            _maxGameSpeed = maxSpeed;
+        }
+
+        public void ResetMaxSpeed()
+        {
+            SetMaxGameSpeed(DEFAULT_MAX_SPEED);
+        }
+
+        void SetCurrentGameSpeed(float gameSpeed)
+        {
+            float settingSpeed = Mathf.Min(gameSpeed, _maxGameSpeed);
+            _currentGameSpeed = settingSpeed;
         }
     }
 }

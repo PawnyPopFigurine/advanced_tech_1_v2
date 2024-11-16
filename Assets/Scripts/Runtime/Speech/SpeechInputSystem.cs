@@ -8,6 +8,7 @@ using System;
 using UnityEngine.UIElements;
 using System.Linq;
 using JZK.UI;
+using JZK.Gameplay;
 
 namespace JZK.Input
 {
@@ -311,8 +312,8 @@ namespace JZK.Input
         {
             base.SetCallbacks();
 
-            SpeechDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
-            SpeechDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;
+            OptionsDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
+            OptionsDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;
 
         }
 
@@ -538,7 +539,7 @@ namespace JZK.Input
 
         public void OnSystemDataLoaded(object loadedData)
         {
-            SpeechSaveData saveData = (SpeechSaveData)loadedData;
+            OptionsSaveData saveData = (OptionsSaveData)loadedData;
 
             SpeechRecognitionSystem.Instance.SetRegionString(saveData.LanguageCode, (ESpeechRegion)saveData.LanguageCodeIndex);
             //ControlSettingsUISystem.Instance.SetSavedSpeechString(saveData.LanguageCode);
@@ -551,7 +552,7 @@ namespace JZK.Input
 
             _speechInputTerm_LUT.Clear();
 
-            foreach(SpeechSaveData.SpeechSaveDataTerm term in saveData.Terms)
+            foreach(OptionsSaveData.SpeechSaveDataTerm term in saveData.Terms)
             {
                 if(_speechInputTerm_LUT.ContainsKey(term.Type))
                 {
@@ -564,15 +565,15 @@ namespace JZK.Input
             }
         }
 
-        public void SaveCurrentSpeechData()
+        public void SaveCurrentOptionData()
         {
-            SpeechSaveData saveData = new();
+            OptionsSaveData saveData = new();
 
             saveData.Terms = new();
 
             foreach(ESpeechInputType termKey in _speechInputTerm_LUT.Keys)
             {
-                SpeechSaveData.SpeechSaveDataTerm term = new()
+                OptionsSaveData.SpeechSaveDataTerm term = new()
                 {
                     Term = _speechInputTerm_LUT[termKey],
                     Type = termKey,
@@ -581,9 +582,11 @@ namespace JZK.Input
                 saveData.Terms.Add(term);
                 saveData.LanguageCode = SpeechRecognitionSystem.Instance.CurrentLanguageString;
                 saveData.LanguageCodeIndex = (int)SpeechRecognitionSystem.Instance.CurrentRegion;
+
+                saveData.MaxGameSpeed = GameplaySystem.Instance.MaxGameSpeed;
             }
 
-            SpeechDataSystem.Instance.SaveGameData(saveData);
+            OptionsDataSystem.Instance.SaveGameData(saveData);
         }
 
         public void ToggleVoiceInputEnabled()

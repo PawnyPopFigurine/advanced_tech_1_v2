@@ -17,7 +17,7 @@ namespace JZK.Framework
             new SystemReference<Gameplay.GameplaySystem>(),
 
             new SystemReference<Input.InputSystem>(),
-            new SystemReference<Input.SpeechDataSystem>(),
+            new SystemReference<Input.OptionsDataSystem>(),
             new SystemReference<Input.SpeechInputSystem>(),
             new SystemReference<Input.SpeechRecognitionSystem>(),
 

@@ -7,12 +7,13 @@ using System;
 using Unity.VisualScripting;
 using JZK.Save;
 using JetBrains.Annotations;
+using JZK.Gameplay;
 
 
 namespace JZK.Input
 {
     [Serializable]
-    public class SpeechSaveData
+    public class OptionsSaveData
     {
         [Serializable]
         public class SpeechSaveDataTerm
@@ -25,9 +26,10 @@ namespace JZK.Input
         public string LanguageCode;
         public int LanguageCodeIndex;
 
+        public float MaxGameSpeed;
     }
 
-    public class SpeechDataSystem : GameSystem<SpeechDataSystem>
+    public class OptionsDataSystem : GameSystem<OptionsDataSystem>
     {
         private SystemLoadData _loadData = new SystemLoadData()
         {
@@ -40,7 +42,7 @@ namespace JZK.Input
             get { return _loadData; }
         }
 
-        private SpeechSaveData _savedSpeechData;
+        private OptionsSaveData _savedSpeechData;
 
         public delegate void DataLoadedEvent(object loadedData);
         public DataLoadedEvent OnSystemDataLoaded;
@@ -84,7 +86,7 @@ namespace JZK.Input
 
             if (loadResult.Success)
             {
-                SpeechSaveData saveData = (SpeechSaveData)loadResult.LoadedData;
+                OptionsSaveData saveData = (OptionsSaveData)loadResult.LoadedData;
 
                 //update save data for different versions here
 
@@ -131,7 +133,7 @@ namespace JZK.Input
             return "Steam_ID_Here";
         }
 
-        public SpeechSaveData CreateDefaultSaveData()
+        public OptionsSaveData CreateDefaultSaveData()
         {
             return new()
             {
@@ -159,7 +161,11 @@ namespace JZK.Input
                 },
 
                 LanguageCode = SpeechHelper.FALLBACK_DEFAULT_REGIONCODE,
-                LanguageCodeIndex = (int)SpeechHelper.FALLBACK_DEFAULT_REGIONENUM
+                LanguageCodeIndex = (int)SpeechHelper.FALLBACK_DEFAULT_REGIONENUM,
+
+                MaxGameSpeed = GameplaySystem.DEFAULT_MAX_SPEED,
+
+
             };
         }
 
@@ -168,8 +174,8 @@ namespace JZK.Input
 
         #region Save
 
-        private SpeechSaveData _pendingBackupSaveData;
-        private SpeechSaveData _pendingSaveData;
+        private OptionsSaveData _pendingBackupSaveData;
+        private OptionsSaveData _pendingSaveData;
 
         public delegate void SaveSystemEvent();
 
@@ -182,12 +188,12 @@ namespace JZK.Input
 
         private EIOState _currentState;
 
-        public void SaveGameData(SpeechSaveData saveData)
+        public void SaveGameData(OptionsSaveData saveData)
         {
             _ = WriteSaveFileAsync(saveData, false);
         }
 
-        public async Task<bool> WriteSaveFileAsync(SpeechSaveData data, bool saveAsBackup)
+        public async Task<bool> WriteSaveFileAsync(OptionsSaveData data, bool saveAsBackup)
         {
             string filePath = saveAsBackup ? GetBackupFilePath() : GetMainFilePath();
 
@@ -215,9 +221,9 @@ namespace JZK.Input
 
         private bool _isRecordingSaveData = false;
 
-        private SpeechSaveData _recordingSaveData = null;
+        private OptionsSaveData _recordingSaveData = null;
 
-        public void SubmitSystemSaveData(SpeechSaveData saveData)
+        public void SubmitSystemSaveData(OptionsSaveData saveData)
         {
             if (!_isRecordingSaveData)
             {

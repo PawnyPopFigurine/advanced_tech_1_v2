@@ -1,3 +1,4 @@
+using JZK.Gameplay;
 using JZK.Input;
 using System;
 using System.Collections;
@@ -52,6 +53,13 @@ namespace JZK.UI
         int _dropdownRiseDropValue = 7;
         int _mainScrollRiseDropValue = 5;
 
+        [SerializeField] Slider _maxSpeedSlider;
+        [SerializeField] TMP_Text _speedSliderValueText;
+
+        [SerializeField] GameObject _confirmMaxSpeedButton;
+
+        float _sliderShiftAmount = 0.25f;
+
         public override void Initialise()
         {
             base.Initialise();
@@ -87,6 +95,7 @@ namespace JZK.UI
             TogglePopup(false);
             RefreshDisplayedTerms();
             RefreshRegionDropdown();
+            RefreshSpeedSlider();
             EventSystem.current.SetSelectedGameObject(_defaultSelected);
             RectTransform defaultSelectRect = _defaultSelected.gameObject.GetComponent<RectTransform>();
             SnapScrollTo(defaultSelectRect);
@@ -115,11 +124,23 @@ namespace JZK.UI
             _languageDropdown.RefreshShownValue();
         }
 
+        void RefreshSpeedSlider()
+        {
+            float maxSpeed = GameplaySystem.Instance.MaxGameSpeed;
+            _maxSpeedSlider.value = maxSpeed;
+        }
+
         public override void UpdateController()
         {
             base.UpdateController();
 
-            UpdateInput();
+            if(_isActive)
+            {
+                UpdateInput();
+
+                _speedSliderValueText.text = _maxSpeedSlider.value.ToString();
+            }
+
 
             _leftPopupLastFrame = false;
         }
@@ -149,6 +170,8 @@ namespace JZK.UI
             if(!_popupOpen)
             {
                 GameObject currentSelectedGO = EventSystem.current.currentSelectedGameObject;
+                bool sliderSelected = currentSelectedGO == _maxSpeedSlider.gameObject;
+
                 if (null != currentSelectedGO)
                 {
                     Selectable currentSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
@@ -191,30 +214,44 @@ namespace JZK.UI
 
                         if (SpeechInputSystem.Instance.DPadLeftPressed)
                         {
-                            Selectable selectOnLeft = currentSelectable.FindSelectableOnLeft();
-                            if (selectOnLeft != null)
+                            if(sliderSelected)
                             {
-                                GameObject selectOnLeftGO = selectOnLeft.gameObject;
-                                EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
-                                RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
-                                if (!_languageDropdown.IsExpanded)
+                                _maxSpeedSlider.value -= _sliderShiftAmount;
+                            }
+                            else
+                            {
+                                Selectable selectOnLeft = currentSelectable.FindSelectableOnLeft();
+                                if (selectOnLeft != null)
                                 {
-                                    SnapScrollTo(scrollToRect);
+                                    GameObject selectOnLeftGO = selectOnLeft.gameObject;
+                                    EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
+                                    RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
+                                    if (!_languageDropdown.IsExpanded)
+                                    {
+                                        SnapScrollTo(scrollToRect);
+                                    }
                                 }
                             }
                         }
 
                         if (SpeechInputSystem.Instance.DPadRightPressed)
                         {
-                            Selectable selectOnRight = currentSelectable.FindSelectableOnRight();
-                            if (selectOnRight != null)
+                            if(sliderSelected)
                             {
-                                GameObject selectOnRightGO = selectOnRight.gameObject;
-                                EventSystem.current.SetSelectedGameObject(selectOnRightGO);
-                                RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
-                                if (!_languageDropdown.IsExpanded)
+                                _maxSpeedSlider.value += _sliderShiftAmount;
+                            }
+                            else
+                            {
+                                Selectable selectOnRight = currentSelectable.FindSelectableOnRight();
+                                if (selectOnRight != null)
                                 {
-                                    SnapScrollTo(scrollToRect);
+                                    GameObject selectOnRightGO = selectOnRight.gameObject;
+                                    EventSystem.current.SetSelectedGameObject(selectOnRightGO);
+                                    RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
+                                    if (!_languageDropdown.IsExpanded)
+                                    {
+                                        SnapScrollTo(scrollToRect);
+                                    }
                                 }
                             }
                         }
@@ -291,6 +328,10 @@ namespace JZK.UI
                                             _languageDropdown.RefreshShownValue();
                                         }
                                     }
+                                    if (currentSelectable.gameObject == _confirmMaxSpeedButton)
+                                    {
+                                        Input_ConfirmMaxSpeedButtonPressed();
+                                    }
                                 }
                             }
                         }
@@ -298,7 +339,10 @@ namespace JZK.UI
                         if (InputSystem.Instance.DPadLeftPressed ||
                             InputSystem.Instance.DPadRightPressed)
                         {
-                            SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                            if(currentSelectable.gameObject != _maxSpeedSlider.gameObject)
+                            {
+                                SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                            }
                         }
 
                         if(_languageDropdown.IsExpanded)
@@ -309,7 +353,10 @@ namespace JZK.UI
                             if (InputSystem.Instance.DPadUpPressed ||
                                 InputSystem.Instance.DPadDownPressed)
                             {
-                                SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                                if(currentSelectable.gameObject != _maxSpeedSlider.gameObject)
+                                {
+                                    SnapScrollTo(currentSelectable.gameObject.GetComponent<RectTransform>());
+                                }
                             }
                         }
                     }
@@ -382,7 +429,7 @@ namespace JZK.UI
                 return;
             }
             SpeechInputSystem.Instance.SetTermForType(_recordForType, _latestRecordedTerm);
-            SpeechInputSystem.Instance.SaveCurrentSpeechData();
+            SpeechInputSystem.Instance.SaveCurrentOptionData();
             RefreshDisplayedTerms();
             TogglePopup(false);
         }
@@ -428,9 +475,12 @@ namespace JZK.UI
         {
             SpeechInputSystem.Instance.ResetTermsToDefault();
             SpeechRecognitionSystem.Instance.ResetRegion();
-            SpeechInputSystem.Instance.SaveCurrentSpeechData();
+            GameplaySystem.Instance.ResetMaxSpeed();
+
+            SpeechInputSystem.Instance.SaveCurrentOptionData();
             RefreshDisplayedTerms();
             RefreshRegionDropdown();
+            RefreshSpeedSlider();
         }
 
         public void Input_PopupConfirmPressed()
@@ -450,7 +500,15 @@ namespace JZK.UI
             string languageCode = SpeechHelper.RegionStringFromEnum(regionEnum);
             Debug.Log("[HELLO] set language to " + languageCode + " - " + regionEnum.ToString());
             SpeechRecognitionSystem.Instance.SetRegionString(languageCode, regionEnum);
-            SpeechInputSystem.Instance.SaveCurrentSpeechData();
+            SpeechInputSystem.Instance.SaveCurrentOptionData();
+        }
+
+        public void Input_ConfirmMaxSpeedButtonPressed()
+        {
+            float maxSpeed = _maxSpeedSlider.value;
+            GameplaySystem.Instance.SetMaxGameSpeed(maxSpeed);
+            Debug.Log("[HELLO] set max speed to " + maxSpeed.ToString());
+            SpeechInputSystem.Instance.SaveCurrentOptionData();
         }
 
         public void SnapScrollTo(RectTransform targetRect)
