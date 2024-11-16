@@ -349,7 +349,8 @@ namespace JZK.UI
                 return;
             }
 
-            if(EventSystem.current.currentSelectedGameObject.transform.IsChildOf(_languageDropdown.transform))
+            if(EventSystem.current.currentSelectedGameObject.transform.IsChildOf(_languageDropdown.transform) &&
+                EventSystem.current.currentSelectedGameObject != _languageDropdown.gameObject)
             {
                 _languageDropdown.Hide();
                 return;
