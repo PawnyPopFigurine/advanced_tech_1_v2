@@ -61,6 +61,11 @@ namespace JZK.Input
         public bool RightTriggerPressed { get; private set; }
         public bool LeftTrigger { get; private set; }
         public bool LeftTriggerPressed { get; private set; }
+		public bool UIRise { get; private set; }
+		public bool UIRIsePressed { get; private set; }
+		public bool UIDrop { get; private set; }
+		public bool UIDropPressed { get; private set; }
+
 
 		public bool AnyButtonPressed
 		{
@@ -256,8 +261,23 @@ namespace JZK.Input
 				RightTriggerPressed = true;
 			}
 
+			bool lastUIRise = UIRise;
+			UIRise = inputAction_UIRise.triggered;
+			if(UIRise && !lastUIRise)
+			{
+				UIRIsePressed = true;
+			}
 
-			ESpeechInputType type = GetDebugInputType();
+			bool lastUIDrop = UIDrop;
+			UIDrop = inputAction_UIDrop.triggered;
+			if(UIDrop && !lastUIDrop)
+			{
+				UIDropPressed = true;
+			}
+
+
+
+            ESpeechInputType type = GetDebugInputType();
 			if(type != ESpeechInputType.None)
 			{
 				DebugLatestInput = type;
@@ -327,6 +347,9 @@ namespace JZK.Input
 		private InputAction inputAction_RightTrigger;
 		private InputAction inputAction_LeftTrigger;
 
+		private InputAction inputAction_UIRise;
+		private InputAction inputAction_UIDrop;
+
 		private void SetUpActions()
 		{
 			inputAction_FaceButtonDown = _playerInput.actions["Gameplay/FaceButtonDown"];
@@ -343,6 +366,9 @@ namespace JZK.Input
 			inputAction_RightShoulder = _playerInput.actions["Gameplay/RightShoulder"];
 			inputAction_LeftTrigger = _playerInput.actions["Gameplay/LeftTrigger"];
 			inputAction_RightTrigger = _playerInput.actions["Gameplay/RightTrigger"];
+
+			inputAction_UIRise = _playerInput.actions["UI/UIRise"];
+			inputAction_UIDrop = _playerInput.actions["UI/UIDrop"];
         }
 
 		public void Clear()
@@ -375,6 +401,11 @@ namespace JZK.Input
 			LeftTriggerPressed = false;
 			RightShoulderPressed = false;
 			RightTriggerPressed = false;
+
+			UIRise = false;
+			UIRIsePressed = false;
+			UIDrop = false;
+			UIDropPressed = false;
 		}
 
 		EControllerType GetCurrentController(out EControllerPlatformType lastPlatformType, out InputDevice lastDevice)

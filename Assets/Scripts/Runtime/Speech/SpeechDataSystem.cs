@@ -154,6 +154,8 @@ namespace JZK.Input
 
                     new(){Type = ESpeechInputType.UI_Confirm, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Confirm]},
                     new(){Type = ESpeechInputType.UI_Back, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Back]},
+                    new(){Type = ESpeechInputType.UI_Rise, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Rise]},
+                    new(){Type = ESpeechInputType.UI_Drop, Term = SpeechHelper.DEFAULT_TERMS[ESpeechInputType.UI_Drop]},
                 },
 
                 LanguageCode = SpeechHelper.FALLBACK_DEFAULT_REGIONCODE,

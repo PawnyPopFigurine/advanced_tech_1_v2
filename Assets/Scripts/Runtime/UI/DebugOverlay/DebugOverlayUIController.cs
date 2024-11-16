@@ -30,6 +30,9 @@ namespace JZK.UI
         [SerializeField] TMP_Text _confirm;
         [SerializeField] TMP_Text _back;
 
+        [SerializeField] TMP_Text _scrollRise;
+        [SerializeField] TMP_Text _scrollDrop;
+
         [SerializeField] TMP_Text _voiceControlEnabledText;
 
         [SerializeField] TMP_Text _isRecordingTrue;
@@ -112,6 +115,10 @@ namespace JZK.UI
                         _rightShoulder.SetText(term); break;
                     case ESpeechInputType.Game_RightTrigger:
                         _rightTrigger.SetText(term); break;
+                    case ESpeechInputType.UI_Rise:
+                        _scrollRise.SetText(term); break;
+                    case ESpeechInputType.UI_Drop:
+                        _scrollDrop.SetText(term); break;
                     default:
                         break;
                 }

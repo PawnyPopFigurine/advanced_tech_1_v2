@@ -56,6 +56,8 @@ namespace JZK.Input
 
             { ESpeechInputType.UI_Back, "back" },
             { ESpeechInputType.UI_Confirm, "confirm" },
+            { ESpeechInputType.UI_Rise, "rise" },
+            { ESpeechInputType.UI_Drop, "drop" },
 
         };
 
@@ -79,6 +81,8 @@ namespace JZK.Input
 
             { ESpeechInputType.UI_Confirm, "UI Confirm" },
             { ESpeechInputType.UI_Back, "UI Back" },
+            { ESpeechInputType.UI_Rise, "UI Rise" },
+            { ESpeechInputType.UI_Drop, "UI Drop" },
 
             { ESpeechInputType.None, "None" },
         };
@@ -117,6 +121,10 @@ namespace JZK.Input
                     return ESpeechInputType_Flag.UI_Confirm;
                 case ESpeechInputType.UI_Back:
                     return ESpeechInputType_Flag.UI_Back;
+                case ESpeechInputType.UI_Rise:
+                    return ESpeechInputType_Flag.UI_Rise;
+                case ESpeechInputType.UI_Drop:
+                    return ESpeechInputType_Flag.UI_Drop;
                 case ESpeechInputType.Max:
                     return ESpeechInputType_Flag.Max;
                 case ESpeechInputType.Invalid:

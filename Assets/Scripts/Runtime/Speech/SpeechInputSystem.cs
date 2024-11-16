@@ -32,6 +32,8 @@ namespace JZK.Input
 
         UI_Confirm,
         UI_Back,
+        UI_Rise,
+        UI_Drop,
 
         Max,
         Invalid
@@ -59,9 +61,11 @@ namespace JZK.Input
 
         UI_Confirm = 4096,
         UI_Back = 8192,
+        UI_Rise = 16384,
+        UI_Drop = 32768,
 
-        Max = 16384,
-        Invalid = 32768,
+        Max = 65536,
+        Invalid = 131072,
     }
 
     public enum ESpeechRegion
@@ -248,6 +252,9 @@ namespace JZK.Input
         public bool LeftTriggerPressed { get; private set; }
         public bool RightTriggerPressed { get; private set; }
 
+        public bool UIRisePressed { get; private set; }
+        public bool UIDropPressed { get; private set; }
+
         public ESpeechInputType DebugLatestInput { get; private set; }
         public ESpeechInputType_Flag DebugLatestInputFlag { get; private set; }
 
@@ -274,7 +281,9 @@ namespace JZK.Input
                     LeftShoulderPressed ||
                     LeftTriggerPressed ||
                     RightShoulderPressed ||
-                    RightTriggerPressed);
+                    RightTriggerPressed ||
+                    UIRisePressed ||
+                    UIDropPressed);
             }
         }
 
@@ -471,6 +480,14 @@ namespace JZK.Input
                             RightTriggerPressed = true;
                             hasPressed = true;
                             break;
+                        case ESpeechInputType.UI_Rise:
+                            UIRisePressed = true;
+                            hasPressed = true;
+                            break;
+                        case ESpeechInputType.UI_Drop:
+                            UIDropPressed = true;
+                            hasPressed = true;
+                            break;
                     }
 
                     _latestSpeechInputData.InputQueue.RemoveAt(0);
@@ -514,6 +531,9 @@ namespace JZK.Input
 
             UIConfirmPressed = false;
             UIBackPressed = false;
+
+            UIRisePressed = false;
+            UIDropPressed = false;
         }
 
         public void OnSystemDataLoaded(object loadedData)

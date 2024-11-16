@@ -49,6 +49,9 @@ namespace JZK.UI
 
         [SerializeField] GameObject _dropdownItemParent;
 
+        int _dropdownRiseDropValue = 7;
+        int _mainScrollRiseDropValue = 5;
+
         public override void Initialise()
         {
             base.Initialise();
@@ -188,7 +191,10 @@ namespace JZK.UI
                                 GameObject selectOnLeftGO = selectOnLeft.gameObject;
                                 EventSystem.current.SetSelectedGameObject(selectOnLeftGO);
                                 RectTransform scrollToRect = selectOnLeftGO.GetComponent<RectTransform>();
-                                SnapScrollTo(scrollToRect);
+                                if (!_languageDropdown.IsExpanded)
+                                {
+                                    SnapScrollTo(scrollToRect);
+                                }
                             }
                         }
 
@@ -200,6 +206,45 @@ namespace JZK.UI
                                 GameObject selectOnRightGO = selectOnRight.gameObject;
                                 EventSystem.current.SetSelectedGameObject(selectOnRightGO);
                                 RectTransform scrollToRect = selectOnRightGO.GetComponent<RectTransform>();
+                                if (!_languageDropdown.IsExpanded)
+                                {
+                                    SnapScrollTo(scrollToRect);
+                                }
+                            }
+                        }
+
+                        if(SpeechInputSystem.Instance.UIDropPressed || InputSystem.Instance.UIDropPressed)
+                        {
+                            if (currentSelectable.transform.IsChildOf(_languageDropdown.transform) &&
+                                currentSelectable != _languageDropdown)
+                            {
+                                GameObject selectOnDropGO = GetDropdownDropSelectable().gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnDropGO);
+                            }
+
+                            else if (currentSelectable.transform.IsChildOf(_contentPanel.transform))
+                            {
+                                GameObject selectOnRiseGO = GetScrollRectDropSelectable().gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnRiseGO);
+                                RectTransform scrollToRect = selectOnRiseGO.GetComponent<RectTransform>();
+                                SnapScrollTo(scrollToRect);
+                            }
+                        }
+
+                        if(SpeechInputSystem.Instance.UIRisePressed || InputSystem.Instance.UIRIsePressed)
+                        {
+                            if(currentSelectable.transform.IsChildOf(_languageDropdown.transform) &&
+                                currentSelectable != _languageDropdown)
+                            {
+                                GameObject selectOnRiseGO = GetDropdownRiseSelectable().gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnRiseGO);
+                            }
+
+                            else if (currentSelectable.transform.IsChildOf(_contentPanel.transform))
+                            {
+                                GameObject selectOnRiseGO = GetScrollRectRiseSelectable().gameObject;
+                                EventSystem.current.SetSelectedGameObject(selectOnRiseGO);
+                                RectTransform scrollToRect = selectOnRiseGO.GetComponent<RectTransform>();
                                 SnapScrollTo(scrollToRect);
                             }
                         }
@@ -252,25 +297,6 @@ namespace JZK.UI
 
                         if(_languageDropdown.IsExpanded)
                         {
-                            if(SpeechInputSystem.Instance.DPadUpPressed)
-                            {
-                                /*int upperDropdownIndex = _languageDropdown.value - 1;
-                                if(upperDropdownIndex > 0)
-                                {
-                                    _languageDropdown.value = upperDropdownIndex;
-                                    _languageDropdown.RefreshShownValue();
-                                }*/
-                            }
-
-                            if(SpeechInputSystem.Instance.DPadDownPressed)
-                            {
-                                /*int lowerDropdownIndex = _languageDropdown.value + 1;
-                                if(lowerDropdownIndex < _languageDropdown.options.Count)
-                                {
-                                    _languageDropdown.value = lowerDropdownIndex;
-                                    _languageDropdown.RefreshShownValue();
-                                }*/
-                            }
                         }
                         else
                         {
@@ -478,6 +504,78 @@ namespace JZK.UI
 
             _recordedTermText.text = displaySpeech;
             _recordedTerm.SetActive(true);
+        }
+
+        public Selectable GetScrollRectRiseSelectable()
+        {
+            Selectable returnSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+            for (int riseIndex = 0; riseIndex < _mainScrollRiseDropValue; ++riseIndex)
+            {
+                Selectable selectOnUp = returnSelectable.FindSelectableOnUp();
+                if (null == selectOnUp)
+                {
+                    return returnSelectable;
+                }
+
+                returnSelectable = selectOnUp;
+            }
+
+            return returnSelectable;
+        }
+
+        public Selectable GetScrollRectDropSelectable()
+        {
+            Selectable returnSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+            for (int riseIndex = 0; riseIndex < _mainScrollRiseDropValue; ++riseIndex)
+            {
+                Selectable selectOnDown = returnSelectable.FindSelectableOnDown();
+                if (null == selectOnDown)
+                {
+                    return returnSelectable;
+                }
+
+                returnSelectable = selectOnDown;
+            }
+
+            return returnSelectable;
+        }
+
+        public Selectable GetDropdownRiseSelectable()
+        {
+            Selectable returnSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+            for(int riseIndex = 0; riseIndex < _dropdownRiseDropValue; ++riseIndex)
+            {
+                Selectable selectOnUp = returnSelectable.FindSelectableOnUp();
+                if(null == selectOnUp)
+                {
+                    return returnSelectable;
+                }
+
+                returnSelectable = selectOnUp;
+            }
+
+            return returnSelectable;
+        }
+
+        public Selectable GetDropdownDropSelectable()
+        {
+            Selectable returnSelectable = EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+
+            for (int riseIndex = 0; riseIndex < _dropdownRiseDropValue; ++riseIndex)
+            {
+                Selectable selectOnDown = returnSelectable.FindSelectableOnDown();
+                if (null == selectOnDown)
+                {
+                    return returnSelectable;
+                }
+
+                returnSelectable = selectOnDown;
+            }
+
+            return returnSelectable;
         }
     }
 }
