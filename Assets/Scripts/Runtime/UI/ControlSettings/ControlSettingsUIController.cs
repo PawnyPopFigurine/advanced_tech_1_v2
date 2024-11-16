@@ -59,7 +59,7 @@ namespace JZK.UI
             _languageDropdown.ClearOptions();
 
             List<TMP_Dropdown.OptionData> optionDataList = new();
-            foreach(ESpeechRegion region in SpeechHelper.ALL_LANGUAGE_ENUMS)
+            foreach(ESpeechRegion region in SpeechHelper.REGIONS_IN_GAME)
             {
                 string regionName = SpeechHelper.RegionNameFromEnum(region);
                 TMP_Dropdown.OptionData optionData = new();
@@ -106,7 +106,12 @@ namespace JZK.UI
 
         void RefreshRegionDropdown()
         {
-            _languageDropdown.value = (int)SpeechRecognitionSystem.Instance.CurrentRegion;
+            int dropdownIndex = SpeechHelper.REGIONS_IN_GAME.IndexOf(SpeechRecognitionSystem.Instance.CurrentRegion);
+            if(dropdownIndex < 0)
+            {
+                dropdownIndex = 0;
+            }
+            _languageDropdown.value = dropdownIndex;
             _languageDropdown.RefreshShownValue();
         }
 
@@ -129,11 +134,13 @@ namespace JZK.UI
 
             if(_popupOpen)
             {
-                if(SpeechInputSystem.Instance.UIConfirmPressed)
+                EventSystem.current.SetSelectedGameObject(null);
+
+                if(SpeechInputSystem.Instance.UIConfirmPressed || InputSystem.Instance.UIConfirmPressed)
                 {
                     ConfirmPopupRecording();
                 }
-                if(SpeechInputSystem.Instance.UIBackPressed)
+                if(SpeechInputSystem.Instance.UIBackPressed || InputSystem.Instance.UICancelPressed)
                 {
                     CancelPopupRecording();
                 }
@@ -278,7 +285,7 @@ namespace JZK.UI
                                     if (currentSelectable.transform.IsChildOf(_languageDropdown.transform))
                                     {
                                         int dropdownItemIndex = currentSelectable.transform.GetSiblingIndex() - 1;
-                                        if(dropdownItemIndex > 0 && dropdownItemIndex < SpeechHelper.ALL_LANGUAGE_ENUMS.Count)
+                                        if(dropdownItemIndex > 0 && dropdownItemIndex < SpeechHelper.REGIONS_IN_GAME.Count)
                                         {
                                             _languageDropdown.value = dropdownItemIndex;
                                             _languageDropdown.RefreshShownValue();
@@ -439,7 +446,7 @@ namespace JZK.UI
         public void Input_ConfirmLanguageButtonPressed()
         {
             int dropdownIndex = _languageDropdown.value;
-            ESpeechRegion regionEnum = SpeechHelper.ALL_LANGUAGE_ENUMS[dropdownIndex];
+            ESpeechRegion regionEnum = SpeechHelper.REGIONS_IN_GAME[dropdownIndex];
             string languageCode = SpeechHelper.RegionStringFromEnum(regionEnum);
             Debug.Log("[HELLO] set language to " + languageCode + " - " + regionEnum.ToString());
             SpeechRecognitionSystem.Instance.SetRegionString(languageCode, regionEnum);

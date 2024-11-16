@@ -32,6 +32,10 @@ namespace JZK.Input
         ESpeechRegion _currentRegion = SpeechHelper.FALLBACK_DEFAULT_REGIONENUM;
         public ESpeechRegion CurrentRegion => _currentRegion;
 
+        public bool DebugConsistentlyRecording;
+
+        bool _recordingLastFrame;
+
         public SystemLoadData _loadData = new SystemLoadData()
         {
             LoadStates = SystemLoadState.NoLoadingNeeded,
@@ -42,6 +46,8 @@ namespace JZK.Input
 
         public override void UpdateSystem()
         {
+            _recordingLastFrame = _isRecording;
+
             base.UpdateSystem();
 
             if(!_isRecording && !UIStateSystem.Instance.QuitTriggered)
@@ -57,6 +63,8 @@ namespace JZK.Input
 
             RecordedThisFrame = false;
             LatestRecordedSpeech = string.Empty;
+
+            DebugConsistentlyRecording = _recordingLastFrame && _isRecording;
         }
 
         public override void SetCallbacks()
@@ -65,9 +73,6 @@ namespace JZK.Input
 
             SceneInit.CurrentSceneInit.OnLoadingStateComplete -= OnLoadingStateComplete;
             SceneInit.CurrentSceneInit.OnLoadingStateComplete += OnLoadingStateComplete;
-
-            /*SpeechDataSystem.Instance.OnSystemDataLoaded -= OnSystemDataLoaded;
-            SpeechDataSystem.Instance.OnSystemDataLoaded += OnSystemDataLoaded;*/
         }
 
         public void StartContinuousRecognition()
@@ -77,31 +82,28 @@ namespace JZK.Input
                 Debug.LogWarning(this.name + " - tried to start recording, when recording already - aborting action");
                 return;
             }
+
+
             Debug.Log("[HELLO] starting continuous recognition");
             StartContinuousRecognitionAsync();
+
             _isRecording = true;
+
         }
 
         public void StopContinuousRecognition()
         {
-            /*if(!_isRecording)
-            {
-                Debug.LogWarning(this.name + " - tried to stop recording before recording started - aborting action");
-                return;
-            }*/
             Debug.Log("[HELLO] stopping continuous recognition");
             StopContinuousRecognitionAsync();
+
             _isRecording = false;
         }
 
         async void StartContinuousRecognitionAsync()
         {
-            SpeechConfig config = SpeechConfig.FromSubscription("af6765f414254e4bb35c0efdfa9adeca", "eastus");
+            SpeechConfig config = SpeechConfig.FromSubscription("1i6ONXG5nl4vbx1fKusvLAz9YEbBdjKUF260SzpP8nqGUMb26XQ2JQQJ99AKACi5YpzXJ3w3AAAYACOG93ck", "northeurope");
             config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "300");
             config.SpeechRecognitionLanguage = _currentLanguageString;
-            //config.SpeechRecognitionLanguage = "en-GB";
-
-            //_isRecording = true;
 
             _recognizer = new SpeechRecognizer(config);
 
@@ -144,17 +146,15 @@ namespace JZK.Input
             {
                 //Debug.LogWarning(this.name + " - tried to dispose disposed object _recognizer - " + e.ToString());
             }
-
-            //_isRecording = false;
         }
 
         void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs e)
         {
-            //Debug.Log("[HELLO] recorded this frame? " + RecordedThisFrame.ToString());
             if(e.Result.Text == string.Empty)
             {
                 return;
             }
+
 
             RecordedThisFrame = true;
             LatestRecordedSpeech = e.Result.Text;
@@ -175,12 +175,6 @@ namespace JZK.Input
             Debug.Log("[HELLO] speech session cancelled");
             _stopRecognition.TrySetResult(0);
             _isRecording = false;
-
-            /*if (true)
-            {
-                Debug.Log("[HELLO] restarting recog after cancel");
-                StartContinuousRecognition();
-            }*/
         }
 
         private void OnSpeechEndDetected(object sender, RecognitionEventArgs e)
@@ -223,29 +217,11 @@ namespace JZK.Input
             Debug.Log(this.name + " - setting language code to " +  language);
 
             StopContinuousRecognition();
-            StartContinuousRecognition();
         }
 
         public void ResetRegion()
         {
-            _currentLanguageString = "en-GB";
-            _currentRegion = ESpeechRegion.English_GB;
+            SetRegionString("en-GB", ESpeechRegion.English_GB);
         }
-
-        /*public void OnSystemDataLoaded(object loadedData)
-        {
-            SpeechSaveData saveData = (SpeechSaveData)loadedData;
-
-            if(saveData.LanguageCode == string.Empty)   //TODO: set up language code list and check this value isn't in that
-            {
-                Debug.LogWarning(this.name + " - recieved save data with empty language string - defaulting to en-GB");
-                SetLanguageString("en-GB");
-            }
-
-            else
-            {
-                SetLanguageString(saveData.LanguageCode);
-            }
-        }*/
     }
 }

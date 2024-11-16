@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Unity.VisualScripting;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 namespace JZK.Input
 {
@@ -15,23 +12,114 @@ namespace JZK.Input
 
         public static List<ESpeechRegion> ALL_LANGUAGE_ENUMS => Enum.GetValues(typeof(ESpeechRegion)).Cast<ESpeechRegion>().ToList();
 
-        /*public static List<string> GetAllLanguageStrings()
+        public static List<ESpeechRegion> REGIONS_IN_GAME = new()
         {
-            List<string> stringList = new();
-            foreach(ESpeechRegion region in ALL_LANGUAGE_ENUMS)
-            {
-                string regionstring = RegionStringFromEnum(region);
-                stringList.Add(regionstring);
-            }
+            ESpeechRegion.English_GB,
+            ESpeechRegion.English_AU,
+            ESpeechRegion.English_CA,
+            ESpeechRegion.English_GH,
+            ESpeechRegion.English_HK,
+            ESpeechRegion.English_IE,
+            ESpeechRegion.English_IN,
+            ESpeechRegion.English_KE,
+            ESpeechRegion.English_NG,
+            ESpeechRegion.English_NZ,
+            ESpeechRegion.English_PH,
+            ESpeechRegion.English_SG,
+            ESpeechRegion.English_TZ,
+            ESpeechRegion.English_ZA,
+            ESpeechRegion.English_US,
 
-            return stringList;
-        }*/
+            ESpeechRegion.Welsh,
+            ESpeechRegion.Irish,
+
+            ESpeechRegion.French_FR,
+            ESpeechRegion.French_BE,
+            ESpeechRegion.French_CA,
+            ESpeechRegion.French_SW,
+
+            ESpeechRegion.German_AU,
+            ESpeechRegion.German_SZ,
+            ESpeechRegion.German_GE,
+
+            ESpeechRegion.Spanish_SP, //Spanish spanish
+            ESpeechRegion.Spanish_AR, //Argentinian spanish
+            ESpeechRegion.Spanish_BO, //Bolivian spanish
+            ESpeechRegion.Spanish_CL, //Chilean spanish
+            ESpeechRegion.Spanish_CO, //Colombian spanish
+            ESpeechRegion.Spanish_CR, //Costa Rica spanish
+            ESpeechRegion.Spanish_CU, //Cuban spanish
+            ESpeechRegion.Spanish_DO, //Dominican spanish
+            ESpeechRegion.Spanish_EC, //Ecuador spanish
+            ESpeechRegion.Spanish_EQ, //Equatorial guinea spanish
+            ESpeechRegion.Spanish_GU, //Guatemalan spanish
+            ESpeechRegion.Spanish_HN, //Honduras spanish
+            ESpeechRegion.Spanish_MX, //Mexican spanish
+            ESpeechRegion.Spanish_NI, //Nicaraguan spanish
+            ESpeechRegion.Spanish_PA, //Panama spanish
+            ESpeechRegion.Spanish_PE, //Peru spanish
+            ESpeechRegion.Spanish_PR, //Puerto rico spanish
+            ESpeechRegion.Spanish_PG, //Paraguay spanish
+            ESpeechRegion.Spanish_SV, //El Salvador spanish
+            ESpeechRegion.Spanish_US, //American spanish
+            ESpeechRegion.Spanish_UG, //Uruguay spanish
+            ESpeechRegion.Spanish_VE, //Venezuelan spanish
+
+            ESpeechRegion.Galician,
+
+            ESpeechRegion.Afrikaans,
+            ESpeechRegion.Azerbaijani,
+            ESpeechRegion.Bulgarian,
+            ESpeechRegion.Greek,
+
+            ESpeechRegion.Catalan,
+            ESpeechRegion.Czech,
+
+            ESpeechRegion.Danish,
+
+            ESpeechRegion.Estonian,
+            ESpeechRegion.Basque,
+
+            ESpeechRegion.Finnish,
+
+            ESpeechRegion.Croatian,
+            ESpeechRegion.Hungarian,
+            ESpeechRegion.Bosnian,
+
+            ESpeechRegion.Serbian,
+            ESpeechRegion.Swedish,
+
+            ESpeechRegion.Turkish,
+            ESpeechRegion.Ukrainian,
+            ESpeechRegion.Russian,
+        };
 
         public static string ProcessSpeechTerm(string rawSpeech)
         {
             string processedSpeech = rawSpeech.ToLower();
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            processedSpeech = rgx.Replace(processedSpeech, "");
+
+            List<string> invalidChars = new()
+            {
+                "?",
+                ".",
+                "!",
+                ",",
+            };
+
+            foreach (string invalid in invalidChars)
+            {
+                processedSpeech = processedSpeech.Replace(invalid, string.Empty);
+            }
+
+            List<string> replaceWithSpace = new()
+            {
+                "-",
+            };
+
+            foreach (string toSpace in replaceWithSpace)
+            {
+                processedSpeech = processedSpeech.Replace(toSpace, " ");
+            }
             return processedSpeech;
         }
 
@@ -89,7 +177,7 @@ namespace JZK.Input
 
         public static ESpeechInputType_Flag FlagFromEnum(ESpeechInputType enumType)
         {
-            switch(enumType)
+            switch (enumType)
             {
                 case ESpeechInputType.None:
                     return ESpeechInputType_Flag.None;
@@ -137,7 +225,7 @@ namespace JZK.Input
 
         public static string RegionNameFromEnum(ESpeechRegion regionEnum)
         {
-            switch(regionEnum)
+            switch (regionEnum)
             {
                 case ESpeechRegion.English_GB:
                     return "English (UK)";
@@ -435,7 +523,7 @@ namespace JZK.Input
 
         public static string RegionStringFromEnum(ESpeechRegion regionEnum)
         {
-            switch(regionEnum)
+            switch (regionEnum)
             {
                 case ESpeechRegion.English_GB:
                     return "en-GB";

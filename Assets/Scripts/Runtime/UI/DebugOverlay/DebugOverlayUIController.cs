@@ -74,7 +74,7 @@ namespace JZK.UI
 
             _voiceControlEnabledText.text = voiceEnabledText;
 
-            bool isRecording = SpeechRecognitionSystem.Instance.IsRecording;
+            bool isRecording = SpeechRecognitionSystem.Instance.DebugConsistentlyRecording;
             _isRecordingTrue.gameObject.SetActive(isRecording);
             _isRecordingFalse.gameObject.SetActive(!isRecording);
         }
