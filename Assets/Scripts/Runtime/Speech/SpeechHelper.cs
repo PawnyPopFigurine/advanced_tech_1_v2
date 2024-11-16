@@ -67,6 +67,9 @@ namespace JZK.Input
 
             ESpeechRegion.Galician,
 
+            ESpeechRegion.Italian_IT,
+            ESpeechRegion.Italian_SW,
+
             ESpeechRegion.Afrikaans,
             ESpeechRegion.Azerbaijani,
             ESpeechRegion.Bulgarian,
@@ -92,6 +95,26 @@ namespace JZK.Input
             ESpeechRegion.Turkish,
             ESpeechRegion.Ukrainian,
             ESpeechRegion.Russian,
+
+            ESpeechRegion.Bokmal,
+            ESpeechRegion.Filipino,
+            ESpeechRegion.Macedonian,
+
+            ESpeechRegion.Polish,
+
+            ESpeechRegion.Portuguese_BR, //Brazilian
+            ESpeechRegion.Portuguese_PT, //Portuguese portuguese
+
+            ESpeechRegion.Romanian,
+            ESpeechRegion.Slovak,
+            ESpeechRegion.Slovenian,
+            ESpeechRegion.Lithuanian,
+            ESpeechRegion.Latvian,
+            ESpeechRegion.Maltese,
+            ESpeechRegion.Icelandic,
+
+            ESpeechRegion.Kazakh,
+
         };
 
         public static string ProcessSpeechTerm(string rawSpeech)
