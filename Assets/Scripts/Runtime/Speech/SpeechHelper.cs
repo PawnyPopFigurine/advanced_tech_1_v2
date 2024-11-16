@@ -135,6 +135,304 @@ namespace JZK.Input
             }
         }
 
+        public static string RegionNameFromEnum(ESpeechRegion regionEnum)
+        {
+            switch(regionEnum)
+            {
+                case ESpeechRegion.English_GB:
+                    return "English (UK)";
+                case ESpeechRegion.English_AU:
+                    return "English (Australia)";
+                case ESpeechRegion.English_CA:
+                    return "English (Canada)";
+                case ESpeechRegion.English_GH:
+                    return "English (Ghana)";
+                case ESpeechRegion.English_HK:
+                    return "English (Hong Kong)";
+                case ESpeechRegion.English_IE:
+                    return "English (Ireland)";
+                case ESpeechRegion.English_IN:
+                    return "English (India)";
+                case ESpeechRegion.English_KE:
+                    return "English (Kenya)";
+                case ESpeechRegion.English_NG:
+                    return "English (Nigeria)";
+                case ESpeechRegion.English_NZ:
+                    return "English (New Zealand)";
+                case ESpeechRegion.English_PH:
+                    return "English (Philippines)";
+                case ESpeechRegion.English_SG:
+                    return "English (Singapore)";
+                case ESpeechRegion.English_TZ:
+                    return "English (Tanzania)";
+                case ESpeechRegion.English_US:
+                    return "English (US)";
+                case ESpeechRegion.English_ZA:
+                    return "English (South Africa)";
+                case ESpeechRegion.Afrikaans:
+                    return "Afrikaans";
+                case ESpeechRegion.Albanian:
+                    return "Albanian";
+                case ESpeechRegion.Amharic:
+                    return "Amharic";
+                case ESpeechRegion.Arabic_AL:
+                    return "Arabic (Algeria)";
+                case ESpeechRegion.Arabic_BH:
+                    return "Arabic (Bahrain)";
+                case ESpeechRegion.Arabic_EG:
+                    return "Arabic (Egypt)";
+                case ESpeechRegion.Arabic_IL:
+                    return "Arabic (Israel)";
+                case ESpeechRegion.Arabic_IQ:
+                    return "Arabic (Iraq)";
+                case ESpeechRegion.Arabic_JO:
+                    return "Arabic (Jordan)";
+                case ESpeechRegion.Arabic_KW:
+                    return "Arabic (Kuwait)";
+                case ESpeechRegion.Arabic_LB:
+                    return "Arabic (Lebanon)";
+                case ESpeechRegion.Arabic_LY:
+                    return "Arabic (Libya)";
+                case ESpeechRegion.Arabic_MA:
+                    return "Arabic (Morocco)";
+                case ESpeechRegion.Arabic_OM:
+                    return "Arabic (Oman)";
+                case ESpeechRegion.Arabic_PS:
+                    return "Arabic (Palestine)";
+                case ESpeechRegion.Arabic_QA:
+                    return "Arabic (Qatar)";
+                case ESpeechRegion.Arabic_SA:
+                    return "Arabic (Saudi Arabia)";
+                case ESpeechRegion.Arabic_SY:
+                    return "Arabic (Syria)";
+                case ESpeechRegion.Arabic_TN:
+                    return "Arabic (Tunisia)";
+                case ESpeechRegion.Arabic_UAE:
+                    return "Arabic (UAE)";
+                case ESpeechRegion.Arabic_YE:
+                    return "Arabic (Yemen)";
+                case ESpeechRegion.Armenian:
+                    return "Armenian";
+                case ESpeechRegion.Azerbaijani:
+                    return "Azerbaijani";
+                case ESpeechRegion.Basque:
+                    return "Basque";
+                case ESpeechRegion.Bengali:
+                    return "Bengali";
+                case ESpeechRegion.Bosnian:
+                    return "Bosnian";
+                case ESpeechRegion.Bulgarian:
+                    return "Bulgarian";
+                case ESpeechRegion.Catalan:
+                    return "Catalan";
+                case ESpeechRegion.Czech:
+                    return "Czech";
+                case ESpeechRegion.Welsh:
+                    return "Welsh";
+                case ESpeechRegion.Danish:
+                    return "Danish";
+                case ESpeechRegion.German_AU:
+                    return "German (Austria)";
+                case ESpeechRegion.German_GE:
+                    return "German (Germany)";
+                case ESpeechRegion.German_SZ:
+                    return "German (Switzerland)";
+                case ESpeechRegion.Greek:
+                    return "Greek";
+                case ESpeechRegion.Spanish_SP:
+                    return "Spanish (Spain)";
+                case ESpeechRegion.Spanish_AR:
+                    return "Spanish (Argentina)";
+                case ESpeechRegion.Spanish_BO:
+                    return "Spanish (Bolivia)";
+                case ESpeechRegion.Spanish_CL:
+                    return "Spanish (Chile)";
+                case ESpeechRegion.Spanish_CO:
+                    return "Spanish (Colombia)";
+                case ESpeechRegion.Spanish_CR:
+                    return "Spanish (Costa Rica)";
+                case ESpeechRegion.Spanish_CU:
+                    return "Spanish (Cuba)";
+                case ESpeechRegion.Spanish_DO:
+                    return "Spanish (Dominican)";
+                case ESpeechRegion.Spanish_EC:
+                    return "Spanish (Ecuador)";
+                case ESpeechRegion.Spanish_EQ:
+                    return "Spanish (Equatorial Guinea)";
+                case ESpeechRegion.Spanish_GU:
+                    return "Spanish (Guatemala)";
+                case ESpeechRegion.Spanish_HN:
+                    return "Spanish (Honduras)";
+                case ESpeechRegion.Spanish_MX:
+                    return "Spanish (Mexico)";
+                case ESpeechRegion.Spanish_NI:
+                    return "Spanish (Nicaragua)";
+                case ESpeechRegion.Spanish_PA:
+                    return "Spanish (Panama)";
+                case ESpeechRegion.Spanish_PE:
+                    return "Spanish (Peru)";
+                case ESpeechRegion.Spanish_PR:
+                    return "Spanish (Puerto Rico)";
+                case ESpeechRegion.Spanish_PG:
+                    return "Spanish (Paraguay)";
+                case ESpeechRegion.Spanish_SV:
+                    return "Spanish (El Salvador)";
+                case ESpeechRegion.Spanish_UG:
+                    return "Spanish (Uruguay)";
+                case ESpeechRegion.Spanish_US:
+                    return "Spanish (US)";
+                case ESpeechRegion.Spanish_VE:
+                    return "Spanish (Venezuela)";
+                case ESpeechRegion.Estonian:
+                    return "Estonian";
+                case ESpeechRegion.Persian:
+                    return "Persian";
+                case ESpeechRegion.Finnish:
+                    return "Finnish";
+                case ESpeechRegion.Filipino:
+                    return "Filipino";
+                case ESpeechRegion.French_BE:
+                    return "French (Belgian)";
+                case ESpeechRegion.French_CA:
+                    return "French (Canada)";
+                case ESpeechRegion.French_FR:
+                    return "French (France)";
+                case ESpeechRegion.French_SW:
+                    return "French (Switzerland)";
+                case ESpeechRegion.Irish:
+                    return "Irish";
+                case ESpeechRegion.Galician:
+                    return "Galician";
+                case ESpeechRegion.Gujarati:
+                    return "Gujarati";
+                case ESpeechRegion.Hebrew:
+                    return "Hebrew";
+                case ESpeechRegion.Hindi:
+                    return "Hindi";
+                case ESpeechRegion.Croatian:
+                    return "Croatian";
+                case ESpeechRegion.Hungarian:
+                    return "Hungarian";
+                case ESpeechRegion.Icelandic:
+                    return "Icelandic";
+                case ESpeechRegion.Indonesian:
+                    return "Indonesian";
+                case ESpeechRegion.Italian_IT:
+                    return "Italian (Italy)";
+                case ESpeechRegion.Italian_SW:
+                    return "Italian (Switzerland)";
+                case ESpeechRegion.Japanese:
+                    return "Japanese";
+                case ESpeechRegion.Javanese:
+                    return "Javanese";
+                case ESpeechRegion.Georgian:
+                    return "Georgian";
+                case ESpeechRegion.Kazakh:
+                    return "Kazakh";
+                case ESpeechRegion.Khmer:
+                    return "Khmer";
+                case ESpeechRegion.Kannada:
+                    return "Kannada";
+                case ESpeechRegion.Korean:
+                    return "Korean";
+                case ESpeechRegion.Lao:
+                    return "Lao";
+                case ESpeechRegion.Lithuanian:
+                    return "Lithuanian";
+                case ESpeechRegion.Latvian:
+                    return "Latvian";
+                case ESpeechRegion.Macedonian:
+                    return "Macedonian";
+                case ESpeechRegion.Malaylam:
+                    return "Malayalam";
+                case ESpeechRegion.Mongolian:
+                    return "Mongolian";
+                case ESpeechRegion.Marathi:
+                    return "Marathi";
+                case ESpeechRegion.Malay:
+                    return "Malay";
+                case ESpeechRegion.Maltese:
+                    return "Maltese";
+                case ESpeechRegion.Burmese:
+                    return "Burmese";
+                case ESpeechRegion.Nepali:
+                    return "Nepali";
+                case ESpeechRegion.Dutch_BE:
+                    return "Dutch (Belgium)";
+                case ESpeechRegion.Dutch_NL:
+                    return "Dutch (Netherlands)";
+                case ESpeechRegion.Punjabi:
+                    return "Punjabi";
+                case ESpeechRegion.Polish:
+                    return "Polish";
+                case ESpeechRegion.Pashto_AF:
+                    return "Pashto";
+                case ESpeechRegion.Portuguese_BR:
+                    return "Portuguese (Brazil)";
+                case ESpeechRegion.Portuguese_PT:
+                    return "Portuguese (Portugal)";
+                case ESpeechRegion.Romanian:
+                    return "Romanian";
+                case ESpeechRegion.Russian:
+                    return "Russian";
+                case ESpeechRegion.Sinhala:
+                    return "Sinhala";
+                case ESpeechRegion.Slovak:
+                    return "Slovak";
+                case ESpeechRegion.Slovenian:
+                    return "Slovenian";
+                case ESpeechRegion.Somali:
+                    return "Somali";
+                case ESpeechRegion.Serbian:
+                    return "Serbian";
+                case ESpeechRegion.Swedish:
+                    return "Swedish";
+                case ESpeechRegion.Kiswahili_KE:
+                    return "Kiswahili (Kenya)";
+                case ESpeechRegion.Kiswahili_TZ:
+                    return "Kiswahili (Tanzania)";
+                case ESpeechRegion.Tamil:
+                    return "Tamil";
+                case ESpeechRegion.Telugu:
+                    return "Telugu";
+                case ESpeechRegion.Thai:
+                    return "Thai";
+                case ESpeechRegion.Turkish:
+                    return "Turkish";
+                case ESpeechRegion.Ukrainian:
+                    return "Ukrainian";
+                case ESpeechRegion.Urdu:
+                    return "Urdu";
+                case ESpeechRegion.Uzbek:
+                    return "Uzbek";
+                case ESpeechRegion.Vietnamese:
+                    return "Vietnamese";
+                case ESpeechRegion.Chinese_WU:
+                    return "Chinese (Wu)";
+                case ESpeechRegion.Cantonese_Simp:
+                    return "Cantonese (Simplified)";
+                case ESpeechRegion.Cantonese_Trad:
+                    return "Cantonese (Traditional)";
+                case ESpeechRegion.Mandarin:
+                    return "Mandarin (Simplified)";
+                case ESpeechRegion.Mandarin_JL:
+                    return "Jilu Mandarin (Simplified)";
+                case ESpeechRegion.Mandarin_SW:
+                    return "Southwest Mandarin (Simplified)";
+                case ESpeechRegion.Mandarin_TW:
+                    return "Taiwanese Mandarin (Simplified)";
+                case ESpeechRegion.IsiZulu:
+                    return "isiZulu";
+                case ESpeechRegion.Bokmal:
+                    return "Bokmal";
+
+
+                default:
+                    Debug.Log("SPEECHHELPER - type " + regionEnum.ToString() + " - not supported");
+                    return "NO NAME FOUND";
+            }
+        }
+
         public static string RegionStringFromEnum(ESpeechRegion regionEnum)
         {
             switch(regionEnum)

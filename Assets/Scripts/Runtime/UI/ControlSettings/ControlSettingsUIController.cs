@@ -61,14 +61,13 @@ namespace JZK.UI
             List<TMP_Dropdown.OptionData> optionDataList = new();
             foreach(ESpeechRegion region in SpeechHelper.ALL_LANGUAGE_ENUMS)
             {
-                string regionString = region.ToString();
+                string regionName = SpeechHelper.RegionNameFromEnum(region);
                 TMP_Dropdown.OptionData optionData = new();
-                optionData.text = regionString;
+                optionData.text = regionName;
                 optionDataList.Add(optionData);
             }
 
             _languageDropdown.AddOptions(optionDataList);
-            //_languageDropdown.
         }
 
 
