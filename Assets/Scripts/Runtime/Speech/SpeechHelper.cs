@@ -115,6 +115,9 @@ namespace JZK.Input
 
             ESpeechRegion.Kazakh,
 
+            ESpeechRegion.Hebrew,
+
+
         };
 
         public static string ProcessSpeechTerm(string rawSpeech)
