@@ -1,4 +1,4 @@
-Joseph Khan 20008729 - Advanced Technology Portfolio Project 1 (Inclusive Gaming)
+Joseph Khan 20008729 - Advanced Technology UFCFW3-30-3 Portfolio Project 1 (Inclusive Gaming)
 README
 
 Welcome to Block Buster Bonanza!
